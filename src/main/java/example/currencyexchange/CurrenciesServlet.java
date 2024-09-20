@@ -11,7 +11,7 @@ import java.io.PrintWriter;
 import java.sql.*;
 
 
-@WebServlet(name = "Currencies", value = "/currencies")
+@WebServlet(name = "Currencies", value = "/currencies/*")
 public class CurrenciesServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
