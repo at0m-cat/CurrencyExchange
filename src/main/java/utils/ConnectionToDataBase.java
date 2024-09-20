@@ -1,16 +1,19 @@
 package utils;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import lombok.Getter;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.Currency;
 
 public class ConnectionToDataBase {
 
-    static final String DB_URL = "jdbc:postgresql://localhost:5432/currencyexchange";
-    static final String USER = "";
-    static final String PASS = "";
+    private final String DB_URL = "jdbc:postgresql://localhost:5432/currencyexchange";
+    private final String USER = "";
+    private final String PASS = "";
 
-    public static void main(String[] args) {
+
+    public void connect() {
 
         System.out.println("Connect to database...");
 
@@ -25,20 +28,35 @@ public class ConnectionToDataBase {
         System.out.println("Connecting to database successfully...");
         Connection connection = null;
 
+
         try {
             connection = DriverManager.getConnection(DB_URL);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * from currencies");
+
+
+            while (resultSet.next()) {
+                String id = resultSet.getString(1);
+                String code = resultSet.getString(2);
+                String fullname = resultSet.getString(3);
+                String sign = resultSet.getString(4);
+
+                // return HashMap<ID, Currency> ???
+
+
+            }
+
         } catch (SQLException e) {
             System.out.println("Database connection failed");
 
             throw new RuntimeException(e);
         }
-
+//
         if (connection != null) {
             System.out.println("Database connection established");
         } else {
             System.out.println("Failed to establish connection");
         }
-
 
     }
 
