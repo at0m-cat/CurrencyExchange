@@ -1,8 +1,7 @@
 package example.currencyexchange.Servlets;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import example.currencyexchange.Objects.Currencies;
-import example.currencyexchange.Scripts.ParseCurrencies;
+import example.currencyexchange.Objects.Rates;
+import example.currencyexchange.Scripts.DataBaseFunction;
 import example.currencyexchange.Scripts.Renderer;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -10,9 +9,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.ResultSet;
 import java.util.List;
+import java.util.Objects;
 
 
 @WebServlet(name = "Currencies", value = "/currencies")
@@ -23,17 +22,22 @@ public class CurrenciesServlet extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        List<Currencies> currencies = ParseCurrencies.execute();
-        if (currencies.isEmpty()) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            return;
-        }
+        // currencyexchange
+        // exchangerates
 
+        ResultSet resultSet = DataBaseFunction
+                .connect("currencyexchange", "SELECT * FROM currencies");
+
+        List<Currencies> currencies = Currencies.parsing(resultSet);
         Renderer.execute(response, currencies);
+
+//        List<Rates> rates = Rates.parsing(resultSet);
+//        Renderer.execute(response, rates);
     }
 
 
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    @SneakyThrows
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 }
