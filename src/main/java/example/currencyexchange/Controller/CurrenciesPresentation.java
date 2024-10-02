@@ -1,7 +1,7 @@
-package example.currencyexchange.View;
-import example.currencyexchange.Model.Currencies;
-import example.currencyexchange.Controller.DataBaseFunction;
-import example.currencyexchange.Controller.Renderer;
+package example.currencyexchange.Controller;
+import example.currencyexchange.Model.dao.Currencies;
+import example.currencyexchange.config.DataBaseFunction;
+import example.currencyexchange.config.Renderer;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;

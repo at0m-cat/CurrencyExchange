@@ -1,12 +1,11 @@
-package example.currencyexchange.Controller;
-import example.currencyexchange.Model.Currencies;
-import example.currencyexchange.Model.Rates;
+package example.currencyexchange.config;
+import example.currencyexchange.Model.dao.Currencies;
+import example.currencyexchange.Model.dao.Rates;
 import lombok.SneakyThrows;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 public class DataBaseFunction {

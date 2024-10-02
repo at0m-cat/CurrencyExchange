@@ -1,4 +1,4 @@
-package example.currencyexchange.Model;
+package example.currencyexchange.Model.dao;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;

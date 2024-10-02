@@ -1,4 +1,4 @@
-package example.currencyexchange.View;
+package example.currencyexchange.Controller;
 
 import java.io.*;
 

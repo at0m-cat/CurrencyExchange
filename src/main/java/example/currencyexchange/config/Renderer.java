@@ -1,4 +1,4 @@
-package example.currencyexchange.Controller;
+package example.currencyexchange.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import example.currencyexchange.Model.SingleCurrency;
 import jakarta.servlet.http.HttpServletResponse;
