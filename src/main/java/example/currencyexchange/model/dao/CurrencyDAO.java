@@ -1,25 +1,19 @@
 package example.currencyexchange.model.dao;
+
+import example.currencyexchange.model.Currencies;
 import example.currencyexchange.model.SingleCurrency;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.SneakyThrows;
+
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor
-@Getter
-public class Currencies{
-
-    private final String FULL_NAME;
-    private final String CODE;
-    private final Integer ID;
-    private final Integer SIGN;
+public class CurrencyDAO {
 
     /**
      * Parsing currency from table "currencies"
      * @param rs ResultSet
-     * @return List of currencies
+     * @return List currencies
      */
     @SneakyThrows
     public static List<Currencies> parsing(ResultSet rs) {
@@ -36,10 +30,21 @@ public class Currencies{
         return list;
     }
 
+    /**
+     * Find code in List "Currencies"
+     * @param currenciesList List currencies
+     * @param code String code currency
+     * @return SingleCurrency object
+     */
     public static SingleCurrency findCodeCurrency(List<Currencies> currenciesList, String code){
         for (Currencies currencies : currenciesList) {
             if (currencies.getCODE().equalsIgnoreCase(code)) {
-                return new SingleCurrency(currencies.FULL_NAME, currencies.CODE, currencies.ID, currencies.SIGN);
+                return new SingleCurrency(
+                        currencies.getFULL_NAME(),
+                        currencies.getCODE(),
+                        currencies.getID(),
+                        currencies.getSIGN()
+                );
             }
         }
         return null;

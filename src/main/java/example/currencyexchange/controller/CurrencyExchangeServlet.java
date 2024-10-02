@@ -1,7 +1,8 @@
 package example.currencyexchange.controller;
 import example.currencyexchange.config.DataBaseConfig;
 import example.currencyexchange.config.Renderer;
-import example.currencyexchange.model.dao.ExchangeRates;
+import example.currencyexchange.model.ExchangeRates;
+import example.currencyexchange.model.dao.ExchangeRatesDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -27,7 +28,7 @@ public class CurrencyExchangeServlet extends HttpServlet {
             String target_code = code[1];
 
             List<ExchangeRates> exchangeRates = DataBaseConfig.getExchangeRate();
-            ExchangeRates rates = ExchangeRates.findCodeRates(exchangeRates, base_code, target_code);
+            ExchangeRates rates = ExchangeRatesDAO.findCodeRates(exchangeRates, base_code, target_code);
 
             if (rates == null) {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND);

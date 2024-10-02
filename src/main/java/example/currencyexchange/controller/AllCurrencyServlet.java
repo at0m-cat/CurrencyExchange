@@ -1,5 +1,5 @@
 package example.currencyexchange.controller;
-import example.currencyexchange.model.dao.Currencies;
+import example.currencyexchange.model.Currencies;
 import example.currencyexchange.config.DataBaseConfig;
 import example.currencyexchange.config.Renderer;
 import jakarta.servlet.annotation.WebServlet;

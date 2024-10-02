@@ -1,8 +1,9 @@
 package example.currencyexchange.controller;
 import example.currencyexchange.config.DataBaseConfig;
-import example.currencyexchange.model.dao.Currencies;
+import example.currencyexchange.model.Currencies;
 import example.currencyexchange.model.SingleCurrency;
 import example.currencyexchange.config.Renderer;
+import example.currencyexchange.model.dao.CurrencyDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -28,7 +29,7 @@ public class SingleCurrencyServlet extends HttpServlet {
             String code = parts[1];
 
             List<Currencies> currenciesList = DataBaseConfig.getCurrencies();
-            SingleCurrency currency = Currencies.findCodeCurrency(currenciesList, code);
+            SingleCurrency currency = CurrencyDAO.findCodeCurrency(currenciesList, code);
 
             if (currency == null) {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND);

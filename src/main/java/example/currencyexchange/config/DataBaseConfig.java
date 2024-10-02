@@ -1,7 +1,10 @@
 package example.currencyexchange.config;
-import example.currencyexchange.model.dao.ExchangeRates;
-import example.currencyexchange.model.dao.Currencies;
-import example.currencyexchange.model.dao.Rates;
+import example.currencyexchange.model.ExchangeRates;
+import example.currencyexchange.model.Currencies;
+import example.currencyexchange.model.Rates;
+import example.currencyexchange.model.dao.CurrencyDAO;
+import example.currencyexchange.model.dao.ExchangeRatesDAO;
+import example.currencyexchange.model.dao.RatesDAO;
 import lombok.SneakyThrows;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -31,7 +34,7 @@ public class DataBaseConfig {
      */
     public static List<Currencies> getCurrencies() {
         ResultSet resultSet = connect("SELECT * FROM currencies");
-        return Currencies.parsing(resultSet);
+        return CurrencyDAO.parsing(resultSet);
     }
 
     /**
@@ -41,7 +44,7 @@ public class DataBaseConfig {
      */
     public static List<Rates> getRates() {
         ResultSet resultSet = connect("SELECT * FROM exchangerates");
-        return Rates.parsing(resultSet);
+        return RatesDAO.parsing(resultSet);
     }
 
     /**
@@ -58,7 +61,7 @@ public class DataBaseConfig {
                 "JOIN currencies c1 ON e.basecurrencyid = c1.id " +
                 "JOIN currencies c2 ON e.targetcurrencyid = c2.id";
         ResultSet resultSet = connect(querry);
-        return ExchangeRates.parsing(resultSet);
+        return ExchangeRatesDAO.parsing(resultSet);
 
     }
 

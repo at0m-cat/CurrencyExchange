@@ -1,23 +1,14 @@
 package example.currencyexchange.model.dao;
 
+import example.currencyexchange.model.ExchangeRates;
 import example.currencyexchange.model.SingleCurrency;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.SneakyThrows;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor
-@Getter
-public class ExchangeRates {
-
-    private final int ID;
-    private final SingleCurrency BASE_CURRENCY;
-    private final SingleCurrency TARGET_CURRENCY;
-    private final double RATE;
-
+public class ExchangeRatesDAO {
 
     @SneakyThrows
     public static List<ExchangeRates> parsing(ResultSet rs){
@@ -47,6 +38,13 @@ public class ExchangeRates {
         return exchangeRates;
     }
 
+    /**
+     * searches for an object in list "ExchangeRates" with target and base codes
+     * @param exchangeRates List ExchangeRates
+     * @param base_code String base code currency
+     * @param target_code String target code currency
+     * @return ExchangeRates object
+     */
     public static ExchangeRates findCodeRates(List<ExchangeRates> exchangeRates, String base_code, String target_code){
 
         for (ExchangeRates exchangeRate : exchangeRates) {
@@ -59,6 +57,5 @@ public class ExchangeRates {
         }
         return null;
     }
+
 }
-
-

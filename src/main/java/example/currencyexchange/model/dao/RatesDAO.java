@@ -1,18 +1,14 @@
 package example.currencyexchange.model.dao;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+
+import example.currencyexchange.model.Rates;
 import lombok.SneakyThrows;
+
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor
-@Getter
-public class Rates {
-    private final Integer ID;
-    private final String BASE_CURRENCY_ID;
-    private final String TARGET_CURRENCY_ID;
-    private final Double RATE;
+public class RatesDAO {
+
 
     @SneakyThrows
     public static List<Rates> parsing(ResultSet rs) {

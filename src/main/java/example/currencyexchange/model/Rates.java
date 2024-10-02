@@ -4,10 +4,10 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class SingleCurrency {
-    private final String FULL_NAME;
-    private final String CODE;
+public class Rates {
     private final Integer ID;
-    private final Integer SIGN;
+    private final String BASE_CURRENCY_ID;
+    private final String TARGET_CURRENCY_ID;
+    private final Double RATE;
 
 }

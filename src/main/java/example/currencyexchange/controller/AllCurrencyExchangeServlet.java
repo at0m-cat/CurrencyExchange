@@ -2,7 +2,7 @@ package example.currencyexchange.controller;
 
 import example.currencyexchange.config.DataBaseConfig;
 import example.currencyexchange.config.Renderer;
-import example.currencyexchange.model.dao.ExchangeRates;
+import example.currencyexchange.model.ExchangeRates;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
