@@ -29,8 +29,6 @@ public class SingleCurrencyServlet extends HttpServlet {
 
         String pathInfo = req.getPathInfo();
 
-        // todo: обращаться к базе данных, а не к классу
-
         try {
             String[] parts = pathInfo.split("/");
             String code = parts[1];

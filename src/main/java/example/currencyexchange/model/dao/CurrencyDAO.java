@@ -29,28 +29,11 @@ public class CurrencyDAO {
         return list;
     }
 
-
-
     /**
-     * Find code in List "Currencies"
-     * @param currenciesList List currencies
+     * Find code in table "Currencies"
      * @param code String code currency
      * @return Currencies object
      */
-    public static Currencies findCodeCurrency(List<Currencies> currenciesList, String code){
-        for (Currencies currencies : currenciesList) {
-            if (currencies.getCODE().equalsIgnoreCase(code)) {
-                return new Currencies(
-                        currencies.getFULL_NAME(),
-                        currencies.getCODE(),
-                        currencies.getID(),
-                        currencies.getSIGN()
-                );
-            }
-        }
-        return null;
-    }
-
     public static Currencies findCodeCurrency(String code){
         String query = String.format("SELECT * FROM currencies WHERE code = '%s'", code.toUpperCase());
 
