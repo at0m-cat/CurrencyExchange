@@ -1,7 +1,9 @@
 package example.currencyexchange.model.dao;
+
 import example.currencyexchange.config.DataBaseConfig;
 import example.currencyexchange.model.Currencies;
 import lombok.SneakyThrows;
+
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +16,7 @@ public class CurrencyDAO {
      *
      * @return List Currencies
      */
-    public static List<Currencies> getCurrencies () {
+    public static List<Currencies> getCurrencies() {
         String query = "select * from currencies";
         ResultSet resultSet = DataBaseConfig.connect(query);
         return CurrencyDAO.parsing(resultSet);
@@ -22,6 +24,7 @@ public class CurrencyDAO {
 
     /**
      * Parsing currency in table "currencies"
+     *
      * @param rs ResultSet
      * @return List currencies
      */
@@ -42,10 +45,11 @@ public class CurrencyDAO {
 
     /**
      * Find code in table "Currencies"
+     *
      * @param code String code currency
      * @return Currencies object
      */
-    public static Currencies findCodeCurrency(String code){
+    public static Currencies findCodeCurrency(String code) {
         String query = String.format("SELECT * FROM currencies WHERE code = '%s'", code.toUpperCase());
 
         ResultSet rs = DataBaseConfig.connect(query);

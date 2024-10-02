@@ -21,7 +21,7 @@ public class AllCurrencyExchangeServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
 
-        if (!DataBaseConfig.isConnectionValid()){
+        if (!DataBaseConfig.isConnectionValid()) {
             Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
             return;
         }

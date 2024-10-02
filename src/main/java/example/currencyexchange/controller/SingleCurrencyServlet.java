@@ -1,4 +1,5 @@
 package example.currencyexchange.controller;
+
 import example.currencyexchange.config.DataBaseConfig;
 import example.currencyexchange.model.Currencies;
 import example.currencyexchange.config.Renderer;
@@ -9,6 +10,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
+
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
@@ -17,9 +19,9 @@ public class SingleCurrencyServlet extends HttpServlet {
 
     @SneakyThrows
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp){
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
 
-        if (!DataBaseConfig.isConnectionValid()){
+        if (!DataBaseConfig.isConnectionValid()) {
             Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
             return;
         }
@@ -37,9 +39,9 @@ public class SingleCurrencyServlet extends HttpServlet {
             Renderer.printJson(resp, currency);
 
         } catch (ArrayIndexOutOfBoundsException e) {
-            Renderer.printErrorJson(resp,String.valueOf(HttpServletResponse.SC_BAD_REQUEST));
-        } catch (NoSuchElementException e){
-            Renderer.printErrorJson(resp,String.valueOf(HttpServletResponse.SC_NOT_FOUND));
+            Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_BAD_REQUEST));
+        } catch (NoSuchElementException e) {
+            Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_NOT_FOUND));
         }
     }
 

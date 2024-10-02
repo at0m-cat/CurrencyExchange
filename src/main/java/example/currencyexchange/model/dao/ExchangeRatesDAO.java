@@ -1,8 +1,10 @@
 package example.currencyexchange.model.dao;
+
 import example.currencyexchange.config.DataBaseConfig;
 import example.currencyexchange.model.Currencies;
 import example.currencyexchange.model.ExchangeRates;
 import lombok.SneakyThrows;
+
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +18,7 @@ public class ExchangeRatesDAO {
      * @return List ExchangeRates ->
      * Base currency identifiers and data. Target currency identifiers and data. Exchange rate.
      */
-    public static List<ExchangeRates> getExchangeRate () {
+    public static List<ExchangeRates> getExchangeRate() {
         String query =
                 "SELECT e.id AS id," +
                         " c1.id AS base_id, " +
@@ -71,12 +73,13 @@ public class ExchangeRatesDAO {
 
     /**
      * searches for an object in database with target and base codes
-     * @param baseCode     String base code currency
-     * @param targetCode   String target code currency
+     *
+     * @param baseCode   String base code currency
+     * @param targetCode String target code currency
      * @return ExchangeRates object
      */
     @SneakyThrows
-    public static ExchangeRates findCodeRates(String baseCode, String targetCode){
+    public static ExchangeRates findCodeRates(String baseCode, String targetCode) {
         String query = String.format("SELECT e.id, e.rate, " +
                 "c1.id AS base_id, c1.fullname AS base_name, c1.code AS base_code, c1.sign AS base_sign, " +
                 "c2.id AS target_id, c2.fullname AS target_name, c2.code AS target_code, c2.sign AS target_sign " +
@@ -86,7 +89,7 @@ public class ExchangeRatesDAO {
                 "WHERE c1.code = '%s' AND c2.code = '%s'", baseCode.toUpperCase(), targetCode.toUpperCase());
 
         ResultSet rs = DataBaseConfig.connect(query);
-       return parsing(rs).getFirst();
+        return parsing(rs).getFirst();
     }
 
 }
