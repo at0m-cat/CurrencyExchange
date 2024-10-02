@@ -1,6 +1,6 @@
 package example.currencyexchange.config;
-import example.currencyexchange.Model.dao.Currencies;
-import example.currencyexchange.Model.dao.Rates;
+import example.currencyexchange.model.dao.Currencies;
+import example.currencyexchange.model.dao.Rates;
 import lombok.SneakyThrows;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.List;
 
-public class DataBaseFunction {
+public class DataBaseConfig {
 
     static final String JDBC_DRIVER = "org.postgresql.Driver";
     static final String DATABASE_URL = "jdbc:postgresql://localhost:5432/currencyexchange";

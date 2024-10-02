@@ -1,14 +1,14 @@
-package example.currencyexchange.Controller;
-
-import example.currencyexchange.config.DataBaseFunction;
-import example.currencyexchange.Model.dao.Currencies;
-import example.currencyexchange.Model.SingleCurrency;
+package example.currencyexchange.controller;
+import example.currencyexchange.config.DataBaseConfig;
+import example.currencyexchange.model.dao.Currencies;
+import example.currencyexchange.model.SingleCurrency;
 import example.currencyexchange.config.Renderer;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,8 +16,9 @@ import java.util.List;
 @WebServlet(name = "SingeCurrency", value = "/currencies/*")
 public class CurrencyShow extends HttpServlet {
 
+    @SneakyThrows
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         String pathInfo = req.getPathInfo();
 
         // todo: обращаться к базе данных, а не к классу
@@ -26,13 +27,15 @@ public class CurrencyShow extends HttpServlet {
             String[] parts = pathInfo.split("/");
             String code = parts[1];
 
-            List<Currencies> currenciesList = DataBaseFunction.getCurrencies();
+            List<Currencies> currenciesList = DataBaseConfig.getCurrencies();
             SingleCurrency currency = Currencies.findCodeCurrency(currenciesList, code);
 
             if (currency == null) {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND);
             }
 
+            resp.setContentType("application/json");
+            req.setCharacterEncoding("UTF-8");
             Renderer.printCurrency(resp, currency);
 
         } catch (ArrayIndexOutOfBoundsException e) {

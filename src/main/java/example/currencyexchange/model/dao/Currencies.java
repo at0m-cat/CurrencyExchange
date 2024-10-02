@@ -1,5 +1,5 @@
-package example.currencyexchange.Model.dao;
-import example.currencyexchange.Model.SingleCurrency;
+package example.currencyexchange.model.dao;
+import example.currencyexchange.model.SingleCurrency;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;

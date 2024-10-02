@@ -1,6 +1,6 @@
 package example.currencyexchange.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import example.currencyexchange.Model.SingleCurrency;
+import example.currencyexchange.model.SingleCurrency;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 import java.io.PrintWriter;
