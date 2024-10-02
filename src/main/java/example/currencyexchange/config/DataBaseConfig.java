@@ -1,15 +1,7 @@
 package example.currencyexchange.config;
-
-import example.currencyexchange.model.ExchangeRates;
-import example.currencyexchange.model.Currencies;
-import example.currencyexchange.model.dao.CurrencyDAO;
-import example.currencyexchange.model.dao.ExchangeRatesDAO;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 import org.postgresql.util.PSQLException;
-
 import java.sql.*;
-import java.util.List;
 
 public class DataBaseConfig {
 

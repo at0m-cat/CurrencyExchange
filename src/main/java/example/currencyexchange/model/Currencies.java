@@ -1,10 +1,6 @@
 package example.currencyexchange.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.SneakyThrows;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
 
 @AllArgsConstructor
 @Getter

@@ -3,22 +3,14 @@ package example.currencyexchange.controller;
 import example.currencyexchange.config.DataBaseConfig;
 import example.currencyexchange.config.Renderer;
 import example.currencyexchange.model.ExchangeRates;
-import example.currencyexchange.model.dao.CurrencyDAO;
 import example.currencyexchange.model.dao.ExchangeRatesDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.SneakyThrows;
-
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @WebServlet(name = "CurrencyExchange", value = "/exchangerates/*")

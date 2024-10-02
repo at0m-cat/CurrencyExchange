@@ -1,10 +1,8 @@
 package example.currencyexchange.model.dao;
-
 import example.currencyexchange.config.DataBaseConfig;
 import example.currencyexchange.model.Currencies;
 import example.currencyexchange.model.ExchangeRates;
 import lombok.SneakyThrows;
-
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
