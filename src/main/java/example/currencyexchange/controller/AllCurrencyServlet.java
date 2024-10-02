@@ -9,8 +9,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 import java.util.List;
 
-@WebServlet(name = "Currencies", value = "/currencies")
-public class CurrenciesPresentation extends HttpServlet {
+@WebServlet(name = "AllCurrency", value = "/currencies")
+public class AllCurrencyServlet extends HttpServlet {
 
 
     @SneakyThrows

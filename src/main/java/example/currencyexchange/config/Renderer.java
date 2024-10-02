@@ -11,7 +11,7 @@ import java.util.List;
 public class Renderer {
 
     /**
-     * Write table to JSON format
+     * Print List to JSON format
      * @param response HttpServletResponse
      * @param list List data
      */
@@ -23,6 +23,12 @@ public class Renderer {
         writer.write(mapper.writerWithDefaultPrettyPrinter()
                 .writeValueAsString(list));
     }
+
+    /**
+     * Print Single JSON currency
+     * @param response HttpServletResponse
+     * @param singleCurrency SingleCurrency object
+     */
     @SneakyThrows
     public static void printCurrency(HttpServletResponse response, SingleCurrency singleCurrency){
         PrintWriter writer = response.getWriter();
@@ -32,6 +38,11 @@ public class Renderer {
                 .writeValueAsString(singleCurrency));
     }
 
+    /**
+     * Prints the exchange rate of two currencies
+     * @param response HttpServletResponse
+     * @param rates ExchangeRates object
+     */
     @SneakyThrows
     public static void printExchangeRates(HttpServletResponse response, ExchangeRates rates){
         PrintWriter writer = response.getWriter();

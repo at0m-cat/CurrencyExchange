@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet(name = "SingeCurrency", value = "/currencies/*")
-public class CurrencyShow extends HttpServlet {
+public class SingleCurrencyServlet extends HttpServlet {
 
     @SneakyThrows
     @Override

@@ -1,9 +1,6 @@
 package example.currencyexchange.controller;
-
 import example.currencyexchange.config.DataBaseConfig;
 import example.currencyexchange.config.Renderer;
-import example.currencyexchange.model.SingleCurrency;
-import example.currencyexchange.model.dao.Currencies;
 import example.currencyexchange.model.dao.ExchangeRates;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,9 +11,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "CurrencyExchangeView", value = "/exchangerates/*")
-public class CurrencyExchangeView extends HttpServlet {
-
+@WebServlet(name = "CurrencyExchange", value = "/exchangerates/*")
+public class CurrencyExchangeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -17,7 +17,7 @@ public class DataBaseConfig {
     static final String DATABASE_PASSWORD = "postgres";
 
     @SneakyThrows
-    public static ResultSet connect(String query) {
+    private static ResultSet connect(String query) {
         Class.forName(JDBC_DRIVER);
         Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD);
         Statement statement = connection.createStatement();
@@ -27,7 +27,7 @@ public class DataBaseConfig {
     /**
      * db name: "currencyexchange",
      * table name: "currencies"
-     * @return List
+     * @return List Currencies
      */
     public static List<Currencies> getCurrencies() {
         ResultSet resultSet = connect("SELECT * FROM currencies");
@@ -37,13 +37,19 @@ public class DataBaseConfig {
     /**
      * db name: "currencyexchange",
      * table name: "exchangerates"
-     * @return List
+     * @return List Rates
      */
     public static List<Rates> getRates() {
         ResultSet resultSet = connect("SELECT * FROM exchangerates");
         return Rates.parsing(resultSet);
     }
 
+    /**
+     * db name: "currencyexchange",
+     * parse from table "exchangerates" and join table "currencies"
+     * @return List ExchangeRates ->
+     * Base currency identifiers and data. Target currency identifiers and data. Exchange rate.
+     */
     public static List<ExchangeRates> getExchangeRate() {
         String querry = "SELECT e.id AS rate_id, c1.id AS base_id, c1.fullname AS base_name, c1.code AS base_code, " +
                 "c1.sign AS base_sign, c2.id AS target_id, c2.fullname AS target_name, c2.code AS target_code, " +
