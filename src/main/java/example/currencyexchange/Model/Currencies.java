@@ -35,4 +35,13 @@ public class Currencies{
         return list;
     }
 
+    public static SingleCurrency findCodeCurrency(List<Currencies> currenciesList, String code){
+        for (Currencies currencies : currenciesList) {
+            if (currencies.getCODE().equalsIgnoreCase(code)) {
+                return new SingleCurrency(currencies.FULL_NAME, currencies.CODE, currencies.ID, currencies.SIGN);
+            }
+        }
+        return null;
+    }
+
 }

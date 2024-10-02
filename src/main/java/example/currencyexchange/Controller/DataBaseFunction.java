@@ -25,9 +25,9 @@ public class DataBaseFunction {
     }
 
     /**
-     * db name: "currencyexchange"
+     * db name: "currencyexchange",
      * table name: "currencies"
-     * @return
+     * @return List
      */
     public static List<Currencies> getCurrencies() {
         ResultSet resultSet = connect("SELECT * FROM currencies");
@@ -35,9 +35,9 @@ public class DataBaseFunction {
     }
 
     /**
-     * db name: "currencyexchange"
+     * db name: "currencyexchange",
      * table name: "exchangerates"
-     * @return
+     * @return List
      */
     public static List<Rates> getRates() {
         ResultSet resultSet = connect("SELECT * FROM exchangerates");

@@ -4,13 +4,4 @@
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
          version="6.0">
 
-<!--    <servlet>-->
-<!--        <servlet-name>Library</servlet-name>-->
-<!--        <servlet-class>example.currencyexchange.View.CurrenciesServlet</servlet-class>-->
-<!--    </servlet>-->
-<!--    <servlet-mapping>-->
-<!--        <servlet-name>Library</servlet-name>-->
-<!--        <url-pattern>/libs</url-pattern>-->
-<!--    </servlet-mapping>-->
-
 </web-app>
