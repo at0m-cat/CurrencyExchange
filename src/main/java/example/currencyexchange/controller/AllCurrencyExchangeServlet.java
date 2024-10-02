@@ -17,7 +17,7 @@ import java.util.List;
 public class AllCurrencyExchangeServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
 

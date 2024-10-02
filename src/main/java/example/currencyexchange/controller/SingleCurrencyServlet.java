@@ -46,7 +46,7 @@ public class SingleCurrencyServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp){
 
         // todo: сверить с базой данных для добавления объекта
 

@@ -17,8 +17,9 @@ import java.util.NoSuchElementException;
 @WebServlet(name = "CurrencyExchange", value = "/exchangerates/*")
 public class CurrencyExchangeServlet extends HttpServlet {
 
+    @SneakyThrows
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
 
         if (!DataBaseConfig.isConnectionValid()) {
             Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
@@ -48,7 +49,7 @@ public class CurrencyExchangeServlet extends HttpServlet {
 
     @SneakyThrows
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
 
         // todo: обработать ошибки, проверить пару, сделать обмен, создать новый объект
 
