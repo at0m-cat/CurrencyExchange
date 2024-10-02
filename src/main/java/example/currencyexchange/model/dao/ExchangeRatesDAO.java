@@ -10,6 +10,11 @@ import java.util.List;
 
 public class ExchangeRatesDAO {
 
+    /**
+     * Parsing currency in table "exchangerates"
+     * @param rs ResultSet
+     * @return List ExchangeRates
+     */
     @SneakyThrows
     public static List<ExchangeRates> parsing(ResultSet rs){
         List<ExchangeRates> exchangeRates = new ArrayList<>();

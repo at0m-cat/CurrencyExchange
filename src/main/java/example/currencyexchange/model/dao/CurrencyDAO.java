@@ -9,7 +9,7 @@ import java.util.List;
 public class CurrencyDAO {
 
     /**
-     * Parsing currency from table "currencies"
+     * Parsing currency in table "currencies"
      * @param rs ResultSet
      * @return List currencies
      */
@@ -32,7 +32,7 @@ public class CurrencyDAO {
      * Find code in List "Currencies"
      * @param currenciesList List currencies
      * @param code String code currency
-     * @return SingleCurrency object
+     * @return Currencies object
      */
     public static Currencies findCodeCurrency(List<Currencies> currenciesList, String code){
         for (Currencies currencies : currenciesList) {
