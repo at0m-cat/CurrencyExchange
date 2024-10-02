@@ -1,4 +1,5 @@
 package example.currencyexchange.config;
+import example.currencyexchange.model.ExchangeRates;
 import example.currencyexchange.model.dao.Currencies;
 import example.currencyexchange.model.dao.Rates;
 import lombok.SneakyThrows;
@@ -41,6 +42,18 @@ public class DataBaseConfig {
     public static List<Rates> getRates() {
         ResultSet resultSet = connect("SELECT * FROM exchangerates");
         return Rates.parsing(resultSet);
+    }
+
+    public static List<ExchangeRates> getExchangeRate() {
+        String querry = "SELECT e.id AS rate_id, c1.id AS base_id, c1.fullname AS base_name, c1.code AS base_code, " +
+                "c1.sign AS base_sign, c2.id AS target_id, c2.fullname AS target_name, c2.code AS target_code, " +
+                "c2.sign AS target_sign, e.rate " +
+                "FROM exchangerates e " +
+                "JOIN currencies c1 ON e.basecurrencyid = c1.id " +
+                "JOIN currencies c2 ON e.targetcurrencyid = c2.id";
+        ResultSet resultSet = connect(querry);
+        return ExchangeRates.parsing(resultSet);
+
     }
 
 }

@@ -9,5 +9,8 @@
 </h1>
 <br/>
 <a href="currencies">Currencies List</a>
+<br/>
+<br/>
+<a href="exchangerates">ExchangeRates List</a>
 </body>
 </html>
