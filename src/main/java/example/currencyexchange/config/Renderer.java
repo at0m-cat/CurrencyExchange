@@ -24,6 +24,8 @@ public class Renderer {
 
     @SneakyThrows
     public static void printErrorJson(HttpServletResponse response, String error) {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         Error errorObj = new Error(error);
         printJson(response, errorObj);
     }

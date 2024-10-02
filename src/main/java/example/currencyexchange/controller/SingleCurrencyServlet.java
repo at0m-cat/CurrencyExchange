@@ -13,6 +13,7 @@ import org.postgresql.util.PSQLException;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @WebServlet(name = "SingeCurrency", value = "/currencies/*")
 public class SingleCurrencyServlet extends HttpServlet {
@@ -34,13 +35,7 @@ public class SingleCurrencyServlet extends HttpServlet {
             String[] parts = pathInfo.split("/");
             String code = parts[1];
 
-            List<Currencies> currenciesList = DataBaseConfig.getCurrencies();
-            Currencies currency = CurrencyDAO.findCodeCurrency(currenciesList, code);
-
-            if (currency == null) {
-                Renderer.printErrorJson(resp,String.valueOf(HttpServletResponse.SC_NOT_FOUND));
-                return;
-            }
+            Currencies currency = CurrencyDAO.findCodeCurrency(code);
 
             resp.setContentType("application/json");
             req.setCharacterEncoding("UTF-8");
@@ -48,6 +43,8 @@ public class SingleCurrencyServlet extends HttpServlet {
 
         } catch (ArrayIndexOutOfBoundsException e) {
             Renderer.printErrorJson(resp,String.valueOf(HttpServletResponse.SC_BAD_REQUEST));
+        } catch (NoSuchElementException e){
+            Renderer.printErrorJson(resp,String.valueOf(HttpServletResponse.SC_NOT_FOUND));
         }
     }
 
@@ -56,13 +53,18 @@ public class SingleCurrencyServlet extends HttpServlet {
 
         // todo: сверить с базой данных для добавления объекта
 
-        String fullName = req.getParameter("name");
+//        String fullName = req.getParameter("name");
         String code = req.getParameter("code");
-        Integer id = Integer.valueOf(req.getParameter("id"));
-        Integer sign = Integer.valueOf(req.getParameter("sign"));
-        Currencies currencies = new Currencies(fullName, code, id, sign);
+//        Integer id = Integer.valueOf(req.getParameter("id"));
+//        Integer sign = Integer.valueOf(req.getParameter("sign"));
 
+        Currencies currencies = CurrencyDAO.findCodeCurrency(code);
         Renderer.printJson(resp, currencies);
+
+
+//        Currencies currencies = new Currencies(fullName, code, id, sign);
+//
+//        Renderer.printJson(resp, currencies);
 
     }
 }

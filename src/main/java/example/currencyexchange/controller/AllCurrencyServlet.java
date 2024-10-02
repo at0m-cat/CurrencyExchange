@@ -33,10 +33,5 @@ public class AllCurrencyServlet extends HttpServlet {
     }
 
 
-    @SneakyThrows
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
-
-
-    }
 
 }

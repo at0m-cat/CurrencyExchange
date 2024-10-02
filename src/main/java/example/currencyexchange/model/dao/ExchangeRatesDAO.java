@@ -1,5 +1,6 @@
 package example.currencyexchange.model.dao;
 
+import example.currencyexchange.config.DataBaseConfig;
 import example.currencyexchange.model.Currencies;
 import example.currencyexchange.model.ExchangeRates;
 import lombok.SneakyThrows;
@@ -12,13 +13,14 @@ public class ExchangeRatesDAO {
 
     /**
      * Parsing currency in table "exchangerates"
+     *
      * @param rs ResultSet
      * @return List ExchangeRates
      */
     @SneakyThrows
-    public static List<ExchangeRates> parsing(ResultSet rs){
+    public static List<ExchangeRates> parsing(ResultSet rs) {
         List<ExchangeRates> exchangeRates = new ArrayList<>();
-        while(rs.next()){
+        while (rs.next()) {
             Currencies baseCurrency = new Currencies(
                     rs.getString("base_name"),
                     rs.getString("base_code"),
@@ -33,7 +35,7 @@ public class ExchangeRatesDAO {
             );
 
             ExchangeRates exchangeRate = new ExchangeRates(
-                    rs.getInt("rate_id"),
+                    rs.getInt("id"),
                     baseCurrency,
                     targetCurrency,
                     rs.getDouble("rate")
@@ -44,23 +46,25 @@ public class ExchangeRatesDAO {
     }
 
     /**
-     * searches for an object in list "ExchangeRates" with target and base codes
-     * @param exchangeRates List ExchangeRates
-     * @param base_code String base code currency
-     * @param target_code String target code currency
+     * searches for an object in database with target and base codes
+     *
+     * @param baseCode     String base code currency
+     * @param targetCode   String target code currency
      * @return ExchangeRates object
      */
-    public static ExchangeRates findCodeRates(List<ExchangeRates> exchangeRates, String base_code, String target_code){
+    @SneakyThrows
+    public static ExchangeRates findCodeRates(String baseCode, String targetCode){
+        String query = String.format("SELECT e.id, e.rate, " +
+                "c1.id AS base_id, c1.fullname AS base_name, c1.code AS base_code, c1.sign AS base_sign, " +
+                "c2.id AS target_id, c2.fullname AS target_name, c2.code AS target_code, c2.sign AS target_sign " +
+                "FROM exchangerates e " +
+                "JOIN currencies c1 ON e.basecurrencyid = c1.id " +
+                "JOIN currencies c2 ON e.targetcurrencyid = c2.id " +
+                "WHERE c1.code = '%s' AND c2.code = '%s'", baseCode.toUpperCase(), targetCode.toUpperCase());
 
-        for (ExchangeRates exchangeRate : exchangeRates) {
-            String bc = exchangeRate.getBASE_CURRENCY().getCODE();
-            String tar = exchangeRate.getTARGET_CURRENCY().getCODE();
 
-            if (base_code.equals(bc) && target_code.equals(tar)){
-                return exchangeRate;
-            }
-        }
-        return null;
+        ResultSet rs = DataBaseConfig.connect(query);
+       return parsing(rs).getFirst();
     }
 
 }

@@ -1,4 +1,5 @@
 package example.currencyexchange.model.dao;
+import example.currencyexchange.config.DataBaseConfig;
 import example.currencyexchange.model.Currencies;
 import lombok.SneakyThrows;
 
@@ -28,6 +29,8 @@ public class CurrencyDAO {
         return list;
     }
 
+
+
     /**
      * Find code in List "Currencies"
      * @param currenciesList List currencies
@@ -46,6 +49,13 @@ public class CurrencyDAO {
             }
         }
         return null;
+    }
+
+    public static Currencies findCodeCurrency(String code){
+        String query = String.format("SELECT * FROM currencies WHERE code = '%s'", code.toUpperCase());
+
+        ResultSet rs = DataBaseConfig.connect(query);
+        return parsing(rs).getFirst();
     }
 
 }
