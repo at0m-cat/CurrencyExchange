@@ -8,7 +8,6 @@ import java.util.List;
 
 public class CurrencyDAO {
 
-
     /**
      * db name: "currencyexchange",
      * table name: "currencies"

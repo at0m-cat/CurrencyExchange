@@ -9,7 +9,6 @@ import java.util.List;
 
 public class ExchangeRatesDAO {
 
-
     /**
      * db name: "currencyexchange",
      * parse from table "exchangerates" and join table "currencies"

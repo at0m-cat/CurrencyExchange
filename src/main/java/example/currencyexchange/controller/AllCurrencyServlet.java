@@ -13,7 +13,6 @@ import java.util.List;
 @WebServlet(name = "AllCurrency", value = "/currencies")
 public class AllCurrencyServlet extends HttpServlet {
 
-
     @SneakyThrows
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("application/json");
@@ -26,9 +25,6 @@ public class AllCurrencyServlet extends HttpServlet {
 
         List<Currencies> currenciesList = CurrencyDAO.getCurrencies();
         Renderer.printJson(response, currenciesList);
-
     }
-
-
 
 }
