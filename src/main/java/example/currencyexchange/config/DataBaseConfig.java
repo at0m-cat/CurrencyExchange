@@ -1,5 +1,5 @@
 package example.currencyexchange.config;
-import example.currencyexchange.model.ExchangeRates;
+import example.currencyexchange.model.dao.ExchangeRates;
 import example.currencyexchange.model.dao.Currencies;
 import example.currencyexchange.model.dao.Rates;
 import lombok.SneakyThrows;

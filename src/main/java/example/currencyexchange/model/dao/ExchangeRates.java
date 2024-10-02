@@ -1,12 +1,11 @@
-package example.currencyexchange.model;
+package example.currencyexchange.model.dao;
 
-import example.currencyexchange.model.dao.Currencies;
+import example.currencyexchange.model.SingleCurrency;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
