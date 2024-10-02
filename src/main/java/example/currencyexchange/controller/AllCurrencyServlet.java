@@ -2,6 +2,7 @@ package example.currencyexchange.controller;
 import example.currencyexchange.model.Currencies;
 import example.currencyexchange.config.DataBaseConfig;
 import example.currencyexchange.config.Renderer;
+import example.currencyexchange.model.dao.CurrencyDAO;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +28,7 @@ public class AllCurrencyServlet extends HttpServlet {
             return;
         }
 
-        List<Currencies> currenciesList = DataBaseConfig.getCurrencies();
+        List<Currencies> currenciesList = CurrencyDAO.getCurrencies();
         Renderer.printJson(response, currenciesList);
 
     }

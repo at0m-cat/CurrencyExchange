@@ -11,6 +11,33 @@ import java.util.List;
 
 public class ExchangeRatesDAO {
 
+
+    /**
+     * db name: "currencyexchange",
+     * parse from table "exchangerates" and join table "currencies"
+     *
+     * @return List ExchangeRates ->
+     * Base currency identifiers and data. Target currency identifiers and data. Exchange rate.
+     */
+    public static List<ExchangeRates> getExchangeRate () {
+        String query =
+                "SELECT e.id AS id," +
+                        " c1.id AS base_id, " +
+                        "c1.fullname AS base_name," +
+                        " c1.code AS base_code, " +
+                        "c1.sign AS base_sign," +
+                        " c2.id AS target_id, " +
+                        "c2.fullname AS target_name," +
+                        " c2.code AS target_code, " +
+                        "c2.sign AS target_sign, " +
+                        "e.rate " +
+                        "FROM exchangerates e " +
+                        "JOIN currencies c1 ON e.basecurrencyid = c1.id " +
+                        "JOIN currencies c2 ON e.targetcurrencyid = c2.id";
+        ResultSet resultSet = DataBaseConfig.connect(query);
+        return ExchangeRatesDAO.parsing(resultSet);
+    }
+
     /**
      * Parsing currency in table "exchangerates"
      *
@@ -47,7 +74,6 @@ public class ExchangeRatesDAO {
 
     /**
      * searches for an object in database with target and base codes
-     *
      * @param baseCode     String base code currency
      * @param targetCode   String target code currency
      * @return ExchangeRates object
@@ -61,7 +87,6 @@ public class ExchangeRatesDAO {
                 "JOIN currencies c1 ON e.basecurrencyid = c1.id " +
                 "JOIN currencies c2 ON e.targetcurrencyid = c2.id " +
                 "WHERE c1.code = '%s' AND c2.code = '%s'", baseCode.toUpperCase(), targetCode.toUpperCase());
-
 
         ResultSet rs = DataBaseConfig.connect(query);
        return parsing(rs).getFirst();

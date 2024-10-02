@@ -9,6 +9,19 @@ import java.util.List;
 
 public class CurrencyDAO {
 
+
+    /**
+     * db name: "currencyexchange",
+     * table name: "currencies"
+     *
+     * @return List Currencies
+     */
+    public static List<Currencies> getCurrencies () {
+        String query = "select * from currencies";
+        ResultSet resultSet = DataBaseConfig.connect(query);
+        return CurrencyDAO.parsing(resultSet);
+    }
+
     /**
      * Parsing currency in table "currencies"
      * @param rs ResultSet

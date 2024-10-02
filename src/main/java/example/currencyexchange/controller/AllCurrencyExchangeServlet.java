@@ -3,6 +3,7 @@ package example.currencyexchange.controller;
 import example.currencyexchange.config.DataBaseConfig;
 import example.currencyexchange.config.Renderer;
 import example.currencyexchange.model.ExchangeRates;
+import example.currencyexchange.model.dao.ExchangeRatesDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -25,7 +26,7 @@ public class AllCurrencyExchangeServlet extends HttpServlet {
             return;
         }
 
-        List<ExchangeRates> exchangeRates = DataBaseConfig.getExchangeRate();
+        List<ExchangeRates> exchangeRates = ExchangeRatesDAO.getExchangeRate();
         Renderer.printJson(resp, exchangeRates);
     }
 }

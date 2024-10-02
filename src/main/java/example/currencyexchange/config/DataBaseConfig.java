@@ -18,6 +18,11 @@ public class DataBaseConfig {
     static final String DATABASE_USER = "postgres";
     static final String DATABASE_PASSWORD = "postgres";
 
+    /**
+     * Connection to dataBase
+     * @param query Strinq
+     * @return ResultSet
+     */
     @SneakyThrows
     public static ResultSet connect(String query) {
         Class.forName(JDBC_DRIVER);
@@ -45,42 +50,5 @@ public class DataBaseConfig {
             return false;
         }
 
-        /**
-         * db name: "currencyexchange",
-         * table name: "currencies"
-         *
-         * @return List Currencies
-         */
-        public static List<Currencies> getCurrencies () {
-            String query = "select * from currencies";
-            ResultSet resultSet = connect(query);
-            return CurrencyDAO.parsing(resultSet);
-        }
-
-        /**
-         * db name: "currencyexchange",
-         * parse from table "exchangerates" and join table "currencies"
-         *
-         * @return List ExchangeRates ->
-         * Base currency identifiers and data. Target currency identifiers and data. Exchange rate.
-         */
-        public static List<ExchangeRates> getExchangeRate () {
-            String query =
-                    "SELECT e.id AS id," +
-                            " c1.id AS base_id, " +
-                            "c1.fullname AS base_name," +
-                            " c1.code AS base_code, " +
-                            "c1.sign AS base_sign," +
-                            " c2.id AS target_id, " +
-                            "c2.fullname AS target_name," +
-                            " c2.code AS target_code, " +
-                            "c2.sign AS target_sign, " +
-                            "e.rate " +
-                            "FROM exchangerates e " +
-                            "JOIN currencies c1 ON e.basecurrencyid = c1.id " +
-                            "JOIN currencies c2 ON e.targetcurrencyid = c2.id";
-            ResultSet resultSet = connect(query);
-            return ExchangeRatesDAO.parsing(resultSet);
-        }
 
     }
