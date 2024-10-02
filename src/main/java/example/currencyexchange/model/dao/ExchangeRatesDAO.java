@@ -8,6 +8,7 @@ import lombok.SneakyThrows;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class ExchangeRatesDAO {
 
@@ -90,6 +91,23 @@ public class ExchangeRatesDAO {
 
         ResultSet rs = DataBaseConfig.connect(query);
         return parsing(rs).getFirst();
+    }
+
+    /**
+     * Checks if an object exists, has an internal find call
+     *
+     * @param baseCode String
+     * @param targetCode String
+     * @return
+     */
+    public static boolean isExist(String baseCode, String targetCode){
+        try {
+            findCodeRates(baseCode, targetCode);
+            return true;
+        }
+        catch (NoSuchElementException e) {
+            return false;
+        }
     }
 
 }

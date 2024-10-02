@@ -5,8 +5,10 @@ import example.currencyexchange.model.Currencies;
 import lombok.SneakyThrows;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class CurrencyDAO {
 
@@ -54,6 +56,21 @@ public class CurrencyDAO {
 
         ResultSet rs = DataBaseConfig.connect(query);
         return parsing(rs).getFirst();
+    }
+
+    /**
+     * Checks if an object exists, has an internal find call
+     *
+     * @param code String
+     * @return
+     */
+    public static boolean isExist(String code) {
+        try {
+            findCodeCurrency(code);
+            return true;
+        } catch (NoSuchElementException e) {
+            return false;
+        }
     }
 
 }

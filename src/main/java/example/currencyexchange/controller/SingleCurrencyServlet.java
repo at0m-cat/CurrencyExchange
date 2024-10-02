@@ -50,13 +50,15 @@ public class SingleCurrencyServlet extends HttpServlet {
 
         // todo: сверить с базой данных для добавления объекта
 
-//        String fullName = req.getParameter("name");
         String code = req.getParameter("code");
+
+        Renderer.printJson(resp, CurrencyDAO.isExist(code));
+
+
+//        String fullName = req.getParameter("name");
 //        Integer id = Integer.valueOf(req.getParameter("id"));
 //        Integer sign = Integer.valueOf(req.getParameter("sign"));
-
-        Currencies currencies = CurrencyDAO.findCodeCurrency(code);
-        Renderer.printJson(resp, currencies);
+//        Currencies currencies = CurrencyDAO.findCodeCurrency(code);
 
 
 //        Currencies currencies = new Currencies(fullName, code, id, sign);
