@@ -1,10 +1,8 @@
 package example.currencyexchange.config;
 import example.currencyexchange.model.ExchangeRates;
 import example.currencyexchange.model.Currencies;
-import example.currencyexchange.model.Rates;
 import example.currencyexchange.model.dao.CurrencyDAO;
 import example.currencyexchange.model.dao.ExchangeRatesDAO;
-import example.currencyexchange.model.dao.RatesDAO;
 import lombok.SneakyThrows;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -35,16 +33,6 @@ public class DataBaseConfig {
     public static List<Currencies> getCurrencies() {
         ResultSet resultSet = connect("SELECT * FROM currencies");
         return CurrencyDAO.parsing(resultSet);
-    }
-
-    /**
-     * db name: "currencyexchange",
-     * table name: "exchangerates"
-     * @return List Rates
-     */
-    public static List<Rates> getRates() {
-        ResultSet resultSet = connect("SELECT * FROM exchangerates");
-        return RatesDAO.parsing(resultSet);
     }
 
     /**
