@@ -1,4 +1,5 @@
 package example.currencyexchange.controller;
+
 import example.currencyexchange.config.DataBaseConfig;
 import example.currencyexchange.config.Renderer;
 import example.currencyexchange.model.ExchangeRates;
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet(name = "CurrencyExchange", value = "/exchangerates/*")
@@ -17,8 +19,13 @@ public class CurrencyExchangeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String pathInfo = req.getPathInfo();
 
+        if (!DataBaseConfig.isConnectionValid()){
+            Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+            return;
+        }
+
+        String pathInfo = req.getPathInfo();
         try {
             String[] parts = pathInfo.split("/");
             String codes = parts[1];
@@ -31,7 +38,8 @@ public class CurrencyExchangeServlet extends HttpServlet {
             ExchangeRates rates = ExchangeRatesDAO.findCodeRates(exchangeRates, base_code, target_code);
 
             if (rates == null) {
-                resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+                Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_NOT_FOUND));
+                return;
             }
 
             resp.setContentType("application/json");
@@ -39,7 +47,7 @@ public class CurrencyExchangeServlet extends HttpServlet {
             Renderer.printJson(resp, rates);
 
         } catch (ArrayIndexOutOfBoundsException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_BAD_REQUEST));
         }
     }
 }

@@ -1,5 +1,6 @@
 package example.currencyexchange.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import example.currencyexchange.model.Error;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 import java.io.PrintWriter;
@@ -19,6 +20,12 @@ public class Renderer {
 
         writer.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(data));
         writer.flush();
+    }
+
+    @SneakyThrows
+    public static void printErrorJson(HttpServletResponse response, String error) {
+        Error errorObj = new Error(error);
+        printJson(response, errorObj);
     }
 
 }
