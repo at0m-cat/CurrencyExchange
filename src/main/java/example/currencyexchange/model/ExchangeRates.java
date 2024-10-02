@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 public class ExchangeRates {
     private final int ID;
-    private final SingleCurrency BASE_CURRENCY;
-    private final SingleCurrency TARGET_CURRENCY;
+    private final Currencies BASE_CURRENCY;
+    private final Currencies TARGET_CURRENCY;
     private final double RATE;
 
 }

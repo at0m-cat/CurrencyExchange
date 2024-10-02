@@ -1,7 +1,5 @@
 package example.currencyexchange.model.dao;
-
 import example.currencyexchange.model.Currencies;
-import example.currencyexchange.model.SingleCurrency;
 import lombok.SneakyThrows;
 
 import java.sql.ResultSet;
@@ -36,10 +34,10 @@ public class CurrencyDAO {
      * @param code String code currency
      * @return SingleCurrency object
      */
-    public static SingleCurrency findCodeCurrency(List<Currencies> currenciesList, String code){
+    public static Currencies findCodeCurrency(List<Currencies> currenciesList, String code){
         for (Currencies currencies : currenciesList) {
             if (currencies.getCODE().equalsIgnoreCase(code)) {
-                return new SingleCurrency(
+                return new Currencies(
                         currencies.getFULL_NAME(),
                         currencies.getCODE(),
                         currencies.getID(),
