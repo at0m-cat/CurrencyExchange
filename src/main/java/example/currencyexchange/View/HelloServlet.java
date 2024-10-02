@@ -1,4 +1,4 @@
-package example.currencyexchange;
+package example.currencyexchange.View;
 
 import java.io.*;
 

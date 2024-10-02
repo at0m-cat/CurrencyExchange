@@ -1,13 +1,7 @@
-package example.currencyexchange.Objects;
-
-import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpServletResponse;
+package example.currencyexchange.Model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
-
-import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;

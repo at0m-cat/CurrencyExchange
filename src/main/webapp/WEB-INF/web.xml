@@ -6,7 +6,7 @@
 
 <!--    <servlet>-->
 <!--        <servlet-name>Library</servlet-name>-->
-<!--        <servlet-class>example.currencyexchange.Servlets.CurrenciesServlet</servlet-class>-->
+<!--        <servlet-class>example.currencyexchange.View.CurrenciesServlet</servlet-class>-->
 <!--    </servlet>-->
 <!--    <servlet-mapping>-->
 <!--        <servlet-name>Library</servlet-name>-->
