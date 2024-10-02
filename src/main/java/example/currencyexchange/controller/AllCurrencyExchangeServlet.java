@@ -22,7 +22,7 @@ public class AllCurrencyExchangeServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
 
         List<ExchangeRates> exchangeRates = DataBaseConfig.getExchangeRate();
-        Renderer.printList(resp, exchangeRates);
+        Renderer.printJson(resp, exchangeRates);
 
     }
 }

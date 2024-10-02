@@ -36,7 +36,7 @@ public class SingleCurrencyServlet extends HttpServlet {
 
             resp.setContentType("application/json");
             req.setCharacterEncoding("UTF-8");
-            Renderer.printCurrency(resp, currency);
+            Renderer.printJson(resp, currency);
 
         } catch (ArrayIndexOutOfBoundsException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);

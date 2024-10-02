@@ -19,7 +19,7 @@ public class AllCurrencyServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         List<Currencies> currenciesList = DataBaseConfig.getCurrencies();
-        Renderer.printList(response, currenciesList);
+        Renderer.printJson(response, currenciesList);
 
     }
 

@@ -35,7 +35,7 @@ public class CurrencyExchangeServlet extends HttpServlet {
 
             resp.setContentType("application/json");
             req.setCharacterEncoding("UTF-8");
-            Renderer.printExchangeRates(resp, rates);
+            Renderer.printJson(resp, rates);
 
         } catch (ArrayIndexOutOfBoundsException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
