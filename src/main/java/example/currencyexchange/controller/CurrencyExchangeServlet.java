@@ -50,4 +50,16 @@ public class CurrencyExchangeServlet extends HttpServlet {
             Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_BAD_REQUEST));
         }
     }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        // todo: проверить наличие пары
+
+        String baseCode = req.getParameter("baseCurrencyCode");
+        String targetCode = req.getParameter("targetCurrencyCode");
+        String rate = req.getParameter("rate");
+
+
+    }
 }

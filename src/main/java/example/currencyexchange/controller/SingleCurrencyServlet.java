@@ -53,6 +53,16 @@ public class SingleCurrencyServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
+
+        // todo: сверить с базой данных для добавления объекта
+
+        String fullName = req.getParameter("name");
+        String code = req.getParameter("code");
+        Integer id = Integer.valueOf(req.getParameter("id"));
+        Integer sign = Integer.valueOf(req.getParameter("sign"));
+        Currencies currencies = new Currencies(fullName, code, id, sign);
+
+        Renderer.printJson(resp, currencies);
+
     }
 }
