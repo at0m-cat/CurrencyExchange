@@ -52,8 +52,11 @@ public class SingleCurrencyServlet extends HttpServlet {
 
         String code = req.getParameter("code");
 
-        Renderer.printJson(resp, CurrencyDAO.isExist(code));
+        if (CurrencyDAO.isExist(code)) {
+            Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_CONFLICT));
+        }
 
+        // todo: создать объект
 
 //        String fullName = req.getParameter("name");
 //        Integer id = Integer.valueOf(req.getParameter("id"));

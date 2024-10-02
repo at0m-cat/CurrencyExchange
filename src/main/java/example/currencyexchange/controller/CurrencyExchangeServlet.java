@@ -56,7 +56,13 @@ public class CurrencyExchangeServlet extends HttpServlet {
         String targetCode = req.getParameter("targetCurrencyCode");
         String rate = req.getParameter("rate");
 
-        Renderer.printJson(resp, ExchangeRatesDAO.isExist(baseCode, targetCode));
+        if (ExchangeRatesDAO.isExist(baseCode, targetCode)) {
+            Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_CONFLICT));
+            return;
+        }
+
+        // todo: создать объект
+
 
 //        // если в базе объект существует, то создаем и печатаем
 //
