@@ -12,8 +12,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "ExchangeRatesAll", value = "/exchangerates")
-public class ExchangeRatesAllShow extends HttpServlet {
+@WebServlet(name = "AllExchangeRates", value = "/exchangerates")
+public class AllCurrencyExchange extends HttpServlet {
 
 
     @Override

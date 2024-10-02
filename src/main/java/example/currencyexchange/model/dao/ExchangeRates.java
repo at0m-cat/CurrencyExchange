@@ -46,6 +46,19 @@ public class ExchangeRates {
         }
         return exchangeRates;
     }
+
+    public static ExchangeRates findCodeRates(List<ExchangeRates> exchangeRates, String base_code, String target_code){
+
+        for (ExchangeRates exchangeRate : exchangeRates) {
+            String bc = exchangeRate.getBASE_CURRENCY().getCODE();
+            String tar = exchangeRate.getTARGET_CURRENCY().getCODE();
+
+            if (base_code.equals(bc) && target_code.equals(tar)){
+                return exchangeRate;
+            }
+        }
+        return null;
+    }
 }
 
 
