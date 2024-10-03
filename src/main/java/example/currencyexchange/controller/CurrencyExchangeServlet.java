@@ -27,10 +27,6 @@ public class CurrencyExchangeServlet extends HttpServlet {
         }
         try {
             String[] codeExchange = UserInputConfig.getCodeExchange(req.getPathInfo());
-            if (codeExchange == null){
-                Renderer.printMessage(resp, HttpServletResponse.SC_BAD_REQUEST);
-                return;
-            }
 
             String baseCode = codeExchange[0];
             String targetCode = codeExchange[1];
@@ -41,12 +37,11 @@ public class CurrencyExchangeServlet extends HttpServlet {
             }
             Renderer.print(resp, rates);
 
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (ArrayIndexOutOfBoundsException | IllegalArgumentException e) {
             Renderer.printMessage(resp, HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 
-    @SneakyThrows
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
 
@@ -54,8 +49,6 @@ public class CurrencyExchangeServlet extends HttpServlet {
             Renderer.printMessage(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
-
-        // todo: обработать ошибки, проверить пару, сделать обмен, создать новый объект
 
         String baseCode = req.getParameter("baseCurrencyCode");
         String targetCode = req.getParameter("targetCurrencyCode");
@@ -67,17 +60,12 @@ public class CurrencyExchangeServlet extends HttpServlet {
             return;
         }
 
-        if (ExchangeRatesDAO.findCodeRates(baseCode, targetCode) != null) {
-            Renderer.printMessage(resp, HttpServletResponse.SC_CONFLICT);
-            return;
-        }
-
-        ExchangeRatesDAO.setExchangeRate(baseCode, targetCode, rate);
-        if (ExchangeRatesDAO.findCodeRates(baseCode, targetCode) != null) {
+        try {
+            ExchangeRatesDAO.setExchangeRate(baseCode, targetCode, rate);
             Renderer.printMessage(resp, HttpServletResponse.SC_CREATED);
-            return;
+        } catch (NoSuchMethodException e){
+            Renderer.printMessage(resp, HttpServletResponse.SC_CONFLICT);
         }
 
-//        Renderer.printJson(resp, er );
     }
 }

@@ -42,7 +42,6 @@ public class SingleCurrencyServlet extends HttpServlet {
         } catch (ArrayIndexOutOfBoundsException e) {
             Renderer.printMessage(resp, HttpServletResponse.SC_BAD_REQUEST);
         }
-
     }
 
     @SneakyThrows
@@ -53,13 +52,9 @@ public class SingleCurrencyServlet extends HttpServlet {
             Renderer.printMessage(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
-
-        // todo: сверить с базой данных для добавления объекта
-
         String code = req.getParameter("code");
         String name = req.getParameter("name");
         String sign = req.getParameter("sign");
-
         String[] params = {code, name, sign};
 
         if (!UserInputConfig.isCorrectPostParams(params)){
@@ -67,15 +62,11 @@ public class SingleCurrencyServlet extends HttpServlet {
             return;
         }
 
-        if (CurrencyDAO.findCodeCurrency(code) != null) {
-            Renderer.printMessage(resp, HttpServletResponse.SC_CONFLICT);
-            return;
-        }
-
-        CurrencyDAO.setCurrency(name, code, sign);
-        if (CurrencyDAO.findCodeCurrency(code) != null) {
+        try {
+            CurrencyDAO.setCurrency(code, name, sign);
             Renderer.printMessage(resp, HttpServletResponse.SC_CREATED);
-            return;
+        } catch (NoSuchMethodException e){
+            Renderer.printMessage(resp, HttpServletResponse.SC_CONFLICT);
         }
 
     }

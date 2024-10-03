@@ -12,7 +12,7 @@ public class UserInputConfig {
         String[] userText = text.split("/");
         String codes = userText[1].toUpperCase();
         if (!isCorrectCodeExchange(codes)) {
-            return null;
+            throw new IllegalArgumentException();
         }
         return codes.split("(?<=\\G...)");
     }

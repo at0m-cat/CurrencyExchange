@@ -27,13 +27,16 @@ public class CurrencyDAO {
     }
 
     @SneakyThrows
-    public static void setCurrency(String currencyName, String currencyCode, String currencySign) {
+    public static void setCurrency(String currencyName, String currencyCode, String currencySign) throws NoSuchMethodException {
+        if (findCodeCurrency(currencyCode) != null) {
+            throw new NoSuchMethodException();
+        }
         String query = """
                 INSERT INTO currencies (fullname, code, sign)
                 VALUES (?, ?, ?)
                 ON CONFLICT (code) DO NOTHING""";
 
-        DataBaseConfig.connect(query, currencyName, currencyCode, currencySign);
+        DataBaseConfig.connect(query, currencyName, currencyCode.toUpperCase(), currencySign);
     }
 
     /**
@@ -66,7 +69,7 @@ public class CurrencyDAO {
     @SneakyThrows
     public static Currencies findCodeCurrency(String code) {
         String query = "SELECT * from currencies where code = ?";
-        ResultSet rs = DataBaseConfig.connect(query, code);
+        ResultSet rs = DataBaseConfig.connect(query, code.toUpperCase());
         try {
             return parsing(rs).getFirst();
         } catch (NoSuchElementException e) {

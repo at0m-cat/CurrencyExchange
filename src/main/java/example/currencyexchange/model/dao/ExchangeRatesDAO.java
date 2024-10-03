@@ -69,7 +69,11 @@ public class ExchangeRatesDAO {
     }
 
     @SneakyThrows
-    public static void setExchangeRate(String baseCode, String targetCode, String rate) {
+    public static void setExchangeRate(String baseCode, String targetCode, String rate) throws NoSuchMethodException {
+        if (findCodeRates(baseCode, targetCode) != null) {
+            throw new NoSuchMethodException();
+        }
+
         String findBaseCurrencyIdQuery = "SELECT id FROM currencies WHERE code = ?";
         String findTargetCurrencyIdQuery = "SELECT id FROM currencies WHERE code = ?";
 
