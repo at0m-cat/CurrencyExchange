@@ -38,8 +38,7 @@ public class Renderer {
         String message;
         switch (errorType) {
             case 500 -> message = "DataBase unavailable";
-            case 400 -> message = "A required form field is missing" +
-                    " or currency code is missing from the address";
+            case 400 -> message = "A required form field is missing";
             case 404 -> message = "Not found";
             case 409 -> message = "A currency with this code already exists";
             case 201 -> message = "Success";

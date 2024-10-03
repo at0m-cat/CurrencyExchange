@@ -57,7 +57,7 @@ public class SingleCurrencyServlet extends HttpServlet {
         String sign = req.getParameter("sign");
         String[] params = {code, name, sign};
 
-        if (!UserInputConfig.isCorrectPostParams(params)){
+        if (!UserInputConfig.isNotNullParams(params)){
             Renderer.printMessage(resp, HttpServletResponse.SC_BAD_REQUEST);
             return;
         }

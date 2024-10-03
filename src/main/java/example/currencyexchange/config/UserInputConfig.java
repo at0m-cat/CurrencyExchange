@@ -32,6 +32,8 @@ public class UserInputConfig {
         return code;
     }
 
+
+
     private static boolean isCorrectCodeExchange(String splitCode) {
         return splitCode.length() == 6;
     }
@@ -40,7 +42,7 @@ public class UserInputConfig {
         return code.length() == 3;
     }
 
-    public static boolean isCorrectPostParams(String[] postParams) {
+    public static boolean isNotNullParams(String[] postParams) {
         for (String postParam : postParams) {
             if (postParam == null || postParam.isEmpty()) {
                 return false;

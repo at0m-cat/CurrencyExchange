@@ -55,7 +55,7 @@ public class CurrencyExchangeServlet extends HttpServlet {
         String rate = req.getParameter("rate");
         String[] params = {baseCode, targetCode, rate};
 
-        if (!UserInputConfig.isCorrectPostParams(params)) {
+        if (!UserInputConfig.isNotNullParams(params)) {
             Renderer.printMessage(resp, HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
