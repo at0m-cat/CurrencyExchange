@@ -22,13 +22,13 @@ public class CurrencyExchangeServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
 
         if (!DataBaseConfig.isConnection()) {
-            Renderer.printErrorJson(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            Renderer.printMessage(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
         try {
             String[] codeExchange = UserInputConfig.getCodeExchange(req.getPathInfo());
             if (codeExchange == null){
-                Renderer.printErrorJson(resp, HttpServletResponse.SC_BAD_REQUEST);
+                Renderer.printMessage(resp, HttpServletResponse.SC_BAD_REQUEST);
                 return;
             }
 
@@ -36,13 +36,13 @@ public class CurrencyExchangeServlet extends HttpServlet {
             String targetCode = codeExchange[1];
             ExchangeRates rates = ExchangeRatesDAO.findCodeRates(baseCode, targetCode);
             if (rates == null) {
-                Renderer.printErrorJson(resp, HttpServletResponse.SC_NOT_FOUND);
+                Renderer.printMessage(resp, HttpServletResponse.SC_NOT_FOUND);
                 return;
             }
-            Renderer.printJson(resp, rates);
+            Renderer.print(resp, rates);
 
         } catch (ArrayIndexOutOfBoundsException e) {
-            Renderer.printErrorJson(resp, HttpServletResponse.SC_BAD_REQUEST);
+            Renderer.printMessage(resp, HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 
@@ -51,7 +51,7 @@ public class CurrencyExchangeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
 
         if (!DataBaseConfig.isConnection()) {
-            Renderer.printErrorJson(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            Renderer.printMessage(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
 
@@ -63,18 +63,18 @@ public class CurrencyExchangeServlet extends HttpServlet {
         String[] params = {baseCode, targetCode, rate};
 
         if (!UserInputConfig.isCorrectPostParams(params)) {
-            Renderer.printErrorJson(resp, HttpServletResponse.SC_BAD_REQUEST);
+            Renderer.printMessage(resp, HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 
         if (ExchangeRatesDAO.findCodeRates(baseCode, targetCode) != null) {
-            Renderer.printErrorJson(resp, HttpServletResponse.SC_CONFLICT);
+            Renderer.printMessage(resp, HttpServletResponse.SC_CONFLICT);
             return;
         }
 
         ExchangeRatesDAO.setExchangeRate(baseCode, targetCode, rate);
         if (ExchangeRatesDAO.findCodeRates(baseCode, targetCode) != null) {
-            Renderer.printErrorJson(resp, HttpServletResponse.SC_CREATED);
+            Renderer.printMessage(resp, HttpServletResponse.SC_CREATED);
             return;
         }
 

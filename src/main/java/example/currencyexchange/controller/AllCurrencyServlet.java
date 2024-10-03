@@ -21,12 +21,12 @@ public class AllCurrencyServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         if (!DataBaseConfig.isConnection()) {
-            Renderer.printErrorJson(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            Renderer.printMessage(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
 
         List<Currencies> currenciesList = CurrencyDAO.getCurrencies();
-        Renderer.printJson(response, currenciesList);
+        Renderer.print(response, currenciesList);
     }
 
 }

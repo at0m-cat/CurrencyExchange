@@ -21,26 +21,26 @@ public class SingleCurrencyServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
 
         if (!DataBaseConfig.isConnection()) {
-            Renderer.printErrorJson(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            Renderer.printMessage(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
         try {
             String code = UserInputConfig.getCodeCurrency(req.getPathInfo());
 
             if (code == null) {
-                Renderer.printErrorJson(resp, HttpServletResponse.SC_BAD_REQUEST);
+                Renderer.printMessage(resp, HttpServletResponse.SC_BAD_REQUEST);
                 return;
             }
 
             Currencies currency = CurrencyDAO.findCodeCurrency(code);
             if (currency == null) {
-                Renderer.printErrorJson(resp, HttpServletResponse.SC_NOT_FOUND);
+                Renderer.printMessage(resp, HttpServletResponse.SC_NOT_FOUND);
                 return;
             }
-            Renderer.printJson(resp, currency);
+            Renderer.print(resp, currency);
 
         } catch (ArrayIndexOutOfBoundsException e) {
-            Renderer.printErrorJson(resp, HttpServletResponse.SC_BAD_REQUEST);
+            Renderer.printMessage(resp, HttpServletResponse.SC_BAD_REQUEST);
         }
 
     }
@@ -50,7 +50,7 @@ public class SingleCurrencyServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
 
         if (!DataBaseConfig.isConnection()) {
-            Renderer.printErrorJson(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            Renderer.printMessage(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
 
@@ -63,18 +63,18 @@ public class SingleCurrencyServlet extends HttpServlet {
         String[] params = {code, name, sign};
 
         if (!UserInputConfig.isCorrectPostParams(params)){
-            Renderer.printErrorJson(resp, HttpServletResponse.SC_BAD_REQUEST);
+            Renderer.printMessage(resp, HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 
         if (CurrencyDAO.findCodeCurrency(code) != null) {
-            Renderer.printErrorJson(resp, HttpServletResponse.SC_CONFLICT);
+            Renderer.printMessage(resp, HttpServletResponse.SC_CONFLICT);
             return;
         }
 
         CurrencyDAO.setCurrency(name, code, sign);
         if (CurrencyDAO.findCodeCurrency(code) != null) {
-            Renderer.printErrorJson(resp, HttpServletResponse.SC_CREATED);
+            Renderer.printMessage(resp, HttpServletResponse.SC_CREATED);
             return;
         }
 

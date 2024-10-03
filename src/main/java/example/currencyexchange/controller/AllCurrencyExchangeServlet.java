@@ -22,11 +22,11 @@ public class AllCurrencyExchangeServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
 
         if (!DataBaseConfig.isConnection()) {
-            Renderer.printErrorJson(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            Renderer.printMessage(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
 
         List<ExchangeRates> exchangeRates = ExchangeRatesDAO.getExchangeRate();
-        Renderer.printJson(resp, exchangeRates);
+        Renderer.print(resp, exchangeRates);
     }
 }

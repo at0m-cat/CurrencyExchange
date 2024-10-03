@@ -14,7 +14,7 @@ public class Renderer {
      * @param <T> Object type
      */
     @SneakyThrows
-    public static <T> void printJson(HttpServletResponse response, T data) {
+    public static <T> void print(HttpServletResponse response, T data) {
         PrintWriter writer = response.getWriter();
         ObjectMapper mapper = new ObjectMapper();
 
@@ -23,7 +23,7 @@ public class Renderer {
     }
 
     @SneakyThrows
-    public static void printErrorJson(HttpServletResponse response, int errorType) {
+    public static void printMessage(HttpServletResponse response, int errorType) {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
@@ -31,7 +31,7 @@ public class Renderer {
         String message = getMessage(errorType);
 
         Error errorObj = new Error(message);
-        printJson(response, errorObj);
+        print(response, errorObj);
     }
 
     private static String getMessage(int errorType) {
