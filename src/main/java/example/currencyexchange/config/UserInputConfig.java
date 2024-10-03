@@ -40,4 +40,13 @@ public class UserInputConfig {
         return code.length() == 3;
     }
 
+    public static boolean isCorrectPostParams(String[] postParams) {
+        for (String postParam : postParams) {
+            if (postParam == null || postParam.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

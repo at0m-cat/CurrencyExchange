@@ -21,16 +21,19 @@ public class CurrencyDAO {
      */
     @SneakyThrows
     public static List<Currencies> getCurrencies() {
-        String query = "select * from currencies";
+        String query = "SELECT * from currencies";
         ResultSet resultSet = DataBaseConfig.connect(query);
         return CurrencyDAO.parsing(resultSet);
     }
 
     @SneakyThrows
     public static void setCurrency(String currencyName, String currencyCode, String currencySign) {
-        String query = "INSERT INTO currencies(fullname, code, sign) VALUES (?, ?, ?)";
-        DataBaseConfig.connect(query, currencyName, currencyCode, currencySign);
+        String query = """
+                INSERT INTO currencies (fullname, code, sign)
+                VALUES (?, ?, ?)
+                ON CONFLICT (code) DO NOTHING""";
 
+        DataBaseConfig.connect(query, currencyName, currencyCode, currencySign);
     }
 
     /**
@@ -62,8 +65,7 @@ public class CurrencyDAO {
      */
     @SneakyThrows
     public static Currencies findCodeCurrency(String code) {
-//        String query = String.format("SELECT * FROM currencies WHERE code = '%s'", code.toUpperCase());
-        String query = "select * from currencies where code = ?";
+        String query = "SELECT * from currencies where code = ?";
         ResultSet rs = DataBaseConfig.connect(query, code);
         try {
             return parsing(rs).getFirst();

@@ -45,8 +45,14 @@ public class SingleCurrencyServlet extends HttpServlet {
 
     }
 
+    @SneakyThrows
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+
+        if (!DataBaseConfig.isConnection()) {
+            Renderer.printErrorJson(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
 
         // todo: сверить с базой данных для добавления объекта
 
@@ -54,12 +60,23 @@ public class SingleCurrencyServlet extends HttpServlet {
         String name = req.getParameter("name");
         String sign = req.getParameter("sign");
 
+        String[] params = {code, name, sign};
+
+        if (!UserInputConfig.isCorrectPostParams(params)){
+            Renderer.printErrorJson(resp, HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
         if (CurrencyDAO.findCodeCurrency(code) != null) {
             Renderer.printErrorJson(resp, HttpServletResponse.SC_CONFLICT);
             return;
         }
 
-        CurrencyDAO.setCurrency(code, name, sign);
+        // todo: раскомментировать по завершению
+//        CurrencyDAO.setCurrency(name, code, sign);
+        if (CurrencyDAO.findCodeCurrency(code) != null) {
+            Renderer.printErrorJson(resp, HttpServletResponse.SC_CREATED);
+        }
 
     }
 }

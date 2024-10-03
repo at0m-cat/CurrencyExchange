@@ -55,8 +55,24 @@ public class CurrencyExchangeServlet extends HttpServlet {
         String baseCode = req.getParameter("baseCurrencyCode");
         String targetCode = req.getParameter("targetCurrencyCode");
         String rate = req.getParameter("rate");
+        String[] params = {baseCode, targetCode, rate};
 
-        // todo: создать объект
+        if (!UserInputConfig.isCorrectPostParams(params)) {
+            Renderer.printErrorJson(resp, HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
 
+        if (ExchangeRatesDAO.findCodeRates(baseCode, targetCode) != null) {
+            Renderer.printErrorJson(resp, HttpServletResponse.SC_CONFLICT);
+            return;
+        }
+
+        ExchangeRatesDAO.setExchangeRate(baseCode, targetCode, rate);
+        if (ExchangeRatesDAO.findCodeRates(baseCode, targetCode) != null) {
+            Renderer.printErrorJson(resp, HttpServletResponse.SC_CREATED);
+            return;
+        }
+
+//        Renderer.printJson(resp, er );
     }
 }

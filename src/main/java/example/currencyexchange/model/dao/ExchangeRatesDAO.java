@@ -21,7 +21,7 @@ public class ExchangeRatesDAO {
      * Base currency identifiers and data. Target currency identifiers and data. Exchange rate.
      */
     public static List<ExchangeRates> getExchangeRate() throws SQLException {
-        String query ="""
+        String query = """
                 SELECT e.id AS id, c1.id AS base_id, c1.fullname AS base_name,
                  c1.code AS base_code, c1.sign AS base_sign,c2.id AS target_id,
                  c2.fullname AS target_name, c2.code AS target_code,
@@ -66,6 +66,23 @@ public class ExchangeRatesDAO {
             exchangeRates.add(exchangeRate);
         }
         return exchangeRates;
+    }
+
+    @SneakyThrows
+    public static void setExchangeRate(String baseCode, String targetCode, String rate) {
+        String findBaseCurrencyIdQuery = "SELECT id FROM currencies WHERE code = ?";
+        String findTargetCurrencyIdQuery = "SELECT id FROM currencies WHERE code = ?";
+
+        String insertExchangeRateQuery = """
+                INSERT INTO exchangerates (basecurrencyid, targetcurrencyid, rate)
+                VALUES (?, ?, ?)""";
+
+        ResultSet baseCurrencyRs = DataBaseConfig.connect(findBaseCurrencyIdQuery, baseCode);
+        ResultSet targetCurrencyRs = DataBaseConfig.connect(findTargetCurrencyIdQuery, targetCode);
+
+        int baseCurrencyId = baseCurrencyRs.getInt("id");
+        int targetCurrencyId = targetCurrencyRs.getInt("id");
+        DataBaseConfig.connect(insertExchangeRateQuery, baseCurrencyId, targetCurrencyId, Double.valueOf(rate));
     }
 
     /**
