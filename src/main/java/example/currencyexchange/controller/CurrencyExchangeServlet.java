@@ -50,6 +50,11 @@ public class CurrencyExchangeServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
 
+        if (!DataBaseConfig.isConnection()) {
+            Renderer.printErrorJson(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
+
         // todo: обработать ошибки, проверить пару, сделать обмен, создать новый объект
 
         String baseCode = req.getParameter("baseCurrencyCode");
