@@ -5,6 +5,9 @@ import example.currencyexchange.model.Currencies;
 import example.currencyexchange.model.Exchange;
 import example.currencyexchange.model.ExchangeRates;
 import lombok.SneakyThrows;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
 
@@ -60,6 +63,7 @@ public class ExchangeDAO {
         }
 
 
+        // todo: поиск посредника (пересобрать)
 
         if (rateExchange == Double.MIN_VALUE) {
             rateExchange = findIndirectExchangeRate(fromCurrencyCode, toCurrencyCode);
@@ -73,15 +77,28 @@ public class ExchangeDAO {
         return exchange;
     }
 
+    @SneakyThrows
+    public static Double findIndirectExchangeRate(String fromCurrencyCode, String toCurrencyCode) {
+        String query = """
+                    SELECT c3.code AS intermediary_currency, e1.rate AS rate_to_intermediary, 
+                           e2.rate AS rate_from_intermediary
+                    FROM exchangerates e1
+                    JOIN exchangerates e2 ON e1.targetcurrencyid = e2.basecurrencyid
+                    JOIN currencies c1 ON e1.basecurrencyid = c1.id
+                    JOIN currencies c2 ON e2.targetcurrencyid = c2.id
+                    JOIN currencies c3 ON e1.targetcurrencyid = c3.id
+                    WHERE c1.code = ?
+                    AND c2.code = ?
+                    AND c1.id != c2.id;
+                """;
+        ResultSet rs = DataBaseConfig.connect(query, fromCurrencyCode, toCurrencyCode);
 
-
-    private static Double findIndirectExchangeRate(String fromCurrencyCode, String toCurrencyCode) {
-
-        // todo: пересобрать!
-
-
-
-        return -1.1;
+        if (rs.next()) {
+            Double rateToIntermediary = rs.getDouble("rate_to_intermediary");
+            Double rateFromIntermediary = rs.getDouble("rate_from_intermediary");
+            return rateFromIntermediary / rateToIntermediary;
+        }
+        return null;
     }
 
     private static boolean isValidCurrency(String codeCurrency) {
