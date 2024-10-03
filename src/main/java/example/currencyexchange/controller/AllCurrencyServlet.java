@@ -21,7 +21,7 @@ public class AllCurrencyServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         if (!DataBaseConfig.isConnection()) {
-            Renderer.printErrorJson(response, String.valueOf(HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+            Renderer.printErrorJson(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
 

@@ -32,11 +32,11 @@ public class UserInputConfig {
         return code;
     }
 
-    public static boolean isCorrectCodeExchange(String splitCode) {
+    private static boolean isCorrectCodeExchange(String splitCode) {
         return splitCode.length() == 6;
     }
 
-    public static boolean isCorrectCodeCurrency(String code) {
+    private static boolean isCorrectCodeCurrency(String code) {
         return code.length() == 3;
     }
 

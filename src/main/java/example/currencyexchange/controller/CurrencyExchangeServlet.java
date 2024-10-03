@@ -22,13 +22,13 @@ public class CurrencyExchangeServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
 
         if (!DataBaseConfig.isConnection()) {
-            Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+            Renderer.printErrorJson(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
         try {
             String[] codeExchange = UserInputConfig.getCodeExchange(req.getPathInfo());
             if (codeExchange == null){
-                Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_BAD_REQUEST));
+                Renderer.printErrorJson(resp, HttpServletResponse.SC_BAD_REQUEST);
                 return;
             }
 
@@ -36,13 +36,13 @@ public class CurrencyExchangeServlet extends HttpServlet {
             String targetCode = codeExchange[1];
             ExchangeRates rates = ExchangeRatesDAO.findCodeRates(baseCode, targetCode);
             if (rates == null) {
-                Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_NOT_FOUND));
+                Renderer.printErrorJson(resp, HttpServletResponse.SC_NOT_FOUND);
                 return;
             }
             Renderer.printJson(resp, rates);
 
         } catch (ArrayIndexOutOfBoundsException e) {
-            Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_BAD_REQUEST));
+            Renderer.printErrorJson(resp, HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 

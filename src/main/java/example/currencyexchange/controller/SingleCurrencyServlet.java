@@ -21,26 +21,28 @@ public class SingleCurrencyServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
 
         if (!DataBaseConfig.isConnection()) {
-            Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+            Renderer.printErrorJson(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
-
         try {
             String code = UserInputConfig.getCodeCurrency(req.getPathInfo());
+
             if (code == null) {
-                Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_BAD_REQUEST));
+                Renderer.printErrorJson(resp, HttpServletResponse.SC_BAD_REQUEST);
+                return;
             }
 
             Currencies currency = CurrencyDAO.findCodeCurrency(code);
             if (currency == null) {
-                Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_NOT_FOUND));
+                Renderer.printErrorJson(resp, HttpServletResponse.SC_NOT_FOUND);
                 return;
             }
             Renderer.printJson(resp, currency);
 
         } catch (ArrayIndexOutOfBoundsException e) {
-            Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_BAD_REQUEST));
+            Renderer.printErrorJson(resp, HttpServletResponse.SC_BAD_REQUEST);
         }
+
     }
 
     @Override
@@ -53,11 +55,11 @@ public class SingleCurrencyServlet extends HttpServlet {
         String sign = req.getParameter("sign");
 
         if (CurrencyDAO.findCodeCurrency(code) != null) {
-            Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_CONFLICT));
+            Renderer.printErrorJson(resp, HttpServletResponse.SC_CONFLICT);
+            return;
         }
 
         CurrencyDAO.setCurrency(code, name, sign);
-
 
     }
 }

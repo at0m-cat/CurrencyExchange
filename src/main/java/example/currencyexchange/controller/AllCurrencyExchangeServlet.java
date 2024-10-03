@@ -22,7 +22,7 @@ public class AllCurrencyExchangeServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
 
         if (!DataBaseConfig.isConnection()) {
-            Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+            Renderer.printErrorJson(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
 

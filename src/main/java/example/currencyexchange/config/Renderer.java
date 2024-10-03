@@ -23,10 +23,14 @@ public class Renderer {
     }
 
     @SneakyThrows
-    public static void printErrorJson(HttpServletResponse response, String error) {
+    public static void printErrorJson(HttpServletResponse response, int errorType) {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        Error errorObj = new Error(error);
+
+        response.setStatus(errorType);
+        String message = String.valueOf(errorType);
+
+        Error errorObj = new Error(message);
         printJson(response, errorObj);
     }
 
