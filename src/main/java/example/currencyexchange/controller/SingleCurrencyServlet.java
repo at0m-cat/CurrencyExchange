@@ -72,10 +72,10 @@ public class SingleCurrencyServlet extends HttpServlet {
             return;
         }
 
-        // todo: раскомментировать по завершению
-//        CurrencyDAO.setCurrency(name, code, sign);
+        CurrencyDAO.setCurrency(name, code, sign);
         if (CurrencyDAO.findCodeCurrency(code) != null) {
             Renderer.printErrorJson(resp, HttpServletResponse.SC_CREATED);
+            return;
         }
 
     }

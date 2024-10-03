@@ -28,10 +28,25 @@ public class Renderer {
         response.setCharacterEncoding("UTF-8");
 
         response.setStatus(errorType);
-        String message = String.valueOf(errorType);
+        String message = getMessage(errorType);
 
         Error errorObj = new Error(message);
         printJson(response, errorObj);
+    }
+
+    private static String getMessage(int errorType) {
+        String message;
+        switch (errorType) {
+            case 500 -> message = "DataBase unavailable";
+            case 400 -> message = "A required form field is missing" +
+                    " or currency code is missing from the address";
+            case 404 -> message = "Not found";
+            case 409 -> message = "A currency with this code already exists";
+            case 201 -> message = "Success";
+            default -> message = String.valueOf(errorType);
+
+        }
+        return message;
     }
 
 }
