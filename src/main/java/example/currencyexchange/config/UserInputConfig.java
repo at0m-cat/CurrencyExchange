@@ -32,7 +32,23 @@ public class UserInputConfig {
         return code;
     }
 
+    public static boolean isDoubleRate(String userRate) {
+        try{
+            Double.parseDouble(userRate);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
 
+    public static boolean isTextSign(String userSign) {
+        try {
+            Integer.parseInt(userSign);
+        } catch (NumberFormatException e) {
+            return true;
+        }
+        return false;
+    }
 
     private static boolean isCorrectCodeExchange(String splitCode) {
         return splitCode.length() == 6;
