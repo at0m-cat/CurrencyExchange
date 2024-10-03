@@ -36,14 +36,14 @@ public class ExchangeServlet extends HttpServlet {
             return;
         }
 
+        // todo: exchange create
+
         try {
-            Exchange exchange = ExchangeDAO.getExchange(from, to, Double.valueOf(amount));
+            Exchange exchange = ExchangeDAO.getEx(from, to, Double.valueOf(amount));
             Renderer.print(resp, exchange);
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             Renderer.printMessage(resp, HttpServletResponse.SC_NOT_FOUND);
         }
-
-
 
     }
 }

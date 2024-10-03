@@ -1,83 +1,95 @@
 package example.currencyexchange.model.dao;
 
 import example.currencyexchange.config.DataBaseConfig;
-import example.currencyexchange.config.Renderer;
 import example.currencyexchange.model.Currencies;
 import example.currencyexchange.model.Exchange;
 import example.currencyexchange.model.ExchangeRates;
 import lombok.SneakyThrows;
-
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.NoSuchElementException;
+import java.util.List;
 
 public class ExchangeDAO {
 
+    /**
+     * Method for direct search of currency exchange (AB)
+     *
+     * @param fromCurrencyCode the code of the currency we are changing
+     * @param toCurrencyCode   code of the currency to which we are changing
+     * @return Returns Double (min) if there is no direct rate
+     */
     @SneakyThrows
-    public static Exchange getExchange(String fromCurrencyCode, String toCurrencyCode, Double amount) {
+    public static Double findExchangeRate(String fromCurrencyCode, String toCurrencyCode) {
         String query = """
-                SELECT e.id, e.rate, c1.id AS base_id,c1.fullname AS base_name,
-                 c1.code AS base_code, c1.sign AS base_sign,
-                 c2.id AS target_id, c2.fullname AS target_name,
-                 c2.code AS target_code, c2.sign AS target_sign
-                 FROM exchangerates e
-                 JOIN currencies c1 ON e.basecurrencyid = c1.id
-                 JOIN currencies c2 ON e.targetcurrencyid = c2.id
-                 WHERE c1.code = ? AND c2.code = ?
-                """;
+                SELECT rate FROM exchangerates e
+                JOIN currencies c1 ON e.basecurrencyid = c1.id
+                JOIN currencies c2 ON e.targetcurrencyid = c2.id
+                WHERE c1.code = ? AND c2.code = ?""";
 
-        ResultSet rs = DataBaseConfig.connect(query, fromCurrencyCode.toUpperCase(), toCurrencyCode.toUpperCase());
-
-        return parsing(rs, amount);
-    }
-
-    @SneakyThrows
-    public static Exchange parsing(ResultSet rs, Double amount) {
+        ResultSet rs = DataBaseConfig.connect(query, fromCurrencyCode, toCurrencyCode);
 
         if (rs.next()) {
-            Currencies baseCurrency = new Currencies(
-                    rs.getString("base_name"),
-                    rs.getString("base_code"),
-                    rs.getInt("base_id"),
-                    rs.getInt("base_sign")
-            );
-            Currencies targetCurrency = new Currencies(
-                    rs.getString("target_name"),
-                    rs.getString("target_code"),
-                    rs.getInt("target_id"),
-                    rs.getInt("target_sign")
-            );
-            Exchange exchange = new Exchange(
-                    baseCurrency,
-                    targetCurrency,
-                    rs.getDouble("rate"),
-                    amount,
-                    (amount / rs.getDouble("rate"))
-            );
-            return exchange;
+            return rs.getDouble("rate");
         }
-        return null;
+        return Double.MIN_VALUE;
     }
 
-    @SneakyThrows
-    public static Exchange findExchange(String fromCurrencyCode, String toCurrencyCode, Double amount) {
-        String query = """
-                SELECT e.id, e.rate, c1.id AS base_id,c1.fullname AS base_name,
-                 c1.code AS base_code, c1.sign AS base_sign,
-                 c2.id AS target_id, c2.fullname AS target_name,
-                 c2.code AS target_code, c2.sign AS target_sign
-                 FROM exchangerates e
-                 JOIN currencies c1 ON e.basecurrencyid = c1.id
-                 JOIN currencies c2 ON e.targetcurrencyid = c2.id
-                 WHERE c1.code = ? AND c2.code = ?
-                """;
-        ResultSet rs = DataBaseConfig.connect(query, fromCurrencyCode.toUpperCase(), toCurrencyCode.toUpperCase());
 
-       try{
-           return parsing(rs, amount);
-       } catch (NullPointerException e){
-           return null;
-       }
+    public static Exchange getEx(String fromCurrencyCode, String toCurrencyCode, Double amount) {
+
+        String[] currencyCodes = {fromCurrencyCode, toCurrencyCode};
+        for (String currencyCode : currencyCodes) {
+            if (!isValidCurrency(currencyCode)) {
+                throw new NullPointerException();
+            }
+        }
+
+        Currencies bc = CurrencyDAO.findCodeCurrency(fromCurrencyCode);
+        Currencies tc = CurrencyDAO.findCodeCurrency(toCurrencyCode);
+
+        if (fromCurrencyCode.equalsIgnoreCase(toCurrencyCode)) {
+            return new Exchange(bc, bc, 1.0, amount, amount);
+        }
+
+
+        Double rateExchange = findExchangeRate(fromCurrencyCode, toCurrencyCode);
+        if (rateExchange == Double.MIN_VALUE) {
+            rateExchange = findExchangeRate(toCurrencyCode, fromCurrencyCode);
+            if (rateExchange != Double.MIN_VALUE) {
+                rateExchange = 1 / rateExchange;
+            }
+        }
+
+
+
+        if (rateExchange == Double.MIN_VALUE) {
+            rateExchange = findIndirectExchangeRate(fromCurrencyCode, toCurrencyCode);
+            if (rateExchange == null) {
+                rateExchange = findIndirectExchangeRate(toCurrencyCode, fromCurrencyCode);
+            }
+        }
+
+        Double convertedAmount = amount / rateExchange;
+        Exchange exchange = new Exchange(bc, tc, rateExchange, amount, convertedAmount);
+        return exchange;
+    }
+
+
+
+    private static Double findIndirectExchangeRate(String fromCurrencyCode, String toCurrencyCode) {
+
+        // todo: пересобрать!
+
+
+
+        return -1.1;
+    }
+
+    private static boolean isValidCurrency(String codeCurrency) {
+        Currencies bc = CurrencyDAO.findCodeCurrency(codeCurrency);
+        if (bc == null) {
+            return false;
+        }
+        return true;
     }
 
 }

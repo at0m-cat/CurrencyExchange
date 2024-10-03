@@ -70,7 +70,7 @@ public class ExchangeRatesDAO {
 
     @SneakyThrows
     public static void setExchangeRate(String baseCode, String targetCode, String rate) throws NoSuchMethodException {
-        if (findCodeRates(baseCode, targetCode) != null) {
+        if (findCodeRate(baseCode, targetCode) != null) {
             throw new NoSuchMethodException();
         }
         String query = "SELECT id FROM currencies WHERE code = ?";
@@ -94,7 +94,7 @@ public class ExchangeRatesDAO {
      * @return ExchangeRates object
      */
     @SneakyThrows
-    public static ExchangeRates findCodeRates(String baseCode, String targetCode) {
+    public static ExchangeRates findCodeRate(String baseCode, String targetCode) {
         String query = """
                 SELECT e.id, e.rate, c1.id AS base_id,c1.fullname AS base_name,
                  c1.code AS base_code, c1.sign AS base_sign,
@@ -109,6 +109,27 @@ public class ExchangeRatesDAO {
         ResultSet rs = DataBaseConfig.connect(query, baseCode, targetCode);
         try {
             return parsing(rs).getFirst();
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+    }
+
+    @SneakyThrows
+    public static List<ExchangeRates> findExchangeRateAll(String codeCurrency) {
+        String query = """
+                SELECT e.id, e.rate, c1.id AS base_id,c1.fullname AS base_name,
+                 c1.code AS base_code, c1.sign AS base_sign,
+                 c2.id AS target_id, c2.fullname AS target_name,
+                 c2.code AS target_code, c2.sign AS target_sign
+                 FROM exchangerates e
+                 JOIN currencies c1 ON e.basecurrencyid = c1.id
+                 JOIN currencies c2 ON e.targetcurrencyid = c2.id
+                 WHERE c1.code = ?
+                """;
+
+        ResultSet rs = DataBaseConfig.connect(query, codeCurrency);
+        try {
+            return parsing(rs);
         } catch (NoSuchElementException e) {
             return null;
         }

@@ -30,7 +30,7 @@ public class CurrencyExchangeServlet extends HttpServlet {
 
             String baseCode = codeExchange[0];
             String targetCode = codeExchange[1];
-            ExchangeRates rates = ExchangeRatesDAO.findCodeRates(baseCode, targetCode);
+            ExchangeRates rates = ExchangeRatesDAO.findCodeRate(baseCode, targetCode);
             if (rates == null) {
                 Renderer.printMessage(resp, HttpServletResponse.SC_NOT_FOUND);
                 return;

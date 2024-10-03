@@ -15,6 +15,9 @@ public class Renderer {
      */
     @SneakyThrows
     public static <T> void print(HttpServletResponse response, T data) {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
         PrintWriter writer = response.getWriter();
         ObjectMapper mapper = new ObjectMapper();
 
