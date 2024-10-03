@@ -6,6 +6,7 @@ import example.currencyexchange.model.ExchangeRates;
 import lombok.SneakyThrows;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -19,21 +20,16 @@ public class ExchangeRatesDAO {
      * @return List ExchangeRates ->
      * Base currency identifiers and data. Target currency identifiers and data. Exchange rate.
      */
-    public static List<ExchangeRates> getExchangeRate() {
-        String query =
-                "SELECT e.id AS id," +
-                        " c1.id AS base_id, " +
-                        "c1.fullname AS base_name," +
-                        " c1.code AS base_code, " +
-                        "c1.sign AS base_sign," +
-                        " c2.id AS target_id, " +
-                        "c2.fullname AS target_name," +
-                        " c2.code AS target_code, " +
-                        "c2.sign AS target_sign, " +
-                        "e.rate " +
-                        "FROM exchangerates e " +
-                        "JOIN currencies c1 ON e.basecurrencyid = c1.id " +
-                        "JOIN currencies c2 ON e.targetcurrencyid = c2.id";
+    public static List<ExchangeRates> getExchangeRate() throws SQLException {
+        String query ="""
+                SELECT e.id AS id, c1.id AS base_id, c1.fullname AS base_name,
+                 c1.code AS base_code, c1.sign AS base_sign,c2.id AS target_id,
+                 c2.fullname AS target_name, c2.code AS target_code,
+                 c2.sign AS target_sign, e.rate
+                 FROM exchangerates e
+                 JOIN currencies c1 ON e.basecurrencyid = c1.id
+                 JOIN currencies c2 ON e.targetcurrencyid = c2.id
+                """;
         ResultSet resultSet = DataBaseConfig.connect(query);
         return ExchangeRatesDAO.parsing(resultSet);
     }
@@ -81,32 +77,22 @@ public class ExchangeRatesDAO {
      */
     @SneakyThrows
     public static ExchangeRates findCodeRates(String baseCode, String targetCode) {
-        String query = String.format("SELECT e.id, e.rate, " +
-                "c1.id AS base_id, c1.fullname AS base_name, c1.code AS base_code, c1.sign AS base_sign, " +
-                "c2.id AS target_id, c2.fullname AS target_name, c2.code AS target_code, c2.sign AS target_sign " +
-                "FROM exchangerates e " +
-                "JOIN currencies c1 ON e.basecurrencyid = c1.id " +
-                "JOIN currencies c2 ON e.targetcurrencyid = c2.id " +
-                "WHERE c1.code = '%s' AND c2.code = '%s'", baseCode.toUpperCase(), targetCode.toUpperCase());
+        String query = """
+                SELECT e.id, e.rate, c1.id AS base_id,c1.fullname AS base_name,
+                 c1.code AS base_code, c1.sign AS base_sign,
+                 c2.id AS target_id, c2.fullname AS target_name,
+                 c2.code AS target_code, c2.sign AS target_sign
+                 FROM exchangerates e
+                 JOIN currencies c1 ON e.basecurrencyid = c1.id
+                 JOIN currencies c2 ON e.targetcurrencyid = c2.id
+                 WHERE c1.code = ? AND c2.code = ?
+                """;
 
-        ResultSet rs = DataBaseConfig.connect(query);
-        return parsing(rs).getFirst();
-    }
-
-    /**
-     * Checks if an object exists, has an internal find call
-     *
-     * @param baseCode String
-     * @param targetCode String
-     * @return
-     */
-    public static boolean isExist(String baseCode, String targetCode){
+        ResultSet rs = DataBaseConfig.connect(query, baseCode, targetCode);
         try {
-            findCodeRates(baseCode, targetCode);
-            return true;
-        }
-        catch (NoSuchElementException e) {
-            return false;
+            return parsing(rs).getFirst();
+        } catch (NoSuchElementException e) {
+            return null;
         }
     }
 

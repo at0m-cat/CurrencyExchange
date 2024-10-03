@@ -7,6 +7,7 @@ import lombok.SneakyThrows;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -18,10 +19,18 @@ public class CurrencyDAO {
      *
      * @return List Currencies
      */
+    @SneakyThrows
     public static List<Currencies> getCurrencies() {
         String query = "select * from currencies";
         ResultSet resultSet = DataBaseConfig.connect(query);
         return CurrencyDAO.parsing(resultSet);
+    }
+
+    @SneakyThrows
+    public static void setCurrency(String currencyName, String currencyCode, String currencySign) {
+        String query = "INSERT INTO currencies(fullname, code, sign) VALUES (?, ?, ?)";
+        DataBaseConfig.connect(query, currencyName, currencyCode, currencySign);
+
     }
 
     /**
@@ -49,27 +58,17 @@ public class CurrencyDAO {
      * Find code in table "Currencies"
      *
      * @param code String code currency
-     * @return Currencies object
+     * @return Currencies object / null
      */
+    @SneakyThrows
     public static Currencies findCodeCurrency(String code) {
-        String query = String.format("SELECT * FROM currencies WHERE code = '%s'", code.toUpperCase());
-
-        ResultSet rs = DataBaseConfig.connect(query);
-        return parsing(rs).getFirst();
-    }
-
-    /**
-     * Checks if an object exists, has an internal find call
-     *
-     * @param code String
-     * @return
-     */
-    public static boolean isExist(String code) {
+//        String query = String.format("SELECT * FROM currencies WHERE code = '%s'", code.toUpperCase());
+        String query = "select * from currencies where code = ?";
+        ResultSet rs = DataBaseConfig.connect(query, code);
         try {
-            findCodeCurrency(code);
-            return true;
+            return parsing(rs).getFirst();
         } catch (NoSuchElementException e) {
-            return false;
+            return null;
         }
     }
 

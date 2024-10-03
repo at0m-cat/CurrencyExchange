@@ -1,18 +1,15 @@
 package example.currencyexchange.controller;
 
 import example.currencyexchange.config.DataBaseConfig;
+import example.currencyexchange.config.UserInputConfig;
 import example.currencyexchange.model.Currencies;
 import example.currencyexchange.config.Renderer;
 import example.currencyexchange.model.dao.CurrencyDAO;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
-
-import java.io.IOException;
-import java.util.NoSuchElementException;
 
 @WebServlet(name = "SingeCurrency", value = "/currencies/*")
 public class SingleCurrencyServlet extends HttpServlet {
@@ -20,53 +17,47 @@ public class SingleCurrencyServlet extends HttpServlet {
     @SneakyThrows
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+        resp.setContentType("application/json");
+        req.setCharacterEncoding("UTF-8");
 
-        if (!DataBaseConfig.isConnectionValid()) {
+        if (!DataBaseConfig.isConnection()) {
             Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
             return;
         }
 
-        String pathInfo = req.getPathInfo();
-
         try {
-            String[] parts = pathInfo.split("/");
-            String code = parts[1];
+            String code = UserInputConfig.getCodeCurrency(req.getPathInfo());
+            if (code == null) {
+                Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_BAD_REQUEST));
+            }
 
             Currencies currency = CurrencyDAO.findCodeCurrency(code);
-
-            resp.setContentType("application/json");
-            req.setCharacterEncoding("UTF-8");
+            if (currency == null) {
+                Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_NOT_FOUND));
+                return;
+            }
             Renderer.printJson(resp, currency);
 
         } catch (ArrayIndexOutOfBoundsException e) {
             Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_BAD_REQUEST));
-        } catch (NoSuchElementException e) {
-            Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_NOT_FOUND));
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp){
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
 
         // todo: сверить с базой данных для добавления объекта
 
         String code = req.getParameter("code");
+        String name = req.getParameter("name");
+        String sign = req.getParameter("sign");
 
-        if (CurrencyDAO.isExist(code)) {
+        if (CurrencyDAO.findCodeCurrency(code) != null) {
             Renderer.printErrorJson(resp, String.valueOf(HttpServletResponse.SC_CONFLICT));
         }
 
-        // todo: создать объект
+        CurrencyDAO.setCurrency(code, name, sign);
 
-//        String fullName = req.getParameter("name");
-//        Integer id = Integer.valueOf(req.getParameter("id"));
-//        Integer sign = Integer.valueOf(req.getParameter("sign"));
-//        Currencies currencies = CurrencyDAO.findCodeCurrency(code);
-
-
-//        Currencies currencies = new Currencies(fullName, code, id, sign);
-//
-//        Renderer.printJson(resp, currencies);
 
     }
 }

@@ -15,15 +15,27 @@ public class DataBaseConfig {
     /**
      * Connection to dataBase
      *
-     * @param query Strinq
-     * @return ResultSet
+     * @param query SQL request
+     * @param params parameters in SQL request, if any
+     * @return ResultSet - if SQL query is "SELECT", otherwise "NULL"
+     * @throws SQLException
      */
     @SneakyThrows
-    public static ResultSet connect(String query) {
+    public static ResultSet connect(String query, Object... params) throws SQLException {
         Class.forName(JDBC_DRIVER);
         Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD);
-        Statement statement = connection.createStatement();
-        return statement.executeQuery(query);
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+        for (int i = 0; i < params.length; i++) {
+            preparedStatement.setObject(i + 1, params[i]);
+        }
+
+        if (query.trim().toUpperCase().startsWith("SELECT")) {
+            return preparedStatement.executeQuery();
+        } else {
+            preparedStatement.executeUpdate();
+            return null;
+        }
     }
 
     /**
@@ -32,7 +44,7 @@ public class DataBaseConfig {
      * @return boolean
      */
     @SneakyThrows
-    public static boolean isConnectionValid() {
+    public static boolean isConnection() {
         Class.forName(JDBC_DRIVER);
         Connection connection;
         try {
