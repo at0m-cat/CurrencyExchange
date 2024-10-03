@@ -3,6 +3,8 @@ package example.currencyexchange.controller;
 import example.currencyexchange.config.DataBaseConfig;
 import example.currencyexchange.config.Renderer;
 import example.currencyexchange.config.UserInputConfig;
+import example.currencyexchange.model.Exchange;
+import example.currencyexchange.model.dao.ExchangeDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -32,6 +34,13 @@ public class ExchangeServlet extends HttpServlet {
         if (!UserInputConfig.isNotNullParams(params)){
             Renderer.printMessage(resp, HttpServletResponse.SC_BAD_REQUEST);
             return;
+        }
+
+        try {
+            Exchange exchange = ExchangeDAO.getExchange(from, to, Double.valueOf(amount));
+            Renderer.print(resp, exchange);
+        } catch (NullPointerException e){
+            Renderer.printMessage(resp, HttpServletResponse.SC_NOT_FOUND);
         }
 
 

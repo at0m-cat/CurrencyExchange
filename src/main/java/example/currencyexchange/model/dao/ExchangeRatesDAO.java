@@ -73,16 +73,13 @@ public class ExchangeRatesDAO {
         if (findCodeRates(baseCode, targetCode) != null) {
             throw new NoSuchMethodException();
         }
-
-        String findBaseCurrencyIdQuery = "SELECT id FROM currencies WHERE code = ?";
-        String findTargetCurrencyIdQuery = "SELECT id FROM currencies WHERE code = ?";
-
+        String query = "SELECT id FROM currencies WHERE code = ?";
         String insertExchangeRateQuery = """
                 INSERT INTO exchangerates (basecurrencyid, targetcurrencyid, rate)
                 VALUES (?, ?, ?)""";
 
-        ResultSet baseCurrencyRs = DataBaseConfig.connect(findBaseCurrencyIdQuery, baseCode);
-        ResultSet targetCurrencyRs = DataBaseConfig.connect(findTargetCurrencyIdQuery, targetCode);
+        ResultSet baseCurrencyRs = DataBaseConfig.connect(query, baseCode);
+        ResultSet targetCurrencyRs = DataBaseConfig.connect(query, targetCode);
 
         int baseCurrencyId = baseCurrencyRs.getInt("id");
         int targetCurrencyId = targetCurrencyRs.getInt("id");
