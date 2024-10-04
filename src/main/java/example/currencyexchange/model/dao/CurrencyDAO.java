@@ -26,6 +26,14 @@ public class CurrencyDAO {
         return CurrencyDAO.parsing(resultSet);
     }
 
+    /**
+     * Adds an object to the database
+     *
+     * @param currencyName String
+     * @param currencyCode String
+     * @param currencySign String
+     * @throws NoSuchMethodException Exception - may be thrown if the object exists in the database
+     */
     @SneakyThrows
     public static void setCurrency(String currencyName, String currencyCode, String currencySign) throws NoSuchMethodException {
         if (findCodeCurrency(currencyCode) != null) {
@@ -63,8 +71,8 @@ public class CurrencyDAO {
     /**
      * Find code in table "Currencies"
      *
-     * @param code String code currency
-     * @return Currencies object / null
+     * @param code String
+     * @return If there is no object, it will return "null", otherwise it will return an object "Currencies".
      */
     @SneakyThrows
     public static Currencies findCodeCurrency(String code) {

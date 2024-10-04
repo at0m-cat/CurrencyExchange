@@ -36,7 +36,7 @@ public class ExchangeDAO {
         return Double.MIN_VALUE;
     }
 
-
+    // todo: переделать, написать javadoc
     public static Exchange getEx(String fromCurrencyCode, String toCurrencyCode, Double amount) {
 
         String[] currencyCodes = {fromCurrencyCode, toCurrencyCode};
@@ -77,6 +77,7 @@ public class ExchangeDAO {
         return exchange;
     }
 
+    // todo: некорректно возвращает значение Double, пересмотреть
     @SneakyThrows
     public static Double findIndirectExchangeRate(String fromCurrencyCode, String toCurrencyCode) {
         String query = """

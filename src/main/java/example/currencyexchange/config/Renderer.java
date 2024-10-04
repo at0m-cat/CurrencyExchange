@@ -25,6 +25,15 @@ public class Renderer {
         writer.flush();
     }
 
+    /**
+     * Print "message" errors in JSON format,
+     * inside the method is set:
+     * encoding UTF 8,
+     * the error is determined by the numerical value
+     *
+     * @param response HttpServletResponse
+     * @param errorType int error type, ex. 500
+     */
     @SneakyThrows
     public static void printMessage(HttpServletResponse response, int errorType) {
         response.setContentType("application/json");

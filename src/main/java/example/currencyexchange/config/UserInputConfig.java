@@ -32,8 +32,15 @@ public class UserInputConfig {
         return code;
     }
 
+    /**
+     * Checks user input string for type "Double",
+     * the method may throw an exception "NumberFormatException"
+     *
+     * @param userRate String
+     * @return "true" if type is double, "false" if other type
+     */
     public static boolean isDoubleRate(String userRate) {
-        try{
+        try {
             Double.parseDouble(userRate);
         } catch (NumberFormatException e) {
             return false;
@@ -41,6 +48,13 @@ public class UserInputConfig {
         return true;
     }
 
+    /**
+     * Checks user input string for type "Integer",
+     * the method may throw an exception "NumberFormatException"
+     *
+     * @param userSign String
+     * @return "false" if type is Integer, "true" if other type
+     */
     public static boolean isTextSign(String userSign) {
         try {
             Integer.parseInt(userSign);
@@ -48,6 +62,21 @@ public class UserInputConfig {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Checks parameters for null value
+     *
+     * @param postParams String[]
+     * @return "true" if the type is not null, "false" if it is null
+     */
+    public static boolean isNotNullParams(String[] postParams) {
+        for (String postParam : postParams) {
+            if (postParam == null || postParam.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static boolean isCorrectCodeExchange(String splitCode) {
@@ -58,13 +87,6 @@ public class UserInputConfig {
         return code.length() == 3;
     }
 
-    public static boolean isNotNullParams(String[] postParams) {
-        for (String postParam : postParams) {
-            if (postParam == null || postParam.isEmpty()) {
-                return false;
-            }
-        }
-        return true;
-    }
+
 
 }
