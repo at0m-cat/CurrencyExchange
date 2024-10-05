@@ -3,11 +3,13 @@ package example.currencyexchange.model.dao;
 import example.currencyexchange.config.DataBaseConfig;
 import example.currencyexchange.model.Currencies;
 import example.currencyexchange.model.ExchangeRates;
+import example.currencyexchange.model.dto.ExchangeRatesDTO;
 import lombok.SneakyThrows;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -71,9 +73,9 @@ public class ExchangeRatesDAO {
     /**
      * Adds an object to the database
      *
-     * @param baseCode String
+     * @param baseCode   String
      * @param targetCode String
-     * @param rate String
+     * @param rate       String
      * @throws NoSuchMethodException may be thrown if the object exists in the database
      */
     @SneakyThrows

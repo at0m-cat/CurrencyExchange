@@ -1,6 +1,6 @@
 package example.currencyexchange.model.exceptions;
 
-public class ObjectAlreadyExist extends Exception {
+public class ObjectAlreadyExist extends RuntimeException {
 
     public ObjectAlreadyExist() {
         super();

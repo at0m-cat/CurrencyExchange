@@ -18,32 +18,32 @@ public class ExchangeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("application/json");
-        req.setCharacterEncoding("UTF-8");
-
-        if (!DataBaseConfig.isConnection()) {
-            Renderer.printMessage(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            return;
-        }
-
-        String from = req.getParameter("from");
-        String to = req.getParameter("to");
-        String amount = req.getParameter("amount");
-        String[] params = {from, to, amount};
-
-        if (!UserInputConfig.isNotNullParams(params)){
-            Renderer.printMessage(resp, HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
-
-        // todo: exchange create
-
-        try {
-            Exchange exchange = ExchangeDAO.getEx(from, to, Double.valueOf(amount));
-            Renderer.print(resp, exchange);
-        } catch (NullPointerException e) {
-            Renderer.printMessage(resp, HttpServletResponse.SC_NOT_FOUND);
-        }
+//        resp.setContentType("application/json");
+//        req.setCharacterEncoding("UTF-8");
+//
+//        if (!DataBaseConfig.isConnection()) {
+////            Renderer.printMessage(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//            return;
+//        }
+//
+//        String from = req.getParameter("from");
+//        String to = req.getParameter("to");
+//        String amount = req.getParameter("amount");
+//        String[] params = {from, to, amount};
+//
+//        if (!UserInputConfig.isNotNullParams(params)){
+////            Renderer.printMessage(resp, HttpServletResponse.SC_BAD_REQUEST);
+//            return;
+//        }
+//
+//        // todo: exchange create
+//
+//        try {
+//            Exchange exchange = ExchangeDAO.getEx(from, to, Double.valueOf(amount));
+////            Renderer.print(resp, exchange);
+//        } catch (NullPointerException e) {
+////            Renderer.printMessage(resp, HttpServletResponse.SC_NOT_FOUND);
+//        }
 
     }
 }

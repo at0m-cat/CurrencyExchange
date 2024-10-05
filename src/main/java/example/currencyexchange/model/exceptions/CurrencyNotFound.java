@@ -1,6 +1,6 @@
 package example.currencyexchange.model.exceptions;
 
-public class CurrencyNotFound extends Exception {
+public class CurrencyNotFound extends RuntimeException {
 
     public CurrencyNotFound() {
         super();

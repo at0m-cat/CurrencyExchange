@@ -17,16 +17,16 @@ public class AllCurrencyServlet extends HttpServlet {
 
     @SneakyThrows
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-
-        if (!DataBaseConfig.isConnection()) {
-            Renderer.printMessage(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            return;
-        }
-
-        List<Currencies> currenciesList = CurrencyDAO.getCurrencies();
-        Renderer.print(response, currenciesList);
+//        response.setContentType("application/json");
+//        response.setCharacterEncoding("UTF-8");
+//
+//        if (!DataBaseConfig.isConnection()) {
+////            Renderer.printMessage(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//            return;
+//        }
+//
+//        List<Currencies> currenciesList = CurrencyDAO.getCurrencies();
+//        Renderer.print(response, currenciesList);
     }
 
 }

@@ -18,15 +18,15 @@ public class AllCurrencyExchangeServlet extends HttpServlet {
     @SneakyThrows
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");
-
-        if (!DataBaseConfig.isConnection()) {
-            Renderer.printMessage(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            return;
-        }
-
-        List<ExchangeRates> exchangeRates = ExchangeRatesDAO.getExchangeRate();
-        Renderer.print(resp, exchangeRates);
+//        resp.setContentType("application/json");
+//        resp.setCharacterEncoding("UTF-8");
+//
+//        if (!DataBaseConfig.isConnection()) {
+////            Renderer.printMessage(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//            return;
+//        }
+//
+//        List<ExchangeRates> exchangeRates = ExchangeRatesDAO.getExchangeRate();
+////        Renderer.print(resp, exchangeRates);
     }
 }

@@ -1,6 +1,6 @@
 package example.currencyexchange.model.exceptions;
 
-public class DataBaseNotAvailable extends Exception {
+public class DataBaseNotAvailable extends RuntimeException {
 
     public DataBaseNotAvailable() {
         super();
