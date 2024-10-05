@@ -2,7 +2,7 @@ package example.currencyexchange.model.dto;
 
 import example.currencyexchange.model.Currencies;
 
-public final class ExchangeRatesDTO {
+public class ExchangeRatesDTO {
 
     private final int ID;
     private final Currencies BASE_CURRENCY;
