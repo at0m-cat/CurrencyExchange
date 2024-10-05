@@ -17,31 +17,31 @@ public class SingleCurrencyServlet extends HttpServlet {
     @SneakyThrows
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-        resp.setContentType("application/json");
-        req.setCharacterEncoding("UTF-8");
-
-        if (!DataBaseConfig.isConnection()) {
-//            Renderer.printMessage(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            return;
-        }
-        try {
-            String code = UserInputConfig.getCodeCurrency(req.getPathInfo());
-
-            if (code == null) {
-//                Renderer.printMessage(resp, HttpServletResponse.SC_BAD_REQUEST);
-                return;
-            }
-
-            Currencies currency = CurrencyDAO.findCodeCurrency(code);
-            if (currency == null) {
-//                Renderer.printMessage(resp, HttpServletResponse.SC_NOT_FOUND);
-                return;
-            }
-//            Renderer.print(resp, currency);
-
-        } catch (ArrayIndexOutOfBoundsException e) {
-//            Renderer.printMessage(resp, HttpServletResponse.SC_BAD_REQUEST);
-        }
+//        resp.setContentType("application/json");
+//        req.setCharacterEncoding("UTF-8");
+//
+//        if (!DataBaseConfig.isConnection()) {
+////            Renderer.printMessage(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//            return;
+//        }
+//        try {
+//            String code = UserInputConfig.getCodeCurrency(req.getPathInfo());
+//
+//            if (code == null) {
+////                Renderer.printMessage(resp, HttpServletResponse.SC_BAD_REQUEST);
+//                return;
+//            }
+//
+//            Currencies currency = CurrencyDAO.findCodeCurrency(code);
+//            if (currency == null) {
+////                Renderer.printMessage(resp, HttpServletResponse.SC_NOT_FOUND);
+//                return;
+//            }
+////            Renderer.print(resp, currency);
+//
+//        } catch (ArrayIndexOutOfBoundsException e) {
+////            Renderer.printMessage(resp, HttpServletResponse.SC_BAD_REQUEST);
+//        }
     }
 
     @SneakyThrows

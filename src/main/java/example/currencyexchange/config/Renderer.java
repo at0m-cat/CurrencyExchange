@@ -29,9 +29,7 @@ public class Renderer {
 
         PrintWriter writer = response.getWriter();
         ObjectMapper mapper = new ObjectMapper();
-//        writer.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(data));
-        writer.write(mapper.writeValueAsString(data));
-//        mapper.writeValue(writer, data);
+        writer.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(data));
         writer.flush();
     }
 

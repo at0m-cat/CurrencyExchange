@@ -6,10 +6,7 @@ import lombok.SneakyThrows;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Currency;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 public class CurrencyDAO {
 
@@ -19,32 +16,10 @@ public class CurrencyDAO {
      *
      * @return List Currencies
      */
-    @SneakyThrows
-    public static List<Currencies> getCurrencies() {
+    public List<Currencies> getCurrencies() throws SQLException {
         String query = "SELECT * from currencies";
         ResultSet resultSet = DataBaseConfig.connect(query);
-        return CurrencyDAO.parsing(resultSet);
-    }
-
-    /**
-     * Adds an object to the database
-     *
-     * @param currencyName String
-     * @param currencyCode String
-     * @param currencySign String
-     * @throws NoSuchMethodException Exception - may be thrown if the object exists in the database
-     */
-    @SneakyThrows
-    public static void setCurrency(String currencyName, String currencyCode, String currencySign) throws NoSuchMethodException {
-        if (findCodeCurrency(currencyCode) != null) {
-            throw new NoSuchMethodException();
-        }
-        String query = """
-                INSERT INTO currencies (fullname, code, sign)
-                VALUES (?, ?, ?)
-                ON CONFLICT (code) DO NOTHING""";
-
-        DataBaseConfig.connect(query, currencyName, currencyCode.toUpperCase(), currencySign);
+        return parsing(Objects.requireNonNull(resultSet));
     }
 
     /**
@@ -54,7 +29,7 @@ public class CurrencyDAO {
      * @return List currencies
      */
     @SneakyThrows
-    public static List<Currencies> parsing(ResultSet rs) {
+    private List<Currencies> parsing(ResultSet rs) {
         List<Currencies> list = new ArrayList<>();
         while (rs.next()) {
             String id = rs.getString(1);
@@ -68,21 +43,46 @@ public class CurrencyDAO {
         return list;
     }
 
-    /**
-     * Find code in table "Currencies"
-     *
-     * @param code String
-     * @return If there is no object, it will return "null", otherwise it will return an object "Currencies".
-     */
-    @SneakyThrows
-    public static Currencies findCodeCurrency(String code) {
-        String query = "SELECT * from currencies where code = ?";
-        ResultSet rs = DataBaseConfig.connect(query, code.toUpperCase());
-        try {
-            return parsing(rs).getFirst();
-        } catch (NoSuchElementException e) {
-            return null;
-        }
-    }
+
+//
+//    /**
+//     * Adds an object to the database
+//     *
+//     * @param currencyName String
+//     * @param currencyCode String
+//     * @param currencySign String
+//     * @throws NoSuchMethodException Exception - may be thrown if the object exists in the database
+//     */
+//    @SneakyThrows
+//    public static void setCurrency(String currencyName, String currencyCode, String currencySign) throws NoSuchMethodException {
+//        if (findCodeCurrency(currencyCode) != null) {
+//            throw new NoSuchMethodException();
+//        }
+//        String query = """
+//                INSERT INTO currencies (fullname, code, sign)
+//                VALUES (?, ?, ?)
+//                ON CONFLICT (code) DO NOTHING""";
+//
+//        DataBaseConfig.connect(query, currencyName, currencyCode.toUpperCase(), currencySign);
+//    }
+//
+
+//
+//    /**
+//     * Find code in table "Currencies"
+//     *
+//     * @param code String
+//     * @return If there is no object, it will return "null", otherwise it will return an object "Currencies".
+//     */
+//    @SneakyThrows
+//    public static Currencies findCodeCurrency(String code) {
+//        String query = "SELECT * from currencies where code = ?";
+//        ResultSet rs = DataBaseConfig.connect(query, code.toUpperCase());
+//        try {
+//            return parsing(rs).getFirst();
+//        } catch (NoSuchElementException e) {
+//            return null;
+//        }
+//    }
 
 }

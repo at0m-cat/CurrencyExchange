@@ -6,6 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.SneakyThrows;
 
 import java.io.UnsupportedEncodingException;
 import java.util.stream.Stream;
@@ -14,7 +15,6 @@ import java.util.stream.Stream;
 public class CurrencyExchangeServlet extends HttpServlet {
 
     Renderer renderer = new Renderer();
-
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws UnsupportedEncodingException {
@@ -33,7 +33,7 @@ public class CurrencyExchangeServlet extends HttpServlet {
             }
 
             Stream.of(codes).forEach(code -> {
-                if (code.length() < 3){
+                if (code.length() < 3) {
                     throw new IncorrectСurrenciesPair(resp, "'%s' - Error code length".formatted(code));
                 }
 
@@ -47,9 +47,8 @@ public class CurrencyExchangeServlet extends HttpServlet {
 //            renderer.print(resp, codes);
 
 
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            renderer.print(resp, new IncorrectСurrenciesPair(resp, "No currency"));
+        } catch (ArrayIndexOutOfBoundsException e) {
+            renderer.print(resp, new IncorrectСurrenciesPair(resp, "No currency pair"));
 
         } catch (IncorrectСurrenciesPair e) {
             renderer.print(resp, e);

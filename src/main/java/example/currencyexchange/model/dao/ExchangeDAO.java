@@ -36,46 +36,46 @@ public class ExchangeDAO {
         return Double.MIN_VALUE;
     }
 
-    // todo: переделать, написать javadoc
-    public static Exchange getEx(String fromCurrencyCode, String toCurrencyCode, Double amount) {
-
-        String[] currencyCodes = {fromCurrencyCode, toCurrencyCode};
-        for (String currencyCode : currencyCodes) {
-            if (!isValidCurrency(currencyCode)) {
-                throw new NullPointerException();
-            }
-        }
-
-        Currencies bc = CurrencyDAO.findCodeCurrency(fromCurrencyCode);
-        Currencies tc = CurrencyDAO.findCodeCurrency(toCurrencyCode);
-
-        if (fromCurrencyCode.equalsIgnoreCase(toCurrencyCode)) {
-            return new Exchange(bc, bc, 1.0, amount, amount);
-        }
-
-
-        Double rateExchange = findExchangeRate(fromCurrencyCode, toCurrencyCode);
-        if (rateExchange == Double.MIN_VALUE) {
-            rateExchange = findExchangeRate(toCurrencyCode, fromCurrencyCode);
-            if (rateExchange != Double.MIN_VALUE) {
-                rateExchange = 1 / rateExchange;
-            }
-        }
-
-
-        // todo: поиск посредника (пересобрать)
-
-        if (rateExchange == Double.MIN_VALUE) {
-            rateExchange = findIndirectExchangeRate(fromCurrencyCode, toCurrencyCode);
-            if (rateExchange == null) {
-                rateExchange = findIndirectExchangeRate(toCurrencyCode, fromCurrencyCode);
-            }
-        }
-
-        Double convertedAmount = amount / rateExchange;
-        Exchange exchange = new Exchange(bc, tc, rateExchange, amount, convertedAmount);
-        return exchange;
-    }
+//    // todo: переделать, написать javadoc
+//    public static Exchange getEx(String fromCurrencyCode, String toCurrencyCode, Double amount) {
+//
+//        String[] currencyCodes = {fromCurrencyCode, toCurrencyCode};
+//        for (String currencyCode : currencyCodes) {
+//            if (!isValidCurrency(currencyCode)) {
+//                throw new NullPointerException();
+//            }
+//        }
+//
+//        Currencies bc = CurrencyDAO.findCodeCurrency(fromCurrencyCode);
+//        Currencies tc = CurrencyDAO.findCodeCurrency(toCurrencyCode);
+//
+//        if (fromCurrencyCode.equalsIgnoreCase(toCurrencyCode)) {
+//            return new Exchange(bc, bc, 1.0, amount, amount);
+//        }
+//
+//
+//        Double rateExchange = findExchangeRate(fromCurrencyCode, toCurrencyCode);
+//        if (rateExchange == Double.MIN_VALUE) {
+//            rateExchange = findExchangeRate(toCurrencyCode, fromCurrencyCode);
+//            if (rateExchange != Double.MIN_VALUE) {
+//                rateExchange = 1 / rateExchange;
+//            }
+//        }
+//
+//
+//        // todo: поиск посредника (пересобрать)
+//
+//        if (rateExchange == Double.MIN_VALUE) {
+//            rateExchange = findIndirectExchangeRate(fromCurrencyCode, toCurrencyCode);
+//            if (rateExchange == null) {
+//                rateExchange = findIndirectExchangeRate(toCurrencyCode, fromCurrencyCode);
+//            }
+//        }
+//
+//        Double convertedAmount = amount / rateExchange;
+//        Exchange exchange = new Exchange(bc, tc, rateExchange, amount, convertedAmount);
+//        return exchange;
+//    }
 
     // todo: некорректно возвращает значение Double, пересмотреть
     @SneakyThrows
@@ -102,12 +102,12 @@ public class ExchangeDAO {
         return null;
     }
 
-    private static boolean isValidCurrency(String codeCurrency) {
-        Currencies bc = CurrencyDAO.findCodeCurrency(codeCurrency);
-        if (bc == null) {
-            return false;
-        }
-        return true;
-    }
+//    private static boolean isValidCurrency(String codeCurrency) {
+//        Currencies bc = CurrencyDAO.findCodeCurrency(codeCurrency);
+//        if (bc == null) {
+//            return false;
+//        }
+//        return true;
+//    }
 
 }
