@@ -1,8 +1,6 @@
-package example.currencyexchange.model.exceptions.code_201;
+package example.currencyexchange.model.exceptions.status_201;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 @JsonIgnoreProperties({"cause", "stackTrace", "localizedMessage", "suppressed"})
 public class SuccesComplete extends RuntimeException{

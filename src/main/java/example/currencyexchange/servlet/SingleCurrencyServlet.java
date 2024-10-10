@@ -2,11 +2,11 @@ package example.currencyexchange.servlet;
 
 import example.currencyexchange.config.Renderer;
 import example.currencyexchange.dto.CurrencyDTO;
-import example.currencyexchange.model.exceptions.code_201.SuccesComplete;
-import example.currencyexchange.model.exceptions.code_400.IncorrectParams;
-import example.currencyexchange.model.exceptions.code_409.ObjectAlreadyExist;
-import example.currencyexchange.model.exceptions.code_500.DataBaseNotAvailable;
-import example.currencyexchange.model.exceptions.code_404.ObjectNotFound;
+import example.currencyexchange.model.exceptions.status_201.SuccesComplete;
+import example.currencyexchange.model.exceptions.status_400.IncorrectParams;
+import example.currencyexchange.model.exceptions.status_409.ObjectAlreadyExist;
+import example.currencyexchange.model.exceptions.status_500.DataBaseNotAvailable;
+import example.currencyexchange.model.exceptions.status_404.ObjectNotFound;
 import example.currencyexchange.service.CurrencyService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

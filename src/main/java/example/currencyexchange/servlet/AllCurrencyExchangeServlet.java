@@ -2,8 +2,8 @@ package example.currencyexchange.servlet;
 
 import example.currencyexchange.config.Renderer;
 import example.currencyexchange.dto.ExchangeDTO;
-import example.currencyexchange.model.exceptions.code_404.ObjectNotFound;
-import example.currencyexchange.model.exceptions.code_500.DataBaseNotAvailable;
+import example.currencyexchange.model.exceptions.status_404.ObjectNotFound;
+import example.currencyexchange.model.exceptions.status_500.DataBaseNotAvailable;
 import example.currencyexchange.service.ExchangeService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

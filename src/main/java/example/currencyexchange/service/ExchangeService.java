@@ -4,10 +4,10 @@ import example.currencyexchange.dao.ExchangeDAO;
 import example.currencyexchange.dto.CurrencyDTO;
 import example.currencyexchange.dto.ExchangeDTO;
 import example.currencyexchange.model.Exchange;
-import example.currencyexchange.model.exceptions.code_400.IncorrectParams;
-import example.currencyexchange.model.exceptions.code_404.ObjectNotFound;
-import example.currencyexchange.model.exceptions.code_409.ObjectAlreadyExist;
-import example.currencyexchange.model.exceptions.code_500.DataBaseNotAvailable;
+import example.currencyexchange.model.exceptions.status_400.IncorrectParams;
+import example.currencyexchange.model.exceptions.status_404.ObjectNotFound;
+import example.currencyexchange.model.exceptions.status_409.ObjectAlreadyExist;
+import example.currencyexchange.model.exceptions.status_500.DataBaseNotAvailable;
 import lombok.Getter;
 
 import java.util.List;

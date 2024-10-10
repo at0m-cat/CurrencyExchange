@@ -1,8 +1,8 @@
 package example.currencyexchange.config;
 
-import example.currencyexchange.model.exceptions.code_400.IncorrectParams;
-import example.currencyexchange.model.exceptions.code_409.ObjectAlreadyExist;
-import example.currencyexchange.model.exceptions.code_500.DataBaseNotAvailable;
+import example.currencyexchange.model.exceptions.status_400.IncorrectParams;
+import example.currencyexchange.model.exceptions.status_409.ObjectAlreadyExist;
+import example.currencyexchange.model.exceptions.status_500.DataBaseNotAvailable;
 import lombok.Getter;
 
 import java.sql.*;
