@@ -8,7 +8,6 @@ import example.currencyexchange.model.exceptions.code_404.ObjectNotFound;
 import example.currencyexchange.model.exceptions.code_500.DataBaseNotAvailable;
 import example.currencyexchange.service.CurrencyExchangeService;
 import example.currencyexchange.service.CurrencyService;
-import example.currencyexchange.service.ExchangeService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -61,13 +60,11 @@ public class CurrencyExchangeServlet extends HttpServlet {
                 if (param == null || param.isEmpty()) {
                     throw new IncorrectParams();
                 }
-            });
-
-            Stream.of(from, to).forEach(param -> {
                 if (!param.equals(param.toUpperCase())) {
                     throw new IncorrectParams("%s - param case error, correct: UpperCase".formatted(param));
                 }
             });
+
 
         } catch (IncorrectParams e) {
             resp.setStatus(400);
