@@ -4,7 +4,6 @@ import example.currencyexchange.dao.ExchangeDAO;
 import example.currencyexchange.dto.CurrencyDTO;
 import example.currencyexchange.dto.ExchangeDTO;
 import example.currencyexchange.model.Exchange;
-import example.currencyexchange.model.exceptions.code_404.ObjectNotFound;
 import lombok.Getter;
 
 import java.util.List;

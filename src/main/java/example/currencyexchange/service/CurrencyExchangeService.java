@@ -35,10 +35,6 @@ public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchang
         return dto;
     }
 
-    public double getRate(CurrencyDTO baseCurrency, CurrencyDTO targetCurrency) {
-        return EXCHANGE_SERVICE.getByCode(baseCurrency.getCode() + targetCurrency.getCode()).getRATE();
-    }
-
     private CurrencyExchangeDTO transform(CurrencyExchange exchange) {
         CurrencyExchangeDTO dto = new CurrencyExchangeDTO();
         CurrencyDTO baseCurrency = new CurrencyDTO();
@@ -52,6 +48,7 @@ public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchang
         targetCurrency.setName(exchange.getTargetCurrency().getFULL_NAME());
         targetCurrency.setCode(exchange.getTargetCurrency().getCODE());
         targetCurrency.setSign(exchange.getTargetCurrency().getSIGN());
+        targetCurrency.setId(exchange.getTargetCurrency().getID());
         dto.setBaseCurrency(baseCurrency);
         dto.setTargetCurrency(targetCurrency);
         dto.setRate(exchange.getRate());
@@ -60,15 +57,17 @@ public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchang
     }
 
     public CurrencyExchangeDTO setExchangeParameters(CurrencyExchangeDTO currencyExchangeDTO, Double amount) {
-        CurrencyExchangeDTO pairs;
+        CurrencyExchangeDTO dto = new CurrencyExchangeDTO();
 
         Double rate = currencyExchangeDTO.getRate();
         Double convertedAmount = amount / rate;
 
-        pairs = currencyExchangeDTO;
-        pairs.setAmount(amount);
-        pairs.setConvertedAmount(convertedAmount);
-        return pairs;
+        dto.setBaseCurrency(currencyExchangeDTO.getBaseCurrency());
+        dto.setTargetCurrency(currencyExchangeDTO.getTargetCurrency());
+        dto.setRate(rate);
+        dto.setConvertedAmount(convertedAmount);
+        dto.setAmount(amount);
+        return dto;
     }
 
     @Override
@@ -80,6 +79,7 @@ public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchang
     public CurrencyExchangeDTO getByCode(String code) {
         String baseCode = code.substring(0, 3);
         String targetCode = code.substring(3);
+
         CurrencyExchange model = DAO.getModel(baseCode, targetCode);
         return transform(model);
     }
