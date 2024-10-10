@@ -3,6 +3,10 @@ package example.currencyexchange.service;
 import example.currencyexchange.dao.CurrencyDAO;
 import example.currencyexchange.dto.CurrencyDTO;
 import example.currencyexchange.model.Currency;
+import example.currencyexchange.model.exceptions.code_400.IncorrectParams;
+import example.currencyexchange.model.exceptions.code_404.ObjectNotFound;
+import example.currencyexchange.model.exceptions.code_409.ObjectAlreadyExist;
+import example.currencyexchange.model.exceptions.code_500.DataBaseNotAvailable;
 import lombok.Getter;
 
 import java.util.List;
@@ -34,21 +38,24 @@ public class CurrencyService implements ServiceIntefrace<CurrencyDTO, String> {
     }
 
     @Override
-    public List<CurrencyDTO> getAll() {
+    public List<CurrencyDTO> getAll()
+            throws ObjectNotFound, DataBaseNotAvailable {
         return DAO.getModelAll()
                 .stream()
                 .map(this::transform).toList();
     }
 
     @Override
-    public CurrencyDTO getByCode(String code) {
+    public CurrencyDTO getByCode(String code)
+            throws ObjectNotFound, DataBaseNotAvailable {
         Currency model = DAO.getModel(code);
         CurrencyDTO dto = transform(model);
         return dto;
     }
 
     @Override
-    public void addToBase(CurrencyDTO entity) {
+    public void addToBase(CurrencyDTO entity)
+            throws ObjectAlreadyExist, DataBaseNotAvailable, IncorrectParams {
         DAO.addModel(entity.getName(), entity.getCode(), String.valueOf(entity.getSign()));
     }
 }

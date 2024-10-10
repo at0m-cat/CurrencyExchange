@@ -4,6 +4,10 @@ import example.currencyexchange.dao.ExchangeDAO;
 import example.currencyexchange.dto.CurrencyDTO;
 import example.currencyexchange.dto.ExchangeDTO;
 import example.currencyexchange.model.Exchange;
+import example.currencyexchange.model.exceptions.code_400.IncorrectParams;
+import example.currencyexchange.model.exceptions.code_404.ObjectNotFound;
+import example.currencyexchange.model.exceptions.code_409.ObjectAlreadyExist;
+import example.currencyexchange.model.exceptions.code_500.DataBaseNotAvailable;
 import lombok.Getter;
 
 import java.util.List;
@@ -49,14 +53,16 @@ public class ExchangeService implements ServiceIntefrace<ExchangeDTO, String> {
     }
 
     @Override
-    public List<ExchangeDTO> getAll() {
+    public List<ExchangeDTO> getAll()
+            throws ObjectNotFound, DataBaseNotAvailable {
         List<Exchange> models = DAO.getModelAll();
         return models.stream().map(this::transform).toList();
     }
 
 
     @Override
-    public ExchangeDTO getByCode(String code) {
+    public ExchangeDTO getByCode(String code)
+            throws ObjectNotFound, DataBaseNotAvailable {
         String baseCode = code.substring(0, 3);
         String targetCode = code.substring(3);
 
@@ -65,7 +71,8 @@ public class ExchangeService implements ServiceIntefrace<ExchangeDTO, String> {
     }
 
     @Override
-    public void addToBase(ExchangeDTO entity) {
+    public void addToBase(ExchangeDTO entity)
+            throws ObjectAlreadyExist, DataBaseNotAvailable, IncorrectParams {
         double rate = entity.getRATE();
         DAO.addToBase(entity, rate);
     }

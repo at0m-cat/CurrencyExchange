@@ -7,6 +7,10 @@ import example.currencyexchange.dto.ExchangeDTO;
 import example.currencyexchange.model.Currency;
 import example.currencyexchange.model.CurrencyExchange;
 import example.currencyexchange.model.Exchange;
+import example.currencyexchange.model.exceptions.code_400.IncorrectParams;
+import example.currencyexchange.model.exceptions.code_404.ObjectNotFound;
+import example.currencyexchange.model.exceptions.code_409.ObjectAlreadyExist;
+import example.currencyexchange.model.exceptions.code_500.DataBaseNotAvailable;
 import lombok.Getter;
 
 import java.util.List;
@@ -18,7 +22,8 @@ public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchang
     private static final ExchangeService EXCHANGE_SERVICE = ExchangeService.getSERVICE();
     private static final CurrencyExchangeDAO DAO = CurrencyExchangeDAO.getDAO();
 
-    public CurrencyExchangeDTO createDto(CurrencyDTO baseCurrency, CurrencyDTO targetCurrency, Double rate, Double amount) {
+    public CurrencyExchangeDTO createDto(CurrencyDTO baseCurrency, CurrencyDTO targetCurrency,
+                                         Double rate, Double amount) {
         CurrencyExchangeDTO dto = new CurrencyExchangeDTO();
 
         String baseCode = baseCurrency.getCode();
@@ -71,12 +76,14 @@ public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchang
     }
 
     @Override
-    public List<CurrencyExchangeDTO> getAll() {
+    public List<CurrencyExchangeDTO> getAll()
+            throws ObjectNotFound, DataBaseNotAvailable {
         return List.of();
     }
 
     @Override
-    public CurrencyExchangeDTO getByCode(String code) {
+    public CurrencyExchangeDTO getByCode(String code)
+            throws ObjectNotFound, DataBaseNotAvailable {
         String baseCode = code.substring(0, 3);
         String targetCode = code.substring(3);
 
@@ -85,7 +92,8 @@ public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchang
     }
 
     @Override
-    public void addToBase(CurrencyExchangeDTO entity) {
+    public void addToBase(CurrencyExchangeDTO entity)
+            throws ObjectAlreadyExist, DataBaseNotAvailable, IncorrectParams {
 
     }
 }
