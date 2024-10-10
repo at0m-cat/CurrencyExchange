@@ -49,8 +49,7 @@ public class CurrencyService implements ServiceIntefrace<CurrencyDTO, String> {
     public CurrencyDTO getByCode(String code)
             throws ObjectNotFound, DataBaseNotAvailable {
         Currency model = DAO.getModel(code);
-        CurrencyDTO dto = transform(model);
-        return dto;
+        return transform(model);
     }
 
     @Override
