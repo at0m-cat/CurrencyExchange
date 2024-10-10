@@ -68,7 +68,7 @@ public class CurrencyExchangeServlet extends HttpServlet {
 
             Stream.of(from, to).forEach(param -> {
                 if (param == null || param.isEmpty()) {
-                    throw new IncorrectСurrenciesPair();
+                    throw new IncorrectParams();
                 }
             });
 
@@ -78,12 +78,13 @@ public class CurrencyExchangeServlet extends HttpServlet {
                 }
             });
 
-        } catch (IncorrectСurrenciesPair e) {
+        } catch (IncorrectParams e) {
             resp.setStatus(400);
             RENDERER.print(resp, e);
+            return;
         }
         try {
-            if (from.equals(to)){
+            if (from.equals(to)) {
                 CurrencyDTO bc = CURRENCY_SERVICE.getByCode(from);
                 CurrencyExchangeDTO pair = CURRENCY_EXCHANGE_SERVICE.createDto(bc, bc, 1.0, amount);
                 RENDERER.print(resp, pair);

@@ -17,14 +17,6 @@ public final class DataBaseConfig {
     @Getter
     private static final DataBaseConfig CONNCECTION = new DataBaseConfig();
 
-    /**
-     * Connection to dataBase
-     *
-     * @param query SQL request
-     * @param params parameters in SQL request, if any
-     * @return ResultSet - if SQL query is "SELECT", otherwise "NULL"
-     * @throws SQLException
-     */
     public ResultSet connect(String query, Object... params){
         try {
             Class.forName(JDBC_DRIVER);
@@ -34,24 +26,29 @@ public final class DataBaseConfig {
             for (int i = 0; i < params.length; i++) {
                 preparedStatement.setObject(i + 1, params[i]);
             }
+
             ResultSet resultSet = null;
-            if (query.trim().toUpperCase().startsWith("SELECT") || query.trim().toUpperCase().startsWith("WITH")) {
+            if (query.trim().toUpperCase().startsWith("SELECT")
+                    || query.trim().toUpperCase().startsWith("WITH RECURSIVE")) {
                 resultSet = preparedStatement.executeQuery();
                 connection.close();
-            }
-            else {
+
+            } else {
                 preparedStatement.executeUpdate();
                 connection.close();
             }
+
             return resultSet;
+
         } catch (ClassNotFoundException e) {
             throw new DataBaseNotAvailable();
-        }
-        catch (SQLException e) {
+
+        } catch (SQLException e) {
             if (e.getSQLState().equals("23505")) {
                 throw new ObjectAlreadyExist("a record with this object already exists");
             }
-            if (e.getSQLState().equals("42804")){
+
+            else if (e.getSQLState().equals("42804")){
                 throw new IncorrectParams();
             }
 

@@ -14,5 +14,4 @@ public class CurrencyPairNotExist extends RuntimeException {
     public CurrencyPairNotExist(String message) {
         super(message);
     }
-
 }

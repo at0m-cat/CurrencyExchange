@@ -80,7 +80,7 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
                 
                     UNION ALL
                 
-                    SELECT DISTINCT e.id, 1/e.rate AS rate,
+                    SELECT DISTINCT e.id, 1 / e.rate AS rate,
                                     c2.id AS base_id, c2.fullname AS base_name, c2.code AS base_code, c2.sign AS base_sign,
                                     c1.id AS target_id, c1.fullname AS target_name, c1.code AS target_code, c1.sign AS target_sign,
                                     'reverse' AS match_type
@@ -106,7 +106,7 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
                 
                       UNION ALL
                 
-                      SELECT DISTINCT e1.id, 1/(e2.rate * e1.rate) AS rate,
+                      SELECT DISTINCT e1.id, 1 / (e2.rate * e1.rate) AS rate,
                                     c3.id AS base_id, c3.fullname AS base_name, c3.code AS base_code, c3.sign AS base_sign,
                                     c1.id AS target_id, c1.fullname AS target_name, c1.code AS target_code, c1.sign AS target_sign,
                                     'reverse_intermediary' AS match_type
@@ -120,9 +120,7 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
                       AND intermediary.code != c3.code
                 )
                 
-                SELECT *
-                FROM exchange_pairs
-                LIMIT 1;
+                SELECT * FROM exchange_pairs LIMIT 1;
                 """;
 
         ResultSet rs = DB.connect(query
@@ -149,9 +147,9 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
 
         String query = """
                 SELECT e.id, e.rate, c1.id AS base_id,c1.fullname AS base_name,
-                 c1.code AS base_code, c1.sign AS base_sign,
-                 c2.id AS target_id, c2.fullname AS target_name,
-                 c2.code AS target_code, c2.sign AS target_sign
+                        c1.code AS base_code, c1.sign AS base_sign,
+                        c2.id AS target_id, c2.fullname AS target_name,
+                        c2.code AS target_code, c2.sign AS target_sign
                  FROM exchangerates e
                  JOIN currencies c1 ON e.basecurrencyid = c1.id
                  JOIN currencies c2 ON e.targetcurrencyid = c2.id
@@ -176,9 +174,9 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
 
         String query = """
                 SELECT e.id AS id, c1.id AS base_id, c1.fullname AS base_name,
-                 c1.code AS base_code, c1.sign AS base_sign,c2.id AS target_id,
-                 c2.fullname AS target_name, c2.code AS target_code,
-                 c2.sign AS target_sign, e.rate
+                        c1.code AS base_code, c1.sign AS base_sign,c2.id AS target_id,
+                        c2.fullname AS target_name, c2.code AS target_code,
+                        c2.sign AS target_sign, e.rate
                  FROM exchangerates e
                  JOIN currencies c1 ON e.basecurrencyid = c1.id
                  JOIN currencies c2 ON e.targetcurrencyid = c2.id
@@ -205,8 +203,7 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
 
     public void addToBase(ExchangeDTO pairsDto, double rate) throws DataBaseNotAvailable {
         String query = """
-                INSERT INTO exchangerates (basecurrencyid, targetcurrencyid, rate)
-                VALUES (?, ?, ?)""";
+                INSERT INTO exchangerates (basecurrencyid, targetcurrencyid, rate) VALUES (?, ?, ?)""";
 
         int baseId = pairsDto.getBaseCurrency().getId();
         int targetId = pairsDto.getTargetCurrency().getId();
