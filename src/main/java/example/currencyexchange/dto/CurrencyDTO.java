@@ -18,6 +18,4 @@ public final class CurrencyDTO {
     private Integer id;
     private Integer sign;
 
-
-
 }

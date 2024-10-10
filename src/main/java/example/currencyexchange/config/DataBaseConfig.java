@@ -47,12 +47,10 @@ public final class DataBaseConfig {
         } catch (SQLException e) {
             if (e.getSQLState().equals("23505")) {
                 throw new ObjectAlreadyExist("a record with this object already exists");
-            }
 
-            else if (e.getSQLState().equals("42804")){
+            } else if (e.getSQLState().equals("42804")){
                 throw new IncorrectParams();
             }
-
             throw new DataBaseNotAvailable(e.getSQLState());
         }
     }

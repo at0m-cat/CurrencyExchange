@@ -21,7 +21,6 @@ public final class CurrencyDAO implements DAOInterface<Currency, String> {
     private CurrencyDAO() {
     }
 
-
     @Override
     public Currency getModel(String baseCode, String targetCode) throws ObjectNotFound, DataBaseNotAvailable {
         return null;

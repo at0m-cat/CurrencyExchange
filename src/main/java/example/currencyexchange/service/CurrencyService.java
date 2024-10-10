@@ -29,12 +29,12 @@ public class CurrencyService implements ServiceIntefrace<CurrencyDTO, String> {
     }
 
     private CurrencyDTO transform(Currency currency) {
-        CurrencyDTO currencyDTO = new CurrencyDTO();
-        currencyDTO.setId(currency.getID());
-        currencyDTO.setName(currency.getFULL_NAME());
-        currencyDTO.setSign(currency.getSIGN());
-        currencyDTO.setCode(currency.getCODE());
-        return currencyDTO;
+        CurrencyDTO dto = new CurrencyDTO();
+        dto.setId(currency.getID());
+        dto.setName(currency.getFULL_NAME());
+        dto.setSign(currency.getSIGN());
+        dto.setCode(currency.getCODE());
+        return dto;
     }
 
     @Override

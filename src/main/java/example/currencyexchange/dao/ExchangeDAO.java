@@ -21,10 +21,8 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
     private static final ExchangeDAO DAO = new ExchangeDAO();
     private static final DataBaseConfig DB = DataBaseConfig.getCONNCECTION();
 
-
     private ExchangeDAO() {
     }
-
 
     @Override
     public Exchange getModel(String code)
@@ -123,7 +121,6 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
     public void addModel(String name, String code, String sign)
             throws DataBaseNotAvailable {
     }
-
 
     public void addToBase(ExchangeDTO pairsDto, double rate)
             throws DataBaseNotAvailable, ObjectAlreadyExist, IncorrectParams {
