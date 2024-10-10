@@ -125,11 +125,11 @@ public class CurrencyExchangeDAO implements DAOInterface<CurrencyExchange, Strin
                 SELECT * FROM exchange_pairs LIMIT 1;
                 """;
 
-        ResultSet rs = DB.connect(query
-                , baseCode, targetCode
-                , targetCode, baseCode
-                , baseCode, targetCode
-                , targetCode, baseCode
+        ResultSet rs = DB.connect(query,
+                baseCode, targetCode,
+                targetCode, baseCode,
+                baseCode, targetCode,
+                targetCode, baseCode
         );
 
         try {
