@@ -23,7 +23,8 @@ public class CurrencyExchangeDAO implements DAOInterface<CurrencyExchange, Strin
     private CurrencyExchangeDAO() {
     }
 
-    private CurrencyExchange building(ResultSet rs)
+    @Override
+    public CurrencyExchange building(ResultSet rs)
             throws DataBaseNotAvailable {
         try {
 

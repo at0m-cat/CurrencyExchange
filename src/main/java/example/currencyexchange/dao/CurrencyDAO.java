@@ -27,7 +27,8 @@ public final class CurrencyDAO implements DAOInterface<Currency, String> {
         return null;
     }
 
-    private Currency building(ResultSet rs) throws DataBaseNotAvailable {
+    @Override
+    public Currency building(ResultSet rs) throws DataBaseNotAvailable {
         try {
             Integer id = rs.getInt(1);
             String codeCurrency = rs.getString(2);

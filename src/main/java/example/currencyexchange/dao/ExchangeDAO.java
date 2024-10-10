@@ -32,7 +32,8 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
         return null;
     }
 
-    private Exchange building(ResultSet rs)
+    @Override
+    public Exchange building(ResultSet rs)
             throws DataBaseNotAvailable {
         try {
             int id = rs.getInt("id");

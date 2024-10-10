@@ -3,10 +3,13 @@ package example.currencyexchange.dao;
 import example.currencyexchange.model.exceptions.code_404.ObjectNotFound;
 import example.currencyexchange.model.exceptions.code_500.DataBaseNotAvailable;
 
+import java.sql.ResultSet;
 import java.util.List;
 
 
 interface DAOInterface<T, K> {
+
+    T building(ResultSet rs) throws DataBaseNotAvailable;
 
     List<T> getModelAll();
 
