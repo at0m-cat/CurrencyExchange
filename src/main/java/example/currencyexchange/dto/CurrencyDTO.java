@@ -16,6 +16,6 @@ public final class CurrencyDTO {
     private String name;
     private String code;
     private Integer id;
-    private Integer sign;
+    private String sign;
 
 }

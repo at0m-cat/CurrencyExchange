@@ -1,4 +1,5 @@
 package example.currencyexchange.dao;
+
 import example.currencyexchange.config.DataBaseConfig;
 import example.currencyexchange.model.Currency;
 import example.currencyexchange.model.exceptions.code_400.IncorrectParams;
@@ -32,7 +33,7 @@ public final class CurrencyDAO implements DAOInterface<Currency, String> {
             Integer id = rs.getInt(1);
             String codeCurrency = rs.getString(2);
             String name = rs.getString(3);
-            Integer sign = rs.getInt(4);
+            String sign = rs.getString(4);
             return new Currency(name, codeCurrency, id, sign);
 
         } catch (SQLException e) {

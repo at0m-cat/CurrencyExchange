@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @JsonPropertyOrder({"base_currency", "target_currency", "rate", "amount", "converted_amount"})

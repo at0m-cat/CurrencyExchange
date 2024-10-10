@@ -10,6 +10,7 @@ import example.currencyexchange.model.exceptions.code_409.ObjectAlreadyExist;
 import example.currencyexchange.model.exceptions.code_500.DataBaseNotAvailable;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchangeDTO, String> {
@@ -19,7 +20,7 @@ public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchang
     private static final CurrencyExchangeDAO DAO = CurrencyExchangeDAO.getDAO();
 
     public CurrencyExchangeDTO createDto(CurrencyDTO baseCurrency, CurrencyDTO targetCurrency,
-                                         Double rate, Double amount) {
+                                         double rate, double amount) {
         CurrencyExchangeDTO dto = new CurrencyExchangeDTO();
 
         String baseCode = baseCurrency.getCode();
@@ -27,12 +28,13 @@ public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchang
 
         CurrencyDTO bc = CURRENCY_SERVICE.getByCode(baseCode);
         CurrencyDTO tc = CURRENCY_SERVICE.getByCode(targetCode);
+        Double convertedAmount = amount / rate;
 
         dto.setBaseCurrency(bc);
         dto.setTargetCurrency(tc);
         dto.setRate(rate);
         dto.setAmount(amount);
-        dto.setConvertedAmount(amount / rate);
+        dto.setConvertedAmount(convertedAmount);
         return dto;
     }
 
@@ -57,11 +59,11 @@ public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchang
         return dto;
     }
 
-    public CurrencyExchangeDTO setExchangeParameters(CurrencyExchangeDTO currencyExchangeDTO, Double amount) {
+    public CurrencyExchangeDTO setExchangeParameters(CurrencyExchangeDTO currencyExchangeDTO, double amount) {
         CurrencyExchangeDTO dto = new CurrencyExchangeDTO();
 
-        Double rate = currencyExchangeDTO.getRate();
-        Double convertedAmount = amount / rate;
+        double rate = currencyExchangeDTO.getRate();
+        double convertedAmount = amount / rate;
 
         dto.setBaseCurrency(currencyExchangeDTO.getBaseCurrency());
         dto.setTargetCurrency(currencyExchangeDTO.getTargetCurrency());

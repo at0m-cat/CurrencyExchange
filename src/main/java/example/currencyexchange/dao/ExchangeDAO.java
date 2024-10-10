@@ -40,12 +40,12 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
             Integer bId = rs.getInt("base_id");
             String bName = rs.getString("base_name");
             String bCode = rs.getString("base_code");
-            Integer bSign = rs.getInt("base_sign");
+            String bSign = rs.getString("base_sign");
 
             Integer tId = rs.getInt("target_id");
             String tName = rs.getString("target_name");
             String tCode = rs.getString("target_code");
-            Integer tSign = rs.getInt("target_sign");
+            String tSign = rs.getString("target_sign");
 
             Currency baseCurrency = new Currency(bName, bCode, bId, bSign);
             Currency targetCurrency = new Currency(tName, tCode, tId, tSign);
@@ -119,7 +119,7 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
 
     @Override
     public void addModel(String name, String code, String sign)
-            throws DataBaseNotAvailable {
+            throws DataBaseNotAvailable, ObjectAlreadyExist, IncorrectParams {
     }
 
     public void addToBase(ExchangeDTO pairsDto, double rate)

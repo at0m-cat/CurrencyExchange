@@ -20,7 +20,7 @@ public class CurrencyService implements ServiceIntefrace<CurrencyDTO, String> {
     private CurrencyService() {
     }
 
-    public CurrencyDTO createDto(String name, String code, int sign) {
+    public CurrencyDTO createDto(String name, String code, String sign) {
         CurrencyDTO dto = new CurrencyDTO();
         dto.setName(name);
         dto.setCode(code);

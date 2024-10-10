@@ -124,6 +124,7 @@ public class SingleExchangeServlet extends HttpServlet {
         } catch (IncorrectParams e) {
             resp.setStatus(400);
             RENDERER.print(resp, e);
+            return;
         }
 
         try {

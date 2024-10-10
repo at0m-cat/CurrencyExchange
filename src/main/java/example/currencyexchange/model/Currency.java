@@ -12,6 +12,6 @@ public class Currency {
     private final String FULL_NAME;
     private final String CODE;
     private final Integer ID;
-    private final Integer SIGN;
+    private final String SIGN;
 
 }

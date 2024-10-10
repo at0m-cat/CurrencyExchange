@@ -8,7 +8,6 @@ import example.currencyexchange.model.exceptions.code_404.ObjectNotFound;
 import example.currencyexchange.model.exceptions.code_409.ObjectAlreadyExist;
 import example.currencyexchange.model.exceptions.code_500.DataBaseNotAvailable;
 import lombok.Getter;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -28,17 +27,17 @@ public class CurrencyExchangeDAO implements DAOInterface<CurrencyExchange, Strin
         try {
 
             CurrencyExchange currencyExchange = new CurrencyExchange();
-            double rate = rs.getDouble("rate");
+            Double rate = rs.getDouble("rate");
 
             Integer bId = rs.getInt("base_id");
             String bName = rs.getString("base_name");
             String bCode = rs.getString("base_code");
-            Integer bSign = rs.getInt("base_sign");
+            String bSign = rs.getString("base_sign");
 
             Integer tId = rs.getInt("target_id");
             String tName = rs.getString("target_name");
             String tCode = rs.getString("target_code");
-            Integer tSign = rs.getInt("target_sign");
+            String tSign = rs.getString("target_sign");
 
             Currency baseCurrency = new Currency(bName, bCode, bId, bSign);
             Currency targetCurrency = new Currency(tName, tCode, tId, tSign);
