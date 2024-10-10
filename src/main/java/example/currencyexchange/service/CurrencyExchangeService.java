@@ -4,6 +4,7 @@ import example.currencyexchange.dao.CurrencyExchangeDAO;
 import example.currencyexchange.dto.CurrencyDTO;
 import example.currencyexchange.dto.CurrencyExchangeDTO;
 import example.currencyexchange.dto.ExchangeDTO;
+import example.currencyexchange.model.Currency;
 import example.currencyexchange.model.CurrencyExchange;
 import example.currencyexchange.model.Exchange;
 import lombok.Getter;
@@ -38,17 +39,23 @@ public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchang
         return EXCHANGE_SERVICE.getByCode(baseCurrency.getCode() + targetCurrency.getCode()).getRATE();
     }
 
-    private CurrencyExchangeDTO transform(ExchangeDTO exchange) {
+    private CurrencyExchangeDTO transform(CurrencyExchange exchange) {
         CurrencyExchangeDTO dto = new CurrencyExchangeDTO();
+        CurrencyDTO baseCurrency = new CurrencyDTO();
+        CurrencyDTO targetCurrency = new CurrencyDTO();
 
-        CurrencyDTO baseCurrency = exchange.getBaseCurrency();
-        CurrencyDTO targetCurrency = exchange.getTargetCurrency();
+        baseCurrency.setName(exchange.getBaseCurrency().getFULL_NAME());
+        baseCurrency.setCode(exchange.getBaseCurrency().getCODE());
+        baseCurrency.setSign(exchange.getBaseCurrency().getSIGN());
+        baseCurrency.setId(exchange.getBaseCurrency().getID());
 
-        Double rate = exchange.getRATE();
-
+        targetCurrency.setName(exchange.getTargetCurrency().getFULL_NAME());
+        targetCurrency.setCode(exchange.getTargetCurrency().getCODE());
+        targetCurrency.setSign(exchange.getTargetCurrency().getSIGN());
         dto.setBaseCurrency(baseCurrency);
         dto.setTargetCurrency(targetCurrency);
-        dto.setRate(rate);
+        dto.setRate(exchange.getRate());
+
         return dto;
     }
 
@@ -73,7 +80,7 @@ public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchang
     public CurrencyExchangeDTO getByCode(String code) {
         String baseCode = code.substring(0, 3);
         String targetCode = code.substring(3);
-        ExchangeDTO model = EXCHANGE_SERVICE.getExchangePairByCode(baseCode, targetCode);
+        CurrencyExchange model = DAO.getModel(baseCode, targetCode);
         return transform(model);
     }
 

@@ -2,15 +2,21 @@ package example.currencyexchange.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.SneakyThrows;
 
 @AllArgsConstructor
 @Getter
+@Setter
 public class CurrencyExchange {
 
-    private final Currency BASE_CURRENCY;
-    private final Currency TARGET_CURRENCY;
-    private final Double RATE;
-    private final Double AMOUNT;
-    private final Double CONVERTED_AMOUNT;
+    public CurrencyExchange(){
+    }
+
+    private  Currency baseCurrency;
+    private  Currency targetCurrency;
+    private  Double rate;
+    private  Double amount;
+    private  Double convertedAmount;
 
 }

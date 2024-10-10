@@ -55,11 +55,6 @@ public class ExchangeService implements ServiceIntefrace<ExchangeDTO, String> {
         return models.stream().map(this::transform).toList();
     }
 
-    public ExchangeDTO getExchangePairByCode(String baseCode, String targetCode) {
-        Exchange model = DAO.getPairsByCode(baseCode, targetCode);
-        return transform(model);
-
-    }
 
     @Override
     public ExchangeDTO getByCode(String code) {
