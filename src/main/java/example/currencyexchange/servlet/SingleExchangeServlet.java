@@ -219,8 +219,17 @@ public class SingleExchangeServlet extends HttpServlet {
                 throw new IncorrectParams("Currency pairs match");
             }
 
-            EXCHANGE_SERVICE.updateRate(baseCode, targetCode, rate);
-            throw new SuccesComplete();
+            try {
+                EXCHANGE_SERVICE.updateRate(baseCode, targetCode, rate);
+
+            } catch (ObjectNotFound | DataBaseNotAvailable e) {
+                resp.setStatus(404);
+                RENDERER.print(resp, e);
+                return;
+            }
+
+            ExchangeDTO dto = EXCHANGE_SERVICE.getByCode(baseCode + targetCode);
+            RENDERER.print(resp, dto);
 
         } catch (IncorrectParams e) {
             resp.setStatus(400);
