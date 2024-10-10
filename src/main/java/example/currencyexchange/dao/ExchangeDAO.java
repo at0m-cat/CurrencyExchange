@@ -106,7 +106,7 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
                 result.add(building(rs));
             }
 
-            if (!result.isEmpty()){
+            if (!result.isEmpty()) {
                 return result;
             }
 
@@ -129,8 +129,20 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
 
         int baseId = pairsDto.getBaseCurrency().getId();
         int targetId = pairsDto.getTargetCurrency().getId();
-
         DB.connect(query, baseId, targetId, rate);
+    }
 
+    public void updateRate(String baseCode, String targetCode, Double rate)
+            throws DataBaseNotAvailable, IncorrectParams, ObjectNotFound {
+        String query = """
+                UPDATE exchangerates
+                SET rate = ?
+                WHERE basecurrencyid = ? AND targetcurrencyid = ?
+                """;
+
+        Exchange model = getModel(baseCode, targetCode);
+        Integer baseId = model.getBASE_CURRENCY().getID();
+        Integer targetId = model.getTARGET_CURRENCY().getID();
+        DB.connect(query, rate, baseId, targetId);
     }
 }

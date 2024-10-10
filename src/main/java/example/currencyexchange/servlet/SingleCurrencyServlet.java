@@ -86,11 +86,9 @@ public class SingleCurrencyServlet extends HttpServlet {
                         }
                     });
 
-
             if (code != code.toUpperCase()){
                 throw new IncorrectParams("%s - incorrect case code, correct: UpperCase".formatted(code));
             }
-
 
             CurrencyDTO currencyDTO = SERVICE.createDto(name, code, sign);
             SERVICE.addToBase(currencyDTO);

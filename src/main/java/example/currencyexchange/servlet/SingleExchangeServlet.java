@@ -17,6 +17,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 @WebServlet(value = "/exchangerates/*")
@@ -28,13 +30,13 @@ public class SingleExchangeServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String method = req.getMethod();
+        this.doPatch(req, resp);
         switch (method) {
-            case "GET", "POST" -> super.service(req, resp);
+            case "GET", "POST", "PATCH" -> super.service(req, resp);
             default -> {
                 resp.setStatus(500);
                 RENDERER.print(resp, new DataBaseNotAvailable("%s: not available method"
                         .formatted(method)));
-
             }
         }
     }
@@ -129,14 +131,14 @@ public class SingleExchangeServlet extends HttpServlet {
 
         try {
 
-             try {
-                 CURRENCY_SERVICE.getByCode(baseCode);
-                 CURRENCY_SERVICE.getByCode(targetCode);
+            try {
+                CURRENCY_SERVICE.getByCode(baseCode);
+                CURRENCY_SERVICE.getByCode(targetCode);
 
-             } catch (ObjectNotFound e) {
-                 resp.setStatus(404);
-                 RENDERER.print(resp, e);
-             }
+            } catch (ObjectNotFound e) {
+                resp.setStatus(404);
+                RENDERER.print(resp, e);
+            }
 
             try {
                 EXCHANGE_SERVICE.getByCode(baseCode + targetCode);
@@ -166,8 +168,87 @@ public class SingleExchangeServlet extends HttpServlet {
             resp.setStatus(500);
             RENDERER.print(resp, e);
 
-        } catch (IncorrectParams e){
+        } catch (IncorrectParams e) {
             resp.setStatus(400);
+            RENDERER.print(resp, e);
+        }
+
+    }
+
+    @Override
+    protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        /*
+                PATCH /exchangeRate/USDRUB?rate=
+
+                Обновление существующего в базе обменного курса.
+                Валютная пара задаётся идущими подряд кодами валют в адресе запроса.
+                Данные передаются в теле запроса в виде полей формы (x-www-form-urlencoded).
+                Единственное поле формы - rate.
+         */
+
+        try {
+            if (req.getPathInfo().equals("/")) {
+                throw new IncorrectParams("No currency pair");
+            }
+
+            String parameter = req.getParameter("rate");
+            String[] args = req.getPathInfo().split("/");
+            String[] codes = args[1].split("(?<=\\G...)");
+
+            if (codes.length != 2) {
+                throw new IncorrectParams("'%s' - Invalid code type".formatted(args[1]));
+            }
+
+            Stream.of(codes).forEach(code -> {
+                if (code.length() < 3) {
+                    throw new IncorrectParams("'%s' - Invalid code length".formatted(code));
+                }
+
+                if (!code.toUpperCase().equals(code)) {
+                    throw new IncorrectParams("%s - Error case, corrected: %s"
+                            .formatted(code, code.toUpperCase()));
+                }
+
+            });
+
+            if (parameter.isEmpty()) {
+                throw new IncorrectParams("Rate is empty");
+            }
+
+            try {
+                Double.valueOf(parameter);
+
+            } catch (NumberFormatException e) {
+                throw new IncorrectParams("Rate is not double");
+            }
+
+            String baseCode = codes[0];
+            String targetCode = codes[1];
+            Double rate = Double.valueOf(parameter);
+
+            if (baseCode.equalsIgnoreCase(targetCode)) {
+                throw new IncorrectParams("Currency pairs match");
+            }
+
+            // doPatch release...
+
+            EXCHANGE_SERVICE.updateRate(baseCode, targetCode, rate);
+            throw new SuccesComplete();
+
+        } catch (IncorrectParams e) {
+            resp.setStatus(400);
+            RENDERER.print(resp, e);
+
+        } catch (DataBaseNotAvailable e) {
+            resp.setStatus(500);
+            RENDERER.print(resp, e);
+
+        } catch (ObjectNotFound e) {
+            resp.setStatus(404);
+            RENDERER.print(resp, e);
+
+        } catch (SuccesComplete e) {
+            resp.setStatus(201);
             RENDERER.print(resp, e);
         }
 

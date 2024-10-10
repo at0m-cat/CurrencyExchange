@@ -77,4 +77,9 @@ public class ExchangeService implements ServiceIntefrace<ExchangeDTO, String> {
         DAO.addToBase(entity, rate);
     }
 
+    public void updateRate(String baseCode, String targetCode, Double rate)
+            throws DataBaseNotAvailable, IncorrectParams {
+        DAO.updateRate(baseCode, targetCode, rate);
+    }
+
 }
