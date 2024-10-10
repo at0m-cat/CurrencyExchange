@@ -16,7 +16,7 @@ public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchang
     @Getter
     private static final CurrencyExchangeService CURRENCY_EXCHANGE_SERVICE = new CurrencyExchangeService();
     private static final CurrencyService CURRENCY_SERVICE = CurrencyService.getCURRENCY_SERVICE();
-    private static final CurrencyExchangeDAO DAO = CurrencyExchangeDAO.getDao();
+    private static final CurrencyExchangeDAO DAO = CurrencyExchangeDAO.getDAO();
 
     private CurrencyExchangeService() {
 

@@ -1,6 +1,6 @@
 package example.currencyexchange.dao;
 
-import example.currencyexchange.config.DataBaseConfig;
+import example.currencyexchange.config.DataBaseConnect;
 import example.currencyexchange.dto.ExchangeDTO;
 import example.currencyexchange.model.Currency;
 import example.currencyexchange.model.Exchange;
@@ -19,7 +19,7 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
 
     @Getter
     private static final ExchangeDAO DAO = new ExchangeDAO();
-    private final DataBaseConfig DB = DataBaseConfig.getCONNCECTION();
+    private static final DataBaseConnect DB = DataBaseConnect.getCONNCECTION();
 
     private ExchangeDAO() {
     }

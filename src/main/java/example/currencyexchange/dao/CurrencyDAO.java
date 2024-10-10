@@ -1,6 +1,6 @@
 package example.currencyexchange.dao;
 
-import example.currencyexchange.config.DataBaseConfig;
+import example.currencyexchange.config.DataBaseConnect;
 import example.currencyexchange.model.Currency;
 import example.currencyexchange.model.exceptions.code_400.IncorrectParams;
 import example.currencyexchange.model.exceptions.code_404.ObjectNotFound;
@@ -17,7 +17,7 @@ public final class CurrencyDAO implements DAOInterface<Currency, String> {
 
     @Getter
     private static final CurrencyDAO DAO = new CurrencyDAO();
-    private static final DataBaseConfig DB = DataBaseConfig.getCONNCECTION();
+    private static final DataBaseConnect DB = DataBaseConnect.getCONNCECTION();
 
     private CurrencyDAO() {
     }

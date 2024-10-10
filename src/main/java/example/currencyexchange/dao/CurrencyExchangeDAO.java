@@ -1,6 +1,6 @@
 package example.currencyexchange.dao;
 
-import example.currencyexchange.config.DataBaseConfig;
+import example.currencyexchange.config.DataBaseConnect;
 import example.currencyexchange.model.Currency;
 import example.currencyexchange.model.CurrencyExchange;
 import example.currencyexchange.model.exceptions.code_400.IncorrectParams;
@@ -16,8 +16,8 @@ import java.util.List;
 public class CurrencyExchangeDAO implements DAOInterface<CurrencyExchange, String> {
 
     @Getter
-    private static final CurrencyExchangeDAO dao = new CurrencyExchangeDAO();
-    private static final DataBaseConfig db = DataBaseConfig.getCONNCECTION();
+    private static final CurrencyExchangeDAO DAO = new CurrencyExchangeDAO();
+    private static final DataBaseConnect DB = DataBaseConnect.getCONNCECTION();
 
     private CurrencyExchangeDAO() {
     }
@@ -125,7 +125,7 @@ public class CurrencyExchangeDAO implements DAOInterface<CurrencyExchange, Strin
             SELECT * FROM exchange_pairs LIMIT 1;
             """;
 
-        ResultSet rs = db.connect(query,
+        ResultSet rs = DB.connect(query,
                 baseCode, targetCode,
                 targetCode, baseCode,
                 baseCode, targetCode,

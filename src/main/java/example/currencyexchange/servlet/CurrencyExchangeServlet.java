@@ -22,7 +22,6 @@ import java.util.stream.Stream;
 public class CurrencyExchangeServlet extends HttpServlet {
     private static final Renderer RENDERER = Renderer.getRENDERER();
     private static final CurrencyService CURRENCY_SERVICE = CurrencyService.getCURRENCY_SERVICE();
-    private static final ExchangeService EXCHANGE_SERVICE = ExchangeService.getEXCHANGE_SERVICE();
     private static final CurrencyExchangeService CURRENCY_EXCHANGE_SERVICE = CurrencyExchangeService.getCURRENCY_EXCHANGE_SERVICE();
 
     @Override
