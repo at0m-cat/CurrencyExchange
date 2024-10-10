@@ -72,8 +72,8 @@ public class SingleExchangeServlet extends HttpServlet {
                 throw new IncorrectParams("Currency pairs match");
             }
 
-            ExchangeDTO DTO = EXCHANGE_SERVICE.getByCode(baseCode + targetCode);
-            RENDERER.print(resp, DTO);
+            ExchangeDTO exchangeDTO = EXCHANGE_SERVICE.getByCode(baseCode + targetCode);
+            RENDERER.print(resp, exchangeDTO);
 
         } catch (IncorrectParams e) {
             resp.setStatus(400);
@@ -146,9 +146,9 @@ public class SingleExchangeServlet extends HttpServlet {
                 RENDERER.print(resp, e);
 
             } catch (ObjectNotFound e) {
-                CurrencyDTO baseCurrency = CURRENCY_SERVICE.getByCode(baseCode);
-                CurrencyDTO targetCurrency = CURRENCY_SERVICE.getByCode(targetCode);
-                ExchangeDTO pairs = EXCHANGE_SERVICE.createDto(baseCurrency, targetCurrency, rate);
+                CurrencyDTO baseCurrencyDTO = CURRENCY_SERVICE.getByCode(baseCode);
+                CurrencyDTO targetCurrencyDTO = CURRENCY_SERVICE.getByCode(targetCode);
+                ExchangeDTO pairs = EXCHANGE_SERVICE.createDto(baseCurrencyDTO, targetCurrencyDTO, rate);
                 EXCHANGE_SERVICE.addToBase(pairs);
                 throw new SuccesComplete();
             }
@@ -169,7 +169,6 @@ public class SingleExchangeServlet extends HttpServlet {
             resp.setStatus(400);
             RENDERER.print(resp, e);
         }
-
 
     }
 }

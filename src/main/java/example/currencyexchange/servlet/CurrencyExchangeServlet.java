@@ -77,14 +77,15 @@ public class CurrencyExchangeServlet extends HttpServlet {
         }
         try {
             if (from.equals(to)) {
-                CurrencyDTO bc = CURRENCY_SERVICE.getByCode(from);
-                CurrencyExchangeDTO pair = CURRENCY_EXCHANGE_SERVICE.createDto(bc, bc, 1.0, amount);
+                CurrencyDTO currencyDTO = CURRENCY_SERVICE.getByCode(from);
+                CurrencyExchangeDTO pair = CURRENCY_EXCHANGE_SERVICE
+                        .createDto(currencyDTO, currencyDTO, 1.0, amount);
                 RENDERER.print(resp, pair);
                 return;
             }
-            CurrencyExchangeDTO dto = CURRENCY_EXCHANGE_SERVICE.getByCode(from + to);
-            dto = CURRENCY_EXCHANGE_SERVICE.setExchangeParameters(dto, amount);
-            RENDERER.print(resp, dto);
+            CurrencyExchangeDTO currencyExchangeDTO = CURRENCY_EXCHANGE_SERVICE.getByCode(from + to);
+            currencyExchangeDTO = CURRENCY_EXCHANGE_SERVICE.setExchangeParameters(currencyExchangeDTO, amount);
+            RENDERER.print(resp, currencyExchangeDTO);
 
         } catch (ObjectNotFound e) {
             resp.setStatus(404);

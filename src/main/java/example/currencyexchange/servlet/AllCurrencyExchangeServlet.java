@@ -38,8 +38,8 @@ public class AllCurrencyExchangeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         try
         {
-            List<ExchangeDTO> DTO = SERVICE.getAll();
-            RENDERER.print(resp, DTO);
+            List<ExchangeDTO> exchangeDTOS = SERVICE.getAll();
+            RENDERER.print(resp, exchangeDTOS);
 
         } catch (DataBaseNotAvailable e) {
             resp.setStatus(500);

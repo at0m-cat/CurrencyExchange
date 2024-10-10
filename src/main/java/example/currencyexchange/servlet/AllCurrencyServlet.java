@@ -36,8 +36,8 @@ public class AllCurrencyServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
-            List<CurrencyDTO> DTO = SERVICE.getAll();
-            RENDERER.print(response, DTO);
+            List<CurrencyDTO> currencyDTOS = SERVICE.getAll();
+            RENDERER.print(response, currencyDTOS);
 
         } catch (DataBaseNotAvailable e) {
             response.setStatus(500);

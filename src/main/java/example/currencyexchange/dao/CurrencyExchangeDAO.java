@@ -3,7 +3,6 @@ package example.currencyexchange.dao;
 import example.currencyexchange.config.DataBaseConfig;
 import example.currencyexchange.model.Currency;
 import example.currencyexchange.model.CurrencyExchange;
-import example.currencyexchange.model.Exchange;
 import example.currencyexchange.model.exceptions.code_400.IncorrectParams;
 import example.currencyexchange.model.exceptions.code_404.ObjectNotFound;
 import example.currencyexchange.model.exceptions.code_409.ObjectAlreadyExist;

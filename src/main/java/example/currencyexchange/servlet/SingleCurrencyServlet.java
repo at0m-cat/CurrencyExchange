@@ -49,13 +49,13 @@ public class SingleCurrencyServlet extends HttpServlet {
                 throw new IncorrectParams("Incorrect length code of currency");
             }
 
-            CurrencyDTO DTO = SERVICE.getByCode(code);
+            CurrencyDTO currencyDTO = SERVICE.getByCode(code);
 
-            if (DTO == null) {
+            if (currencyDTO == null) {
                 throw new ObjectNotFound("Currency not found");
             }
 
-            RENDERER.print(resp, DTO);
+            RENDERER.print(resp, currencyDTO);
 
         } catch (IncorrectParams e) {
             resp.setStatus(400);
@@ -92,8 +92,8 @@ public class SingleCurrencyServlet extends HttpServlet {
             }
 
             try {
-                CurrencyDTO dto = SERVICE.createDto(name, code, Integer.valueOf(sign));
-                SERVICE.addToBase(dto);
+                CurrencyDTO currencyDTO = SERVICE.createDto(name, code, Integer.valueOf(sign));
+                SERVICE.addToBase(currencyDTO);
             } catch (NumberFormatException e){
                 throw new IncorrectParams("%s - incorrect param sign".formatted(sign));
             }

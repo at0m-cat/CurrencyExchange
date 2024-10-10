@@ -1,4 +1,4 @@
-package example.currencyexchange.dao;//package example.currencyexchange.model.dao;
+package example.currencyexchange.dao;
 import example.currencyexchange.config.DataBaseConfig;
 import example.currencyexchange.model.Currency;
 import example.currencyexchange.model.exceptions.code_400.IncorrectParams;
@@ -15,7 +15,7 @@ import java.util.List;
 public final class CurrencyDAO implements DAOInterface<Currency, String> {
 
     @Getter
-    private final static CurrencyDAO DAO = new CurrencyDAO();
+    private static final CurrencyDAO DAO = new CurrencyDAO();
     private static final DataBaseConfig DB = DataBaseConfig.getCONNCECTION();
 
     private CurrencyDAO() {
