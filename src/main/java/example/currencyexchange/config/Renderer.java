@@ -1,18 +1,18 @@
 package example.currencyexchange.config;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.SneakyThrows;
+import lombok.Getter;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 
 public class Renderer {
 
-    public Renderer() {
+    @Getter
+    private static final Renderer RENDERER = new Renderer();
+
+    private Renderer() {
     }
 
     /**
@@ -22,15 +22,19 @@ public class Renderer {
      * @param data     Object to output in JSON
      * @param <T>      Object type
      */
-    @SneakyThrows
     public <T> void print(HttpServletResponse response, T data) {
+
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        PrintWriter writer = response.getWriter();
-        ObjectMapper mapper = new ObjectMapper();
-        writer.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(data));
-        writer.flush();
+        try {
+            PrintWriter writer = response.getWriter();
+            ObjectMapper mapper = new ObjectMapper();
+            writer.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(data));
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
