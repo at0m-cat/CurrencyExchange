@@ -17,8 +17,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 @WebServlet(value = "/exchangerates/*")
@@ -177,15 +175,6 @@ public class SingleExchangeServlet extends HttpServlet {
 
     @Override
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        /*
-                PATCH /exchangeRate/USDRUB?rate=
-
-                Обновление существующего в базе обменного курса.
-                Валютная пара задаётся идущими подряд кодами валют в адресе запроса.
-                Данные передаются в теле запроса в виде полей формы (x-www-form-urlencoded).
-                Единственное поле формы - rate.
-         */
-
         try {
             if (req.getPathInfo().equals("/")) {
                 throw new IncorrectParams("No currency pair");
@@ -230,8 +219,6 @@ public class SingleExchangeServlet extends HttpServlet {
                 throw new IncorrectParams("Currency pairs match");
             }
 
-            // doPatch release...
-
             EXCHANGE_SERVICE.updateRate(baseCode, targetCode, rate);
             throw new SuccesComplete();
 
@@ -251,6 +238,5 @@ public class SingleExchangeServlet extends HttpServlet {
             resp.setStatus(201);
             RENDERER.print(resp, e);
         }
-
     }
 }
