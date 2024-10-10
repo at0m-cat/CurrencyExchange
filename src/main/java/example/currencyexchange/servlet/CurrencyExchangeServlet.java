@@ -21,9 +21,9 @@ import java.util.stream.Stream;
 @WebServlet(value = "/exchange")
 public class CurrencyExchangeServlet extends HttpServlet {
     private static final Renderer RENDERER = Renderer.getRENDERER();
-    private static final CurrencyService CURRENCY_SERVICE = CurrencyService.getSERVICE();
-    private static final ExchangeService EXCHANGE_SERVICE = ExchangeService.getSERVICE();
-    private static final CurrencyExchangeService CURRENCY_EXCHANGE_SERVICE = CurrencyExchangeService.getSERVICE();
+    private static final CurrencyService CURRENCY_SERVICE = CurrencyService.getCURRENCY_SERVICE();
+    private static final ExchangeService EXCHANGE_SERVICE = ExchangeService.getEXCHANGE_SERVICE();
+    private static final CurrencyExchangeService CURRENCY_EXCHANGE_SERVICE = CurrencyExchangeService.getCURRENCY_EXCHANGE_SERVICE();
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

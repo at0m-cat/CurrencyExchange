@@ -2,7 +2,6 @@ package example.currencyexchange.servlet;
 
 import example.currencyexchange.config.Renderer;
 import example.currencyexchange.dto.CurrencyDTO;
-import example.currencyexchange.model.Currency;
 import example.currencyexchange.model.exceptions.code_404.ObjectNotFound;
 import example.currencyexchange.model.exceptions.code_500.DataBaseNotAvailable;
 import example.currencyexchange.service.CurrencyService;
@@ -18,7 +17,7 @@ import java.util.List;
 @WebServlet(value = "/currencies")
 public class AllCurrencyServlet extends HttpServlet {
     private static final Renderer RENDERER = Renderer.getRENDERER();
-    private static final CurrencyService SERVICE = CurrencyService.getSERVICE();
+    private static final CurrencyService SERVICE = CurrencyService.getCURRENCY_SERVICE();
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

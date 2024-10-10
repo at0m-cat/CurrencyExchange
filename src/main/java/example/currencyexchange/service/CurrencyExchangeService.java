@@ -3,10 +3,7 @@ package example.currencyexchange.service;
 import example.currencyexchange.dao.CurrencyExchangeDAO;
 import example.currencyexchange.dto.CurrencyDTO;
 import example.currencyexchange.dto.CurrencyExchangeDTO;
-import example.currencyexchange.dto.ExchangeDTO;
-import example.currencyexchange.model.Currency;
 import example.currencyexchange.model.CurrencyExchange;
-import example.currencyexchange.model.Exchange;
 import example.currencyexchange.model.exceptions.code_400.IncorrectParams;
 import example.currencyexchange.model.exceptions.code_404.ObjectNotFound;
 import example.currencyexchange.model.exceptions.code_409.ObjectAlreadyExist;
@@ -17,9 +14,8 @@ import java.util.List;
 
 public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchangeDTO, String> {
     @Getter
-    private static final CurrencyExchangeService SERVICE = new CurrencyExchangeService();
-    private static final CurrencyService CURRENCY_SERVICE = CurrencyService.getSERVICE();
-    private static final ExchangeService EXCHANGE_SERVICE = ExchangeService.getSERVICE();
+    private static final CurrencyExchangeService CURRENCY_EXCHANGE_SERVICE = new CurrencyExchangeService();
+    private static final CurrencyService CURRENCY_SERVICE = CurrencyService.getCURRENCY_SERVICE();
     private static final CurrencyExchangeDAO DAO = CurrencyExchangeDAO.getDAO();
 
     public CurrencyExchangeDTO createDto(CurrencyDTO baseCurrency, CurrencyDTO targetCurrency,

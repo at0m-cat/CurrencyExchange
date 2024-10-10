@@ -16,7 +16,7 @@ import java.util.List;
 @WebServlet(value = "/exchangerates")
 public class AllCurrencyExchangeServlet extends HttpServlet {
     private static final Renderer RENDERER = Renderer.getRENDERER();
-    private static final ExchangeService SERVICE = ExchangeService.getSERVICE();
+    private static final ExchangeService SERVICE = ExchangeService.getEXCHANGE_SERVICE();
 
 
     @Override

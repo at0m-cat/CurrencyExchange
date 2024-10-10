@@ -15,7 +15,7 @@ import java.util.List;
 public final class CurrencyDAO implements DAOInterface<Currency, String> {
 
     @Getter
-    private final static CurrencyDAO INSTANCE = new CurrencyDAO();
+    private final static CurrencyDAO DAO = new CurrencyDAO();
     private static final DataBaseConfig DB = DataBaseConfig.getCONNCECTION();
 
     private CurrencyDAO() {

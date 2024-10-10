@@ -14,8 +14,8 @@ import java.util.List;
 public class CurrencyService implements ServiceIntefrace<CurrencyDTO, String> {
 
     @Getter
-    private static final CurrencyService SERVICE = new CurrencyService();
-    private static final CurrencyDAO DAO = CurrencyDAO.getINSTANCE();
+    private static final CurrencyService CURRENCY_SERVICE = new CurrencyService();
+    private static final CurrencyDAO DAO = CurrencyDAO.getDAO();
 
     private CurrencyService() {
     }

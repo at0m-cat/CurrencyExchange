@@ -15,8 +15,8 @@ import java.util.List;
 public class ExchangeService implements ServiceIntefrace<ExchangeDTO, String> {
 
     @Getter
-    private static final ExchangeService SERVICE = new ExchangeService();
-    private static final ExchangeDAO DAO = ExchangeDAO.getINSTANCE();
+    private static final ExchangeService EXCHANGE_SERVICE = new ExchangeService();
+    private static final ExchangeDAO DAO = ExchangeDAO.getDAO();
 
     private ExchangeService() {
     }

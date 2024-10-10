@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 @WebServlet(value = "/currencies/*")
 public class SingleCurrencyServlet extends HttpServlet {
     private static final Renderer RENDERER = Renderer.getRENDERER();
-    private static final CurrencyService SERVICE = CurrencyService.getSERVICE();
+    private static final CurrencyService SERVICE = CurrencyService.getCURRENCY_SERVICE();
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
