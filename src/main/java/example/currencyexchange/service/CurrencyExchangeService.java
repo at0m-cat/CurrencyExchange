@@ -63,7 +63,7 @@ public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchang
         CurrencyExchangeDTO dto = new CurrencyExchangeDTO();
 
         double rate = currencyExchangeDTO.getRate();
-        double convertedAmount = amount / rate;
+        double convertedAmount = amount * rate;
 
         dto.setBaseCurrency(currencyExchangeDTO.getBaseCurrency());
         dto.setTargetCurrency(currencyExchangeDTO.getTargetCurrency());

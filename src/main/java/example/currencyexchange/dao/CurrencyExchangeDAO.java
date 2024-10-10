@@ -8,6 +8,7 @@ import example.currencyexchange.model.exceptions.code_404.ObjectNotFound;
 import example.currencyexchange.model.exceptions.code_409.ObjectAlreadyExist;
 import example.currencyexchange.model.exceptions.code_500.DataBaseNotAvailable;
 import lombok.Getter;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -81,7 +82,7 @@ public class CurrencyExchangeDAO implements DAOInterface<CurrencyExchange, Strin
                 
                     UNION ALL
                 
-                    SELECT DISTINCT e.id, 1 / e.rate AS rate,
+                    SELECT DISTINCT e.id, ROUND (1 / e.rate, 4) AS rate,
                                     c2.id AS base_id, c2.fullname AS base_name, c2.code AS base_code, c2.sign AS base_sign,
                                     c1.id AS target_id, c1.fullname AS target_name, c1.code AS target_code, c1.sign AS target_sign,
                                     'reverse' AS match_type
@@ -92,7 +93,7 @@ public class CurrencyExchangeDAO implements DAOInterface<CurrencyExchange, Strin
                 
                     UNION ALL
                 
-                    SELECT DISTINCT e1.id, e1.rate * e2.rate AS rate,
+                    SELECT DISTINCT e1.id, ROUND (e1.rate * e2.rate, 4) AS rate,
                                     c1.id AS base_id, c1.fullname AS base_name, c1.code AS base_code, c1.sign AS base_sign,
                                     c3.id AS target_id, c3.fullname AS target_name, c3.code AS target_code, c3.sign AS target_sign,
                                     'intermediary' AS match_type
@@ -105,9 +106,9 @@ public class CurrencyExchangeDAO implements DAOInterface<CurrencyExchange, Strin
                       AND intermediary.code != c1.code
                       AND intermediary.code != c3.code
                 
-                      UNION ALL
+                    UNION ALL
                 
-                      SELECT DISTINCT e1.id, 1 / (e2.rate * e1.rate) AS rate,
+                    SELECT DISTINCT e1.id, ROUND (1 / (e2.rate * e1.rate), 4) AS rate,
                                     c3.id AS base_id, c3.fullname AS base_name, c3.code AS base_code, c3.sign AS base_sign,
                                     c1.id AS target_id, c1.fullname AS target_name, c1.code AS target_code, c1.sign AS target_sign,
                                     'reverse_intermediary' AS match_type
@@ -140,7 +141,7 @@ public class CurrencyExchangeDAO implements DAOInterface<CurrencyExchange, Strin
             throw new DataBaseNotAvailable();
         }
 
-        throw new ObjectNotFound("Currency pair not found");
+        throw new ObjectNotFound("Currency pair not found :(");
     }
 
     @Override
