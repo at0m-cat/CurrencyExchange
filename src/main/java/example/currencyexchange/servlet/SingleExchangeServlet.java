@@ -8,8 +8,6 @@ import example.currencyexchange.model.exceptions.code_400.IncorrectParams;
 import example.currencyexchange.model.exceptions.code_404.ObjectNotFound;
 import example.currencyexchange.model.exceptions.code_409.ObjectAlreadyExist;
 import example.currencyexchange.model.exceptions.code_500.DataBaseNotAvailable;
-import example.currencyexchange.model.exceptions.code_400.CurrencyPairNotExist;
-import example.currencyexchange.model.exceptions.code_400.IncorrectСurrenciesPair;
 import example.currencyexchange.service.CurrencyService;
 import example.currencyexchange.service.ExchangeService;
 import jakarta.servlet.ServletException;
@@ -19,7 +17,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 @WebServlet(value = "/exchangerates/*")
@@ -46,14 +43,14 @@ public class SingleExchangeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         try {
             if (req.getPathInfo().equals("/")) {
-                throw new IncorrectСurrenciesPair("No currency pair");
+                throw new IncorrectParams("No currency pair");
             }
 
             String[] args = req.getPathInfo().split("/");
             String[] codes = args[1].split("(?<=\\G...)");
 
             if (codes.length != 2) {
-                throw new IncorrectСurrenciesPair("Error when entering currency");
+                throw new IncorrectParams("Error when entering currency");
             }
 
             String baseCode = codes[0];
@@ -62,23 +59,23 @@ public class SingleExchangeServlet extends HttpServlet {
             Stream.of(codes).forEach(code -> {
 
                 if (code.length() < 3) {
-                    throw new IncorrectСurrenciesPair("'%s' - Invalid code type".formatted(code));
+                    throw new IncorrectParams("'%s' - Invalid code type".formatted(code));
                 }
 
                 if (!code.toUpperCase().equals(code)) {
-                    throw new IncorrectСurrenciesPair("%s - Error case, corrected: %s"
+                    throw new IncorrectParams("%s - Error case, corrected: %s"
                             .formatted(code, code.toUpperCase()));
                 }
             });
 
             if (baseCode.equalsIgnoreCase(targetCode)) {
-                throw new IncorrectСurrenciesPair("Currency pairs match");
+                throw new IncorrectParams("Currency pairs match");
             }
 
             ExchangeDTO DTO = EXCHANGE_SERVICE.getByCode(baseCode + targetCode);
             RENDERER.print(resp, DTO);
 
-        } catch (IncorrectСurrenciesPair | CurrencyPairNotExist e) {
+        } catch (IncorrectParams e) {
             resp.setStatus(400);
             RENDERER.print(resp, e);
         } catch (DataBaseNotAvailable e) {

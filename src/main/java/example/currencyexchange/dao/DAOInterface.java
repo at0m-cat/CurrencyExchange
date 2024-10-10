@@ -2,7 +2,6 @@ package example.currencyexchange.dao;
 
 import example.currencyexchange.model.exceptions.code_404.ObjectNotFound;
 import example.currencyexchange.model.exceptions.code_500.DataBaseNotAvailable;
-import example.currencyexchange.model.exceptions.code_400.CurrencyPairNotExist;
 
 import java.util.List;
 

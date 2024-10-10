@@ -17,7 +17,8 @@ public final class DataBaseConfig {
     @Getter
     private static final DataBaseConfig CONNCECTION = new DataBaseConfig();
 
-    public ResultSet connect(String query, Object... params){
+    public ResultSet connect(String query, Object... params)
+            throws DataBaseNotAvailable, IncorrectParams, ObjectAlreadyExist {
         try {
             Class.forName(JDBC_DRIVER);
             Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD);

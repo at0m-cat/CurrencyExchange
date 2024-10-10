@@ -2,7 +2,6 @@ package example.currencyexchange.servlet;
 
 import example.currencyexchange.config.Renderer;
 import example.currencyexchange.dto.ExchangeDTO;
-import example.currencyexchange.model.exceptions.code_400.CurrencyPairNotExist;
 import example.currencyexchange.model.exceptions.code_500.DataBaseNotAvailable;
 import example.currencyexchange.service.ExchangeService;
 import jakarta.servlet.ServletException;
@@ -44,10 +43,6 @@ public class AllCurrencyExchangeServlet extends HttpServlet {
 
         } catch (DataBaseNotAvailable e) {
             resp.setStatus(500);
-            RENDERER.print(resp, e);
-
-        } catch (CurrencyPairNotExist e) {
-            resp.setStatus(400);
             RENDERER.print(resp, e);
         }
     }

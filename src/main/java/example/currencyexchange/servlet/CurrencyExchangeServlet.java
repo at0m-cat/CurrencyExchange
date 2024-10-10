@@ -3,12 +3,7 @@ package example.currencyexchange.servlet;
 import example.currencyexchange.config.Renderer;
 import example.currencyexchange.dto.CurrencyDTO;
 import example.currencyexchange.dto.CurrencyExchangeDTO;
-import example.currencyexchange.dto.ExchangeDTO;
-import example.currencyexchange.model.CurrencyExchange;
-import example.currencyexchange.model.Exchange;
 import example.currencyexchange.model.exceptions.code_400.IncorrectParams;
-import example.currencyexchange.model.exceptions.code_400.IncorrectСurrenciesPair;
-import example.currencyexchange.model.exceptions.code_404.ExchangeRateNotFound;
 import example.currencyexchange.model.exceptions.code_404.ObjectNotFound;
 import example.currencyexchange.model.exceptions.code_500.DataBaseNotAvailable;
 import example.currencyexchange.service.CurrencyExchangeService;
@@ -20,10 +15,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import javax.crypto.ExemptionMechanismException;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 @WebServlet(value = "/exchange")

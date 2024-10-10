@@ -4,7 +4,9 @@ import example.currencyexchange.config.DataBaseConfig;
 import example.currencyexchange.model.Currency;
 import example.currencyexchange.model.CurrencyExchange;
 import example.currencyexchange.model.Exchange;
+import example.currencyexchange.model.exceptions.code_400.IncorrectParams;
 import example.currencyexchange.model.exceptions.code_404.ObjectNotFound;
+import example.currencyexchange.model.exceptions.code_409.ObjectAlreadyExist;
 import example.currencyexchange.model.exceptions.code_500.DataBaseNotAvailable;
 import lombok.Getter;
 
@@ -21,12 +23,11 @@ public class CurrencyExchangeDAO implements DAOInterface<CurrencyExchange, Strin
     private CurrencyExchangeDAO() {
     }
 
-    private CurrencyExchange building(ResultSet rs) throws DataBaseNotAvailable {
+    private CurrencyExchange building(ResultSet rs)
+            throws DataBaseNotAvailable {
         try {
 
             CurrencyExchange currencyExchange = new CurrencyExchange();
-
-            int id = rs.getInt("id");
             double rate = rs.getDouble("rate");
 
             Integer bId = rs.getInt("base_id");
@@ -59,13 +60,15 @@ public class CurrencyExchangeDAO implements DAOInterface<CurrencyExchange, Strin
     }
 
     @Override
-    public CurrencyExchange getModel(String code) throws ObjectNotFound, DataBaseNotAvailable {
+    public CurrencyExchange getModel(String code)
+            throws ObjectNotFound, DataBaseNotAvailable {
         return null;
     }
 
 
     @Override
-    public CurrencyExchange getModel(String baseCode, String targetCode) throws ObjectNotFound, DataBaseNotAvailable {
+    public CurrencyExchange getModel(String baseCode, String targetCode)
+            throws ObjectNotFound, DataBaseNotAvailable {
         String query = """
                 WITH RECURSIVE exchange_pairs AS (
                     SELECT DISTINCT e.id, e.rate,
@@ -142,7 +145,8 @@ public class CurrencyExchangeDAO implements DAOInterface<CurrencyExchange, Strin
     }
 
     @Override
-    public void addModel(String name, String code, String sign) throws DataBaseNotAvailable {
+    public void addModel(String name, String code, String sign)
+            throws DataBaseNotAvailable, ObjectAlreadyExist, IncorrectParams {
 
     }
 }

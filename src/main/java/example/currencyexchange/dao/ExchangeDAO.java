@@ -4,7 +4,9 @@ import example.currencyexchange.config.DataBaseConfig;
 import example.currencyexchange.dto.ExchangeDTO;
 import example.currencyexchange.model.Currency;
 import example.currencyexchange.model.Exchange;
+import example.currencyexchange.model.exceptions.code_400.IncorrectParams;
 import example.currencyexchange.model.exceptions.code_404.ObjectNotFound;
+import example.currencyexchange.model.exceptions.code_409.ObjectAlreadyExist;
 import example.currencyexchange.model.exceptions.code_500.DataBaseNotAvailable;
 import lombok.Getter;
 
@@ -25,13 +27,14 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
 
 
     @Override
-    public Exchange getModel(String code) throws ObjectNotFound, DataBaseNotAvailable {
+    public Exchange getModel(String code)
+            throws ObjectNotFound, DataBaseNotAvailable {
         return null;
     }
 
-    private Exchange building(ResultSet rs) throws DataBaseNotAvailable {
+    private Exchange building(ResultSet rs)
+            throws DataBaseNotAvailable {
         try {
-
             int id = rs.getInt("id");
             double rate = rs.getDouble("rate");
 
@@ -56,7 +59,8 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
     }
 
     @Override
-    public Exchange getModel(String baseCode, String targetCode) throws ObjectNotFound, DataBaseNotAvailable {
+    public Exchange getModel(String baseCode, String targetCode)
+            throws ObjectNotFound, DataBaseNotAvailable {
 
         String query = """
                 SELECT e.id, e.rate, c1.id AS base_id,c1.fullname AS base_name,
@@ -83,7 +87,7 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
     }
 
     @Override
-    public List<Exchange> getModelAll() {
+    public List<Exchange> getModelAll() throws DataBaseNotAvailable, ObjectNotFound {
 
         String query = """
                 SELECT e.id AS id, c1.id AS base_id, c1.fullname AS base_name,
@@ -102,19 +106,26 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
             while (rs.next()) {
                 result.add(building(rs));
             }
-            return result;
+
+            if (!result.isEmpty()){
+                return result;
+            }
 
         } catch (SQLException e) {
             throw new DataBaseNotAvailable();
         }
+
+        throw new ObjectNotFound("Currency pair not found");
     }
 
     @Override
-    public void addModel(String name, String code, String sign) throws DataBaseNotAvailable {
+    public void addModel(String name, String code, String sign)
+            throws DataBaseNotAvailable {
     }
 
 
-    public void addToBase(ExchangeDTO pairsDto, double rate) throws DataBaseNotAvailable {
+    public void addToBase(ExchangeDTO pairsDto, double rate)
+            throws DataBaseNotAvailable, ObjectAlreadyExist, IncorrectParams {
         String query = """
                 INSERT INTO exchangerates (basecurrencyid, targetcurrencyid, rate) VALUES (?, ?, ?)""";
 

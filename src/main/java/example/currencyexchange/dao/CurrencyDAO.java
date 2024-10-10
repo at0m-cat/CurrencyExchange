@@ -1,10 +1,10 @@
 package example.currencyexchange.dao;//package example.currencyexchange.model.dao;
 import example.currencyexchange.config.DataBaseConfig;
-import example.currencyexchange.dto.CurrencyDTO;
 import example.currencyexchange.model.Currency;
+import example.currencyexchange.model.exceptions.code_400.IncorrectParams;
 import example.currencyexchange.model.exceptions.code_404.ObjectNotFound;
+import example.currencyexchange.model.exceptions.code_409.ObjectAlreadyExist;
 import example.currencyexchange.model.exceptions.code_500.DataBaseNotAvailable;
-import example.currencyexchange.model.exceptions.code_400.CurrencyPairNotExist;
 import lombok.Getter;
 
 import java.sql.ResultSet;
@@ -42,7 +42,8 @@ public final class CurrencyDAO implements DAOInterface<Currency, String> {
 
 
     @Override
-    public Currency getModel(String code) throws ObjectNotFound, DataBaseNotAvailable {
+    public Currency getModel(String code)
+            throws ObjectNotFound, DataBaseNotAvailable {
         String query = "SELECT * FROM currencies WHERE code = ?";
         ResultSet rs = DB.connect(query, code.toUpperCase());
         try {
@@ -57,7 +58,8 @@ public final class CurrencyDAO implements DAOInterface<Currency, String> {
     }
 
     @Override
-    public List<Currency> getModelAll() {
+    public List<Currency> getModelAll()
+            throws DataBaseNotAvailable, ObjectNotFound {
 
         String query = "SELECT * FROM currencies";
         ResultSet rs = DB.connect(query);
@@ -78,7 +80,8 @@ public final class CurrencyDAO implements DAOInterface<Currency, String> {
     }
 
     @Override
-    public void addModel(String name, String code, String sign) throws DataBaseNotAvailable {
+    public void addModel(String name, String code, String sign)
+            throws DataBaseNotAvailable, ObjectAlreadyExist, IncorrectParams {
         String query = """
                 INSERT INTO currencies (fullname, code, sign)
                 VALUES (?, ?, ?)

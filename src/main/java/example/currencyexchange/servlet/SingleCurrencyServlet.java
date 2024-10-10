@@ -3,12 +3,10 @@ package example.currencyexchange.servlet;
 import example.currencyexchange.config.Renderer;
 import example.currencyexchange.dto.CurrencyDTO;
 import example.currencyexchange.model.exceptions.code_201.SuccesComplete;
-import example.currencyexchange.model.exceptions.code_400.CurrencyPairNotExist;
 import example.currencyexchange.model.exceptions.code_400.IncorrectParams;
 import example.currencyexchange.model.exceptions.code_409.ObjectAlreadyExist;
 import example.currencyexchange.model.exceptions.code_500.DataBaseNotAvailable;
 import example.currencyexchange.model.exceptions.code_404.ObjectNotFound;
-import example.currencyexchange.model.exceptions.code_400.IncorrectСurrenciesPair;
 import example.currencyexchange.service.CurrencyService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,7 +15,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 @WebServlet(value = "/currencies/*")
@@ -44,12 +41,12 @@ public class SingleCurrencyServlet extends HttpServlet {
         try {
             String[] args = req.getPathInfo().split("/");
             if (args.length != 2) {
-                throw new IncorrectСurrenciesPair("Incorrect code of currency");
+                throw new IncorrectParams("Incorrect code of currency");
             }
 
             String code = args[1];
             if (code.length() != 3) {
-                throw new IncorrectСurrenciesPair("Incorrect length code of currency");
+                throw new IncorrectParams("Incorrect length code of currency");
             }
 
             CurrencyDTO DTO = SERVICE.getByCode(code);
@@ -60,7 +57,7 @@ public class SingleCurrencyServlet extends HttpServlet {
 
             RENDERER.print(resp, DTO);
 
-        } catch (IncorrectСurrenciesPair | CurrencyPairNotExist e) {
+        } catch (IncorrectParams e) {
             resp.setStatus(400);
             RENDERER.print(resp, e);
 
