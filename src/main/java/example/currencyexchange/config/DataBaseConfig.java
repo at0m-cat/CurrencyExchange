@@ -17,6 +17,9 @@ public final class DataBaseConfig {
     @Getter
     private static final DataBaseConfig CONNCECTION = new DataBaseConfig();
 
+    private DataBaseConfig() {
+    }
+
     public ResultSet connect(String query, Object... params)
             throws DataBaseNotAvailable, IncorrectParams, ObjectAlreadyExist {
         try {
@@ -30,7 +33,7 @@ public final class DataBaseConfig {
 
             ResultSet resultSet = null;
             if (query.trim().toUpperCase().startsWith("SELECT")
-                    || query.trim().toUpperCase().startsWith("WITH RECURSIVE")) {
+                    || query.trim().toUpperCase().startsWith("WITH")) {
                 resultSet = preparedStatement.executeQuery();
                 connection.close();
 
@@ -48,7 +51,7 @@ public final class DataBaseConfig {
             if (e.getSQLState().equals("23505")) {
                 throw new ObjectAlreadyExist("a record with this object already exists");
 
-            } else if (e.getSQLState().equals("42804")){
+            } else if (e.getSQLState().equals("42804")) {
                 throw new IncorrectParams();
             }
             throw new DataBaseNotAvailable(e.getSQLState());

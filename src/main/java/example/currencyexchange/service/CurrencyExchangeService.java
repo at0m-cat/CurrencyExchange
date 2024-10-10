@@ -10,14 +10,17 @@ import example.currencyexchange.model.exceptions.code_409.ObjectAlreadyExist;
 import example.currencyexchange.model.exceptions.code_500.DataBaseNotAvailable;
 import lombok.Getter;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchangeDTO, String> {
     @Getter
     private static final CurrencyExchangeService CURRENCY_EXCHANGE_SERVICE = new CurrencyExchangeService();
     private static final CurrencyService CURRENCY_SERVICE = CurrencyService.getCURRENCY_SERVICE();
-    private static final CurrencyExchangeDAO DAO = CurrencyExchangeDAO.getDAO();
+    private static final CurrencyExchangeDAO DAO = CurrencyExchangeDAO.getDao();
+
+    private CurrencyExchangeService() {
+
+    }
 
     public CurrencyExchangeDTO createDto(CurrencyDTO baseCurrency, CurrencyDTO targetCurrency,
                                          double rate, double amount) {

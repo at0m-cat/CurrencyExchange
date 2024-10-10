@@ -19,7 +19,7 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
 
     @Getter
     private static final ExchangeDAO DAO = new ExchangeDAO();
-    private static final DataBaseConfig DB = DataBaseConfig.getCONNCECTION();
+    private final DataBaseConfig DB = DataBaseConfig.getCONNCECTION();
 
     private ExchangeDAO() {
     }
