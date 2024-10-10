@@ -222,7 +222,7 @@ public class SingleExchangeServlet extends HttpServlet {
             try {
                 EXCHANGE_SERVICE.updateRate(baseCode, targetCode, rate);
 
-            } catch (ObjectNotFound | DataBaseNotAvailable e) {
+            } catch (ObjectNotFound e) {
                 resp.setStatus(404);
                 RENDERER.print(resp, e);
                 return;
