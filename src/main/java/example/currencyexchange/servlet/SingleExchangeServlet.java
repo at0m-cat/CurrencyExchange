@@ -28,9 +28,9 @@ public class SingleExchangeServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String method = req.getMethod();
-        this.doPatch(req, resp);
         switch (method) {
-            case "GET", "POST", "PATCH" -> super.service(req, resp);
+            case "GET", "POST" -> super.service(req, resp);
+            case "PATCH" -> this.doPatch(req, resp);
             default -> {
                 resp.setStatus(500);
                 RENDERER.print(resp, new DataBaseNotAvailable("%s: not available method"
@@ -136,10 +136,12 @@ public class SingleExchangeServlet extends HttpServlet {
             } catch (ObjectNotFound e) {
                 resp.setStatus(404);
                 RENDERER.print(resp, e);
+                return;
             }
 
             try {
                 EXCHANGE_SERVICE.getByCode(baseCode + targetCode);
+                resp.setStatus(409);
                 throw new ObjectAlreadyExist();
 
             } catch (ObjectAlreadyExist e) {

@@ -1,6 +1,7 @@
 package example.currencyexchange.dao;
 
 import example.currencyexchange.config.DataBaseConnect;
+import example.currencyexchange.config.DataBaseRequestContainer;
 import example.currencyexchange.dto.ExchangeDTO;
 import example.currencyexchange.model.Currency;
 import example.currencyexchange.model.Exchange;
@@ -20,6 +21,7 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
     @Getter
     private static final ExchangeDAO DAO = new ExchangeDAO();
     private static final DataBaseConnect DB = DataBaseConnect.getCONNCECTION();
+    private static final DataBaseRequestContainer QUERY = DataBaseRequestContainer.getREQUEST_CONTAINER();
 
     private ExchangeDAO() {
     }
@@ -61,19 +63,7 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
     public Exchange getModel(String baseCode, String targetCode)
             throws ObjectNotFound, DataBaseNotAvailable {
 
-        String query = """
-                SELECT e.id, e.rate, c1.id AS base_id,c1.fullname AS base_name,
-                        c1.code AS base_code, c1.sign AS base_sign,
-                        c2.id AS target_id, c2.fullname AS target_name,
-                        c2.code AS target_code, c2.sign AS target_sign
-                 FROM exchangerates e
-                 JOIN currencies c1 ON e.basecurrencyid = c1.id
-                 JOIN currencies c2 ON e.targetcurrencyid = c2.id
-                 WHERE c1.code = ? AND c2.code = ?
-                """;
-
-        ResultSet rs = DB.connect(query, baseCode, targetCode);
-
+        ResultSet rs = DB.connect(QUERY.getExchangeByCodePair, baseCode, targetCode);
         try {
             if (rs.next()) {
                 return building(rs);
@@ -88,18 +78,7 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
     @Override
     public List<Exchange> getModelAll() throws DataBaseNotAvailable, ObjectNotFound {
 
-        String query = """
-                SELECT e.id AS id, c1.id AS base_id, c1.fullname AS base_name,
-                        c1.code AS base_code, c1.sign AS base_sign,c2.id AS target_id,
-                        c2.fullname AS target_name, c2.code AS target_code,
-                        c2.sign AS target_sign, e.rate
-                 FROM exchangerates e
-                 JOIN currencies c1 ON e.basecurrencyid = c1.id
-                 JOIN currencies c2 ON e.targetcurrencyid = c2.id
-                """;
-
-        ResultSet rs = DB.connect(query);
-
+        ResultSet rs = DB.connect(QUERY.getExchangeAll);
         try {
             List<Exchange> result = new ArrayList<>();
             while (rs.next()) {
@@ -124,25 +103,18 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
 
     public void addToBase(ExchangeDTO pairsDto, double rate)
             throws DataBaseNotAvailable, ObjectAlreadyExist, IncorrectParams {
-        String query = """
-                INSERT INTO exchangerates (basecurrencyid, targetcurrencyid, rate) VALUES (?, ?, ?)""";
 
         int baseId = pairsDto.getBaseCurrency().getId();
         int targetId = pairsDto.getTargetCurrency().getId();
-        DB.connect(query, baseId, targetId, rate);
+        DB.connect(QUERY.addExchange, baseId, targetId, rate);
     }
 
     public void updateRate(String baseCode, String targetCode, Double rate)
             throws DataBaseNotAvailable, IncorrectParams, ObjectNotFound {
-        String query = """
-                UPDATE exchangerates
-                SET rate = ?
-                WHERE basecurrencyid = ? AND targetcurrencyid = ?
-                """;
 
         Exchange model = getModel(baseCode, targetCode);
         Integer baseId = model.getBASE_CURRENCY().getID();
         Integer targetId = model.getTARGET_CURRENCY().getID();
-        DB.connect(query, rate, baseId, targetId);
+        DB.connect(QUERY.updateRate, rate, baseId, targetId);
     }
 }

@@ -1,6 +1,7 @@
 package example.currencyexchange.dao;
 
 import example.currencyexchange.config.DataBaseConnect;
+import example.currencyexchange.config.DataBaseRequestContainer;
 import example.currencyexchange.model.Currency;
 import example.currencyexchange.model.exceptions.status_400.IncorrectParams;
 import example.currencyexchange.model.exceptions.status_404.ObjectNotFound;
@@ -18,6 +19,7 @@ public final class CurrencyDAO implements DAOInterface<Currency, String> {
     @Getter
     private static final CurrencyDAO DAO = new CurrencyDAO();
     private static final DataBaseConnect DB = DataBaseConnect.getCONNCECTION();
+    private static final DataBaseRequestContainer QUERY = DataBaseRequestContainer.getREQUEST_CONTAINER();
 
     private CurrencyDAO() {
     }
@@ -45,26 +47,22 @@ public final class CurrencyDAO implements DAOInterface<Currency, String> {
     @Override
     public Currency getModel(String code)
             throws ObjectNotFound, DataBaseNotAvailable {
-        String query = "SELECT * FROM currencies WHERE code = ?";
-        ResultSet rs = DB.connect(query, code.toUpperCase());
+        ResultSet rs = DB.connect(QUERY.getCurrencyByCode, code.toUpperCase());
         try {
             if (rs.next()) {
                 return building(rs);
             }
+            throw new ObjectNotFound("Currency not found");
 
         } catch (SQLException | DataBaseNotAvailable e) {
             throw new DataBaseNotAvailable();
         }
-        throw new ObjectNotFound("Currency not found");
     }
 
     @Override
     public List<Currency> getModelAll()
             throws DataBaseNotAvailable, ObjectNotFound {
-
-        String query = "SELECT * FROM currencies";
-        ResultSet rs = DB.connect(query);
-
+        ResultSet rs = DB.connect(QUERY.getAllCurrency);
         try {
             List<Currency> currencies = new ArrayList<>();
             while (rs.next()) {
@@ -83,11 +81,6 @@ public final class CurrencyDAO implements DAOInterface<Currency, String> {
     @Override
     public void addModel(String name, String code, String sign)
             throws DataBaseNotAvailable, ObjectAlreadyExist, IncorrectParams {
-        String query = """
-                INSERT INTO currencies (fullname, code, sign)
-                VALUES (?, ?, ?)
-                """;
-
-        DB.connect(query, name, code, sign);
+        DB.connect(QUERY.addCurrency, name, code, sign);
     }
 }

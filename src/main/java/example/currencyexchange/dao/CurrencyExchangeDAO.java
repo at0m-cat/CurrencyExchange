@@ -1,6 +1,7 @@
 package example.currencyexchange.dao;
 
 import example.currencyexchange.config.DataBaseConnect;
+import example.currencyexchange.config.DataBaseRequestContainer;
 import example.currencyexchange.model.Currency;
 import example.currencyexchange.model.CurrencyExchange;
 import example.currencyexchange.model.exceptions.status_400.IncorrectParams;
@@ -18,6 +19,7 @@ public class CurrencyExchangeDAO implements DAOInterface<CurrencyExchange, Strin
     @Getter
     private static final CurrencyExchangeDAO DAO = new CurrencyExchangeDAO();
     private static final DataBaseConnect DB = DataBaseConnect.getCONNCECTION();
+    private static final DataBaseRequestContainer QUERY = DataBaseRequestContainer.getREQUEST_CONTAINER();
 
     private CurrencyExchangeDAO() {
     }
@@ -65,77 +67,22 @@ public class CurrencyExchangeDAO implements DAOInterface<CurrencyExchange, Strin
         return null;
     }
 
-
     @Override
     public CurrencyExchange getModel(String baseCode, String targetCode)
             throws ObjectNotFound, DataBaseNotAvailable {
-        String query = """
-            WITH RECURSIVE exchange_pairs AS (
-                SELECT DISTINCT e.id, e.rate,
-                                c1.id AS base_id, c1.fullname AS base_name, c1.code AS base_code, c1.sign AS base_sign,
-                                c2.id AS target_id, c2.fullname AS target_name, c2.code AS target_code, c2.sign AS target_sign,
-                                'direct' AS match_type
-                FROM exchangerates e
-                JOIN currencies c1 ON e.basecurrencyid = c1.id
-                JOIN currencies c2 ON e.targetcurrencyid = c2.id
-                WHERE c1.code = ? AND c2.code = ?
-            
-                UNION ALL
-            
-                SELECT DISTINCT e.id, ROUND (1 / e.rate, 4) AS rate,
-                                c2.id AS base_id, c2.fullname AS base_name, c2.code AS base_code, c2.sign AS base_sign,
-                                c1.id AS target_id, c1.fullname AS target_name, c1.code AS target_code, c1.sign AS target_sign,
-                                'reverse' AS match_type
-                FROM exchangerates e
-                JOIN currencies c1 ON e.basecurrencyid = c1.id
-                JOIN currencies c2 ON e.targetcurrencyid = c2.id
-                WHERE c1.code = ? AND c2.code = ?
-            
-                UNION ALL
-            
-                SELECT DISTINCT e1.id, ROUND (e1.rate * e2.rate, 4) AS rate,
-                                c1.id AS base_id, c1.fullname AS base_name, c1.code AS base_code, c1.sign AS base_sign,
-                                c3.id AS target_id, c3.fullname AS target_name, c3.code AS target_code, c3.sign AS target_sign,
-                                'intermediary' AS match_type
-                FROM exchangerates e1
-                JOIN currencies c1 ON e1.basecurrencyid = c1.id
-                JOIN currencies intermediary ON e1.targetcurrencyid = intermediary.id
-                JOIN exchangerates e2 ON e2.basecurrencyid = intermediary.id
-                JOIN currencies c3 ON e2.targetcurrencyid = c3.id
-                WHERE c1.code = ? AND c3.code = ?
-                  AND intermediary.code != c1.code
-                  AND intermediary.code != c3.code
-            
-                UNION ALL
-            
-                SELECT DISTINCT e1.id, ROUND (1 / (e2.rate * e1.rate), 4) AS rate,
-                                c3.id AS base_id, c3.fullname AS base_name, c3.code AS base_code, c3.sign AS base_sign,
-                                c1.id AS target_id, c1.fullname AS target_name, c1.code AS target_code, c1.sign AS target_sign,
-                                'reverse_intermediary' AS match_type
-                FROM exchangerates e1
-                JOIN currencies c1 ON e1.basecurrencyid = c1.id
-                JOIN currencies intermediary ON e1.targetcurrencyid = intermediary.id
-                JOIN exchangerates e2 ON e2.basecurrencyid = intermediary.id
-                JOIN currencies c3 ON e2.targetcurrencyid = c3.id
-                WHERE c1.code = ? AND c3.code = ?
-                  AND intermediary.code != c1.code
-                  AND intermediary.code != c3.code
-            )
-            
-            SELECT * FROM exchange_pairs LIMIT 1;
-            """;
 
-        ResultSet rs = DB.connect(query,
+        ResultSet rs = DB.connect(QUERY.exchangeRequest,
                 baseCode, targetCode,
                 targetCode, baseCode,
                 baseCode, targetCode,
-                targetCode, baseCode
+                targetCode, baseCode,
+                baseCode, targetCode,
+                baseCode, targetCode
         );
 
         try {
             if (rs.next()) {
                 return building(rs);
-
             }
 
         } catch (SQLException e) {
@@ -148,6 +95,5 @@ public class CurrencyExchangeDAO implements DAOInterface<CurrencyExchange, Strin
     @Override
     public void addModel(String name, String code, String sign)
             throws DataBaseNotAvailable, ObjectAlreadyExist, IncorrectParams {
-
     }
 }
