@@ -1,5 +1,5 @@
+FROM maven:3.8.7-eclipse-temurin-17 AS build
 
-# Собираем проект Maven и создаём WAR-файл
 RUN mvn clean package
 
 FROM tomcat:jdk21-temurin
