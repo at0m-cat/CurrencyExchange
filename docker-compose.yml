@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+    image: tomcat:jdk21-temurin
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8080"
+    environment:
+      - TOMCAT_USER=admin
+      - TOMCAT_PASSWORD=admin
+      - DATABASE_URL=jdbc:postgresql://db:5432/currencyexchange
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=yourpassword
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_DB: currencyexchange
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: yourpassword
+    ports:
+      - "8083:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

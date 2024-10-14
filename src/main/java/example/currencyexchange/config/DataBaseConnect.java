@@ -51,6 +51,9 @@ public final class DataBaseConnect {
             } else if (e.getSQLState().equals("42804")) {
                 throw new IncorrectParams();
             }
+            else if (e.getSQLState().equals("08001")) {
+                throw new DataBaseNotAvailable("database connection lost");
+            }
             throw new DataBaseNotAvailable(e.getSQLState());
         }
     }
