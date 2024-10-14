@@ -10,6 +10,7 @@ import example.currencyexchange.model.exceptions.status_409.ObjectAlreadyExist;
 import example.currencyexchange.model.exceptions.status_500.DataBaseNotAvailable;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class ExchangeService implements ServiceIntefrace<ExchangeDTO, String> {
@@ -21,7 +22,7 @@ public class ExchangeService implements ServiceIntefrace<ExchangeDTO, String> {
     private ExchangeService() {
     }
 
-    public ExchangeDTO createDto(CurrencyDTO baseCurrency, CurrencyDTO targetCurrency, Double rate) {
+    public ExchangeDTO createDto(CurrencyDTO baseCurrency, CurrencyDTO targetCurrency, BigDecimal rate) {
         ExchangeDTO dto = new ExchangeDTO();
         dto.setBaseCurrency(baseCurrency);
         dto.setTargetCurrency(targetCurrency);
@@ -73,7 +74,7 @@ public class ExchangeService implements ServiceIntefrace<ExchangeDTO, String> {
     @Override
     public void addToBase(ExchangeDTO entity)
             throws ObjectAlreadyExist, DataBaseNotAvailable, IncorrectParams {
-        double rate = entity.getRATE();
+        BigDecimal rate = entity.getRATE();
         DAO.addToBase(entity, rate);
     }
 

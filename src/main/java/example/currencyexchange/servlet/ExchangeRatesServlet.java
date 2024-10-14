@@ -17,10 +17,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.stream.Stream;
 
-@WebServlet(value = "/exchangerates/*")
-public class SingleExchangeServlet extends HttpServlet {
+@WebServlet(value = "/exchangerates")
+public class ExchangeRatesServlet extends HttpServlet {
     private static final Renderer RENDERER = Renderer.getRENDERER();
     private static final ExchangeService EXCHANGE_SERVICE = ExchangeService.getEXCHANGE_SERVICE();
     private static final CurrencyService CURRENCY_SERVICE = CurrencyService.getCURRENCY_SERVICE();
@@ -30,8 +32,8 @@ public class SingleExchangeServlet extends HttpServlet {
         String method = req.getMethod();
         switch (method) {
             case "GET", "POST" -> super.service(req, resp);
-            case "PATCH" -> this.doPatch(req, resp);
-            default -> {
+            default ->
+            {
                 resp.setStatus(500);
                 RENDERER.print(resp, new DataBaseNotAvailable("%s: not available method"
                         .formatted(method)));
@@ -41,51 +43,19 @@ public class SingleExchangeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-        try {
-            if (req.getPathInfo().equals("/")) {
-                throw new IncorrectParams("No currency pair");
-            }
+        try
+        {
+            List<ExchangeDTO> exchangeDTOS = EXCHANGE_SERVICE.getAll();
+            RENDERER.print(resp, exchangeDTOS);
 
-            String[] args = req.getPathInfo().split("/");
-            String[] codes = args[1].split("(?<=\\G...)");
-
-            if (codes.length != 2) {
-                throw new IncorrectParams("Error when entering currency");
-            }
-
-            String baseCode = codes[0];
-            String targetCode = codes[1];
-
-            Stream.of(codes).forEach(code -> {
-
-                if (code.length() < 3) {
-                    throw new IncorrectParams("'%s' - Invalid code type".formatted(code));
-                }
-
-                if (!code.toUpperCase().equals(code)) {
-                    throw new IncorrectParams("%s - Error case, corrected: %s"
-                            .formatted(code, code.toUpperCase()));
-                }
-            });
-
-            if (baseCode.equalsIgnoreCase(targetCode)) {
-                throw new IncorrectParams("Currency pairs match");
-            }
-
-            ExchangeDTO exchangeDTO = EXCHANGE_SERVICE.getByCode(baseCode + targetCode);
-            RENDERER.print(resp, exchangeDTO);
-
-        } catch (IncorrectParams e) {
-            resp.setStatus(400);
-            RENDERER.print(resp, e);
         } catch (DataBaseNotAvailable e) {
             resp.setStatus(500);
             RENDERER.print(resp, e);
+
         } catch (ObjectNotFound e) {
             resp.setStatus(404);
             RENDERER.print(resp, e);
         }
-
     }
 
     @Override
@@ -128,7 +98,6 @@ public class SingleExchangeServlet extends HttpServlet {
         }
 
         try {
-
             try {
                 CURRENCY_SERVICE.getByCode(baseCode);
                 CURRENCY_SERVICE.getByCode(targetCode);
@@ -151,7 +120,8 @@ public class SingleExchangeServlet extends HttpServlet {
             } catch (ObjectNotFound e) {
                 CurrencyDTO baseCurrencyDTO = CURRENCY_SERVICE.getByCode(baseCode);
                 CurrencyDTO targetCurrencyDTO = CURRENCY_SERVICE.getByCode(targetCode);
-                ExchangeDTO pairs = EXCHANGE_SERVICE.createDto(baseCurrencyDTO, targetCurrencyDTO, rate);
+                ExchangeDTO pairs = EXCHANGE_SERVICE
+                        .createDto(baseCurrencyDTO, targetCurrencyDTO, BigDecimal.valueOf(rate));
                 EXCHANGE_SERVICE.addToBase(pairs);
                 throw new SuccesComplete();
             }
@@ -172,82 +142,6 @@ public class SingleExchangeServlet extends HttpServlet {
             resp.setStatus(400);
             RENDERER.print(resp, e);
         }
-
     }
 
-    @Override
-    protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try {
-            if (req.getPathInfo().equals("/")) {
-                throw new IncorrectParams("No currency pair");
-            }
-
-            String parameter = req.getParameter("rate");
-            String[] args = req.getPathInfo().split("/");
-            String[] codes = args[1].split("(?<=\\G...)");
-
-            if (codes.length != 2) {
-                throw new IncorrectParams("'%s' - Invalid code type".formatted(args[1]));
-            }
-
-            Stream.of(codes).forEach(code -> {
-                if (code.length() < 3) {
-                    throw new IncorrectParams("'%s' - Invalid code length".formatted(code));
-                }
-
-                if (!code.toUpperCase().equals(code)) {
-                    throw new IncorrectParams("%s - Error case, corrected: %s"
-                            .formatted(code, code.toUpperCase()));
-                }
-
-            });
-
-            if (parameter.isEmpty()) {
-                throw new IncorrectParams("Rate is empty");
-            }
-
-            try {
-                Double.valueOf(parameter);
-
-            } catch (NumberFormatException e) {
-                throw new IncorrectParams("Rate is not double");
-            }
-
-            String baseCode = codes[0];
-            String targetCode = codes[1];
-            Double rate = Double.valueOf(parameter);
-
-            if (baseCode.equalsIgnoreCase(targetCode)) {
-                throw new IncorrectParams("Currency pairs match");
-            }
-
-            try {
-                EXCHANGE_SERVICE.updateRate(baseCode, targetCode, rate);
-
-            } catch (ObjectNotFound e) {
-                resp.setStatus(404);
-                RENDERER.print(resp, e);
-                return;
-            }
-
-            ExchangeDTO dto = EXCHANGE_SERVICE.getByCode(baseCode + targetCode);
-            RENDERER.print(resp, dto);
-
-        } catch (IncorrectParams e) {
-            resp.setStatus(400);
-            RENDERER.print(resp, e);
-
-        } catch (DataBaseNotAvailable e) {
-            resp.setStatus(500);
-            RENDERER.print(resp, e);
-
-        } catch (ObjectNotFound e) {
-            resp.setStatus(404);
-            RENDERER.print(resp, e);
-
-        } catch (SuccesComplete e) {
-            resp.setStatus(201);
-            RENDERER.print(resp, e);
-        }
-    }
 }

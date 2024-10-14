@@ -15,10 +15,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.stream.Stream;
 
 @WebServlet(value = "/exchange")
-public class CurrencyExchangeServlet extends HttpServlet {
+public class ExchangeServlet extends HttpServlet {
     private static final Renderer RENDERER = Renderer.getRENDERER();
     private static final CurrencyService CURRENCY_SERVICE = CurrencyService.getCURRENCY_SERVICE();
     private static final CurrencyExchangeService CURRENCY_EXCHANGE_SERVICE = CurrencyExchangeService.getCURRENCY_EXCHANGE_SERVICE();
@@ -32,7 +33,6 @@ public class CurrencyExchangeServlet extends HttpServlet {
                 resp.setStatus(500);
                 RENDERER.print(resp, new DataBaseNotAvailable("%s: not available method"
                         .formatted(method)));
-
             }
         }
     }
@@ -43,7 +43,6 @@ public class CurrencyExchangeServlet extends HttpServlet {
         String from = null;
         String to = null;
         Double amount = null;
-
         try {
             try {
                 Double.valueOf(req.getParameter("amount"));
@@ -65,7 +64,6 @@ public class CurrencyExchangeServlet extends HttpServlet {
                 }
             });
 
-
         } catch (IncorrectParams e) {
             resp.setStatus(400);
             RENDERER.print(resp, e);
@@ -75,12 +73,13 @@ public class CurrencyExchangeServlet extends HttpServlet {
             if (from.equals(to)) {
                 CurrencyDTO currencyDTO = CURRENCY_SERVICE.getByCode(from);
                 CurrencyExchangeDTO pair = CURRENCY_EXCHANGE_SERVICE
-                        .createDto(currencyDTO, currencyDTO, 1.0, amount);
+                        .createDto(currencyDTO, currencyDTO, BigDecimal.valueOf(1.0), BigDecimal.valueOf(amount));
                 RENDERER.print(resp, pair);
                 return;
             }
             CurrencyExchangeDTO currencyExchangeDTO = CURRENCY_EXCHANGE_SERVICE.getByCode(from + to);
-            currencyExchangeDTO = CURRENCY_EXCHANGE_SERVICE.setExchangeParameters(currencyExchangeDTO, amount);
+            currencyExchangeDTO = CURRENCY_EXCHANGE_SERVICE
+                    .setExchangeParameters(currencyExchangeDTO, BigDecimal.valueOf(amount));
             RENDERER.print(resp, currencyExchangeDTO);
 
         } catch (ObjectNotFound e) {

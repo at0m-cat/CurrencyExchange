@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @JsonPropertyOrder({"id", "base_currency", "target_currency", "rate",})
@@ -15,6 +17,6 @@ public final class ExchangeDTO {
     private CurrencyDTO baseCurrency;
     @JsonProperty(value = "target_currency")
     private CurrencyDTO targetCurrency;
-    private double RATE;
+    private BigDecimal RATE;
 
 }

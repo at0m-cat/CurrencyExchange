@@ -11,7 +11,7 @@ public class DataBaseConfig {
     }
 
     public final String JDBC_DRIVER = "org.postgresql.Driver";
-    public final String DATABASE_URL = "jdbc:postgresql://db:5432/currencyexchange";  // Используем имя сервиса 'db'
+    public final String DATABASE_URL = "jdbc:postgresql://db:5432/currencyexchange";
     public final String DATABASE_USER = "postgres";
     public final String DATABASE_PASSWORD = "yourpassword";
 }

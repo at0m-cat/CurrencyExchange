@@ -16,8 +16,8 @@ public class CurrencyExchange {
 
     private Currency baseCurrency;
     private Currency targetCurrency;
-    private Double rate;
-    private Double amount;
-    private Double convertedAmount;
+    private BigDecimal rate;
+    private BigDecimal amount;
+    private BigDecimal convertedAmount;
 
 }

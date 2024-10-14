@@ -10,6 +10,7 @@ import example.currencyexchange.model.exceptions.status_409.ObjectAlreadyExist;
 import example.currencyexchange.model.exceptions.status_500.DataBaseNotAvailable;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchangeDTO, String> {
@@ -23,7 +24,7 @@ public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchang
     }
 
     public CurrencyExchangeDTO createDto(CurrencyDTO baseCurrency, CurrencyDTO targetCurrency,
-                                         double rate, double amount) {
+                                         BigDecimal rate, BigDecimal amount) {
         CurrencyExchangeDTO dto = new CurrencyExchangeDTO();
 
         String baseCode = baseCurrency.getCode();
@@ -31,7 +32,8 @@ public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchang
 
         CurrencyDTO bc = CURRENCY_SERVICE.getByCode(baseCode);
         CurrencyDTO tc = CURRENCY_SERVICE.getByCode(targetCode);
-        Double convertedAmount = amount / rate;
+        BigDecimal convertedAmount = amount.divide(rate);
+//        Double convertedAmount = amount / rate;
 
         dto.setBaseCurrency(bc);
         dto.setTargetCurrency(tc);
@@ -62,11 +64,11 @@ public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchang
         return dto;
     }
 
-    public CurrencyExchangeDTO setExchangeParameters(CurrencyExchangeDTO currencyExchangeDTO, double amount) {
+    public CurrencyExchangeDTO setExchangeParameters(CurrencyExchangeDTO currencyExchangeDTO, BigDecimal amount) {
         CurrencyExchangeDTO dto = new CurrencyExchangeDTO();
 
-        double rate = currencyExchangeDTO.getRate();
-        double convertedAmount = amount * rate;
+        BigDecimal rate = currencyExchangeDTO.getRate();
+        BigDecimal convertedAmount = amount.multiply(rate);
 
         dto.setBaseCurrency(currencyExchangeDTO.getBaseCurrency());
         dto.setTargetCurrency(currencyExchangeDTO.getTargetCurrency());

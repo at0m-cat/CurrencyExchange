@@ -22,9 +22,9 @@ public class CurrencyExchangeDTO {
     private CurrencyDTO baseCurrency;
     @JsonProperty(value = "target_currency")
     private CurrencyDTO targetCurrency;
-    private Double rate;
-    private Double amount;
+    private BigDecimal rate;
+    private BigDecimal amount;
     @JsonProperty(value = "converted_amount")
-    private Double convertedAmount;
+    private BigDecimal convertedAmount;
     
 }

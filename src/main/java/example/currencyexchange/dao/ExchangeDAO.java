@@ -11,6 +11,7 @@ import example.currencyexchange.model.exceptions.status_409.ObjectAlreadyExist;
 import example.currencyexchange.model.exceptions.status_500.DataBaseNotAvailable;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
             throws DataBaseNotAvailable {
         try {
             int id = rs.getInt("id");
-            double rate = rs.getDouble("rate");
+            BigDecimal rate = rs.getBigDecimal("rate");
 
             Integer bId = rs.getInt("base_id");
             String bName = rs.getString("base_name");
@@ -101,7 +102,7 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
             throws DataBaseNotAvailable, ObjectAlreadyExist, IncorrectParams {
     }
 
-    public void addToBase(ExchangeDTO pairsDto, double rate)
+    public void addToBase(ExchangeDTO pairsDto, BigDecimal rate)
             throws DataBaseNotAvailable, ObjectAlreadyExist, IncorrectParams {
 
         int baseId = pairsDto.getBaseCurrency().getId();

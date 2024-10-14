@@ -1,0 +1,213 @@
+{
+	"info": {
+		"_postman_id": "79c74007-051c-40ec-b809-8cc5ad6ead1c",
+		"name": "CurrencyExchange",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38445554"
+	},
+	"item": [
+		{
+			"name": "currencies",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/currencies",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"currencies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "currency",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/currency/EUR",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"currency",
+						"EUR"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "currencies",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/currencies?name&code&sign",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"currencies"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": null
+						},
+						{
+							"key": "code",
+							"value": null
+						},
+						{
+							"key": "sign",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "exchagerates",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/exchangerates",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"exchangerates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "exchangerate",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/exchangerate/RUBUSD",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"exchangerate",
+						"RUBUSD"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "exchagerates",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/exchangerates?baseCurrencyCode=SSS&targetCurrencyCode=RUB&rate=1.023",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"exchangerates"
+					],
+					"query": [
+						{
+							"key": "baseCurrencyCode",
+							"value": "SSS"
+						},
+						{
+							"key": "targetCurrencyCode",
+							"value": "RUB"
+						},
+						{
+							"key": "rate",
+							"value": "1.023"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "exchagerate",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/exchangerate/SSSRUB?rate=1.005",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"exchangerate",
+						"SSSRUB"
+					],
+					"query": [
+						{
+							"key": "rate",
+							"value": "1.005"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "exchange",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/exchange?from=SSS&to=DKK&amount=123",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"exchange"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "SSS"
+						},
+						{
+							"key": "to",
+							"value": "DKK"
+						},
+						{
+							"key": "amount",
+							"value": "123"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

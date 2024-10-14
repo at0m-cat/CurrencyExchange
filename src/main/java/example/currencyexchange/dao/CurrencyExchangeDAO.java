@@ -10,6 +10,7 @@ import example.currencyexchange.model.exceptions.status_409.ObjectAlreadyExist;
 import example.currencyexchange.model.exceptions.status_500.DataBaseNotAvailable;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -30,7 +31,7 @@ public class CurrencyExchangeDAO implements DAOInterface<CurrencyExchange, Strin
         try {
 
             CurrencyExchange currencyExchange = new CurrencyExchange();
-            Double rate = rs.getDouble("rate");
+            BigDecimal rate = rs.getBigDecimal("rate");
 
             Integer bId = rs.getInt("base_id");
             String bName = rs.getString("base_name");
