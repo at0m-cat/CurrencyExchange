@@ -156,7 +156,7 @@ Success - 200
 Error (for example, the database is unavailable) - 500
 ```
 
-### 🔸 GET `/exchangeRate/USDRUB`
+### 🔸 GET `/exchangeRate/RUBUSD`
 - Getting a specific exchange rate. The currency pair is set by consecutive currency codes in the request address. Sample response:
 
 ```json
