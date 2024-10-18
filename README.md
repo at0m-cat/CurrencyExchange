@@ -50,7 +50,7 @@ Error (e.g. database unavailable) - 500
 - Receiving a specific currency. Example answer:
 
 ```json
-  {
+{
     "id": 29,
     "name": "Euro",
     "code": "EUR",
