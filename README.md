@@ -2,13 +2,18 @@
 REST API for describing currencies and exchange rates.
 Allows you to view and edit lists of currencies and exchange rates, and perform calculations for converting arbitrary amounts from one currency to another.
 
+### 🔗 Links
 - [Java Roadmap by Sergey Zhukov.](https://zhukovsd.github.io/java-backend-learning-course/)
 - [Project "Сurrency Exchange".](https://zhukovsd.github.io/java-backend-learning-course/projects/currency-exchange/)
 
 ### 🗃 Stack
 > Java EE, Tomcat, PostgreSQL, Maven, Docker, Docker-Compose.
 
+### 🗂 Resources
+- [Postman Collection](src/main/resources/CurrencyExchange.postman_collection.json), [Dump DataBase](src/main/resources/dump_db.sql)
+
 ## ➡️ Currencies
+
 ### 🔸 GET `/currencies`
 - example of output of all currencies:
 
