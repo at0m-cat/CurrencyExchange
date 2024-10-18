@@ -2,15 +2,21 @@
 REST API for describing currencies and exchange rates.
 Allows you to view and edit lists of currencies and exchange rates, and perform calculations for converting arbitrary amounts from one currency to another.
 
-### 🔗 Links
-- [Java Roadmap by Sergey Zhukov.](https://zhukovsd.github.io/java-backend-learning-course/)
-- [Project "Сurrency Exchange".](https://zhukovsd.github.io/java-backend-learning-course/projects/currency-exchange/)
+### 👓 Motivation of the project
+
+- Getting to know `MVC` pattern
+- `REST API` - proper naming of resources, use of HTTP response codes
+- `SQL` - basic syntax for creating tables
 
 ### 🗃 Stack
 > Java EE, Tomcat, PostgreSQL, Maven, Docker, Docker-Compose.
 
 ### 🗂 Resources
 - [Postman Collection](src/main/resources/CurrencyExchange.postman_collection.json), [Dump DataBase](src/main/resources/dump_db.sql)
+
+### 🔗 Links
+- [Java Roadmap by Sergey Zhukov.](https://zhukovsd.github.io/java-backend-learning-course/)
+- [Project "Сurrency Exchange".](https://zhukovsd.github.io/java-backend-learning-course/projects/currency-exchange/)
 
 ## ➡️ Currencies
 
@@ -285,4 +291,4 @@ Error (for example, the database is unavailable) - 500
 ```
 
 - The value of the `message` depends on what kind of error occurred.
-- Errors that are possible: `DataBaseNotAvailableException`, `IncorrectParamsException`, `ObjectAlreadyExistException`, `ObjectNotFoundException`
+- Errors that are possible: `DataBaseNotAvailableException`, `IncorrectParamsException`, `ObjectAlreadyExistException`, `ObjectNotFoundException`.
