@@ -2,10 +2,10 @@ package example.currencyexchange.servlet;
 
 import example.currencyexchange.config.Renderer;
 import example.currencyexchange.dto.ExchangeDTO;
-import example.currencyexchange.model.exceptions.status_201.SuccesComplete;
-import example.currencyexchange.model.exceptions.status_400.IncorrectParams;
-import example.currencyexchange.model.exceptions.status_404.ObjectNotFound;
-import example.currencyexchange.model.exceptions.status_500.DataBaseNotAvailable;
+import example.currencyexchange.exceptions.status_201.SuccesComplete;
+import example.currencyexchange.exceptions.status_400.IncorrectParams;
+import example.currencyexchange.exceptions.status_404.ObjectNotFound;
+import example.currencyexchange.exceptions.status_500.DataBaseNotAvailable;
 import example.currencyexchange.service.ExchangeService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,8 +18,8 @@ import java.util.stream.Stream;
 
 @WebServlet(value = "/exchangerate/*")
 public class ExchangeRateServlet extends HttpServlet {
-    private static final Renderer RENDERER = Renderer.getRENDERER();
-    private static final ExchangeService EXCHANGE_SERVICE = ExchangeService.getEXCHANGE_SERVICE();
+    private static final Renderer RENDERER = Renderer.getInstance();
+    private static final ExchangeService EXCHANGE_SERVICE = ExchangeService.getInstance();
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -67,7 +67,7 @@ public class ExchangeRateServlet extends HttpServlet {
                 throw new IncorrectParams("Currency pairs match");
             }
 
-            ExchangeDTO exchangeDTO = EXCHANGE_SERVICE.getByCode(baseCode + targetCode);
+            ExchangeDTO exchangeDTO = EXCHANGE_SERVICE.findByCode(baseCode + targetCode);
             RENDERER.print(resp, exchangeDTO);
 
         } catch (IncorrectParams e) {
@@ -136,7 +136,7 @@ public class ExchangeRateServlet extends HttpServlet {
                 return;
             }
 
-            ExchangeDTO dto = EXCHANGE_SERVICE.getByCode(baseCode + targetCode);
+            ExchangeDTO dto = EXCHANGE_SERVICE.findByCode(baseCode + targetCode);
             RENDERER.print(resp, dto);
 
         } catch (IncorrectParams e) {

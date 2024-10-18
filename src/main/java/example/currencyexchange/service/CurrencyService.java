@@ -3,10 +3,10 @@ package example.currencyexchange.service;
 import example.currencyexchange.dao.CurrencyDAO;
 import example.currencyexchange.dto.CurrencyDTO;
 import example.currencyexchange.model.Currency;
-import example.currencyexchange.model.exceptions.status_400.IncorrectParams;
-import example.currencyexchange.model.exceptions.status_404.ObjectNotFound;
-import example.currencyexchange.model.exceptions.status_409.ObjectAlreadyExist;
-import example.currencyexchange.model.exceptions.status_500.DataBaseNotAvailable;
+import example.currencyexchange.exceptions.status_400.IncorrectParams;
+import example.currencyexchange.exceptions.status_404.ObjectNotFound;
+import example.currencyexchange.exceptions.status_409.ObjectAlreadyExist;
+import example.currencyexchange.exceptions.status_500.DataBaseNotAvailable;
 import lombok.Getter;
 
 import java.util.List;
@@ -14,8 +14,8 @@ import java.util.List;
 public class CurrencyService implements ServiceIntefrace<CurrencyDTO, String> {
 
     @Getter
-    private static final CurrencyService CURRENCY_SERVICE = new CurrencyService();
-    private static final CurrencyDAO DAO = CurrencyDAO.getDAO();
+    private static final CurrencyService instance = new CurrencyService();
+    private static final CurrencyDAO dao = CurrencyDAO.getInstance();
 
     private CurrencyService() {
     }
@@ -30,31 +30,31 @@ public class CurrencyService implements ServiceIntefrace<CurrencyDTO, String> {
 
     private CurrencyDTO transform(Currency currency) {
         CurrencyDTO dto = new CurrencyDTO();
-        dto.setId(currency.getID());
-        dto.setName(currency.getFULL_NAME());
-        dto.setSign(currency.getSIGN());
-        dto.setCode(currency.getCODE());
+        dto.setId(currency.getId());
+        dto.setName(currency.getFullName());
+        dto.setSign(currency.getSign());
+        dto.setCode(currency.getCode());
         return dto;
     }
 
     @Override
-    public List<CurrencyDTO> getAll()
+    public List<CurrencyDTO> findAll()
             throws ObjectNotFound, DataBaseNotAvailable {
-        return DAO.getModelAll()
+        return dao.findAll()
                 .stream()
                 .map(this::transform).toList();
     }
 
     @Override
-    public CurrencyDTO getByCode(String code)
+    public CurrencyDTO findByCode(String code)
             throws ObjectNotFound, DataBaseNotAvailable {
-        Currency model = DAO.getModel(code);
+        Currency model = dao.find(code);
         return transform(model);
     }
 
     @Override
-    public void addToBase(CurrencyDTO entity)
+    public void save(CurrencyDTO entity)
             throws ObjectAlreadyExist, DataBaseNotAvailable, IncorrectParams {
-        DAO.addModel(entity.getName(), entity.getCode(), String.valueOf(entity.getSign()));
+        dao.save(entity.getName(), entity.getCode(), String.valueOf(entity.getSign()));
     }
 }

@@ -1,4 +1,4 @@
-package example.currencyexchange.model.exceptions.status_201;
+package example.currencyexchange.exceptions.status_201;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

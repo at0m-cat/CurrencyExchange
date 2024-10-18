@@ -2,11 +2,11 @@ package example.currencyexchange.servlet;
 
 import example.currencyexchange.config.Renderer;
 import example.currencyexchange.dto.CurrencyDTO;
-import example.currencyexchange.model.exceptions.status_201.SuccesComplete;
-import example.currencyexchange.model.exceptions.status_400.IncorrectParams;
-import example.currencyexchange.model.exceptions.status_404.ObjectNotFound;
-import example.currencyexchange.model.exceptions.status_409.ObjectAlreadyExist;
-import example.currencyexchange.model.exceptions.status_500.DataBaseNotAvailable;
+import example.currencyexchange.exceptions.status_201.SuccesComplete;
+import example.currencyexchange.exceptions.status_400.IncorrectParams;
+import example.currencyexchange.exceptions.status_404.ObjectNotFound;
+import example.currencyexchange.exceptions.status_409.ObjectAlreadyExist;
+import example.currencyexchange.exceptions.status_500.DataBaseNotAvailable;
 import example.currencyexchange.service.CurrencyService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,8 +20,8 @@ import java.util.stream.Stream;
 
 @WebServlet(value = "/currencies")
 public class CurrenciesServlet extends HttpServlet {
-    private static final Renderer RENDERER = Renderer.getRENDERER();
-    private static final CurrencyService SERVICE = CurrencyService.getCURRENCY_SERVICE();
+    private static final Renderer renderer = Renderer.getInstance();
+    private static final CurrencyService service = CurrencyService.getInstance();
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -30,7 +30,7 @@ public class CurrenciesServlet extends HttpServlet {
             case "GET", "POST" -> super.service(req, resp);
             default -> {
                 resp.setStatus(500);
-                RENDERER.print(resp, new DataBaseNotAvailable("%s: not available method"
+                renderer.print(resp, new DataBaseNotAvailable("%s: not available method"
                         .formatted(method)));
             }
         }
@@ -40,16 +40,16 @@ public class CurrenciesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
-            List<CurrencyDTO> currencyDTOS = SERVICE.getAll();
-            RENDERER.print(response, currencyDTOS);
+            List<CurrencyDTO> currencyDTOS = service.findAll();
+            renderer.print(response, currencyDTOS);
 
         } catch (DataBaseNotAvailable e) {
             response.setStatus(500);
-            RENDERER.print(response, e);
+            renderer.print(response, e);
 
         } catch (ObjectNotFound e){
             response.setStatus(404);
-            RENDERER.print(response, e);
+            renderer.print(response, e);
         }
     }
 
@@ -72,25 +72,25 @@ public class CurrenciesServlet extends HttpServlet {
                 throw new IncorrectParams("%s - incorrect case code, correct: UpperCase".formatted(code));
             }
 
-            CurrencyDTO currencyDTO = SERVICE.createDto(name, code, sign);
-            SERVICE.addToBase(currencyDTO);
+            CurrencyDTO currencyDTO = service.createDto(name, code, sign);
+            service.save(currencyDTO);
             throw new SuccesComplete();
 
         } catch (IncorrectParams e) {
             resp.setStatus(400);
-            RENDERER.print(resp, e);
+            renderer.print(resp, e);
 
         } catch (DataBaseNotAvailable e) {
             resp.setStatus(500);
-            RENDERER.print(resp, e);
+            renderer.print(resp, e);
 
         } catch (ObjectAlreadyExist e) {
             resp.setStatus(409);
-            RENDERER.print(resp, e);
+            renderer.print(resp, e);
 
         } catch (SuccesComplete e){
             resp.setStatus(201);
-            RENDERER.print(resp, e);
+            renderer.print(resp, e);
         }
     }
 }

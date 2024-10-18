@@ -1,4 +1,4 @@
-package example.currencyexchange.model.exceptions.status_500;
+package example.currencyexchange.exceptions.status_500;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

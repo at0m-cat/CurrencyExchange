@@ -3,9 +3,9 @@ package example.currencyexchange.servlet;
 import example.currencyexchange.config.Renderer;
 import example.currencyexchange.dto.CurrencyDTO;
 import example.currencyexchange.dto.CurrencyExchangeDTO;
-import example.currencyexchange.model.exceptions.status_400.IncorrectParams;
-import example.currencyexchange.model.exceptions.status_404.ObjectNotFound;
-import example.currencyexchange.model.exceptions.status_500.DataBaseNotAvailable;
+import example.currencyexchange.exceptions.status_400.IncorrectParams;
+import example.currencyexchange.exceptions.status_404.ObjectNotFound;
+import example.currencyexchange.exceptions.status_500.DataBaseNotAvailable;
 import example.currencyexchange.service.CurrencyExchangeService;
 import example.currencyexchange.service.CurrencyService;
 import jakarta.servlet.ServletException;
@@ -20,9 +20,9 @@ import java.util.stream.Stream;
 
 @WebServlet(value = "/exchange")
 public class ExchangeServlet extends HttpServlet {
-    private static final Renderer RENDERER = Renderer.getRENDERER();
-    private static final CurrencyService CURRENCY_SERVICE = CurrencyService.getCURRENCY_SERVICE();
-    private static final CurrencyExchangeService CURRENCY_EXCHANGE_SERVICE = CurrencyExchangeService.getCURRENCY_EXCHANGE_SERVICE();
+    private static final Renderer RENDERER = Renderer.getInstance();
+    private static final CurrencyService CURRENCY_SERVICE = CurrencyService.getInstance();
+    private static final CurrencyExchangeService CURRENCY_EXCHANGE_SERVICE = CurrencyExchangeService.getInstance();
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -71,13 +71,13 @@ public class ExchangeServlet extends HttpServlet {
         }
         try {
             if (from.equals(to)) {
-                CurrencyDTO currencyDTO = CURRENCY_SERVICE.getByCode(from);
+                CurrencyDTO currencyDTO = CURRENCY_SERVICE.findByCode(from);
                 CurrencyExchangeDTO pair = CURRENCY_EXCHANGE_SERVICE
                         .createDto(currencyDTO, currencyDTO, BigDecimal.valueOf(1.0), BigDecimal.valueOf(amount));
                 RENDERER.print(resp, pair);
                 return;
             }
-            CurrencyExchangeDTO currencyExchangeDTO = CURRENCY_EXCHANGE_SERVICE.getByCode(from + to);
+            CurrencyExchangeDTO currencyExchangeDTO = CURRENCY_EXCHANGE_SERVICE.findByCode(from + to);
             currencyExchangeDTO = CURRENCY_EXCHANGE_SERVICE
                     .setExchangeParameters(currencyExchangeDTO, BigDecimal.valueOf(amount));
             RENDERER.print(resp, currencyExchangeDTO);

@@ -1,4 +1,4 @@
-package example.currencyexchange.model.exceptions.status_404;
+package example.currencyexchange.exceptions.status_404;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

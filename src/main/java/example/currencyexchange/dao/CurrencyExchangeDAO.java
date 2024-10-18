@@ -4,10 +4,10 @@ import example.currencyexchange.config.DataBaseConnect;
 import example.currencyexchange.config.DataBaseRequestContainer;
 import example.currencyexchange.model.Currency;
 import example.currencyexchange.model.CurrencyExchange;
-import example.currencyexchange.model.exceptions.status_400.IncorrectParams;
-import example.currencyexchange.model.exceptions.status_404.ObjectNotFound;
-import example.currencyexchange.model.exceptions.status_409.ObjectAlreadyExist;
-import example.currencyexchange.model.exceptions.status_500.DataBaseNotAvailable;
+import example.currencyexchange.exceptions.status_400.IncorrectParams;
+import example.currencyexchange.exceptions.status_404.ObjectNotFound;
+import example.currencyexchange.exceptions.status_409.ObjectAlreadyExist;
+import example.currencyexchange.exceptions.status_500.DataBaseNotAvailable;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -20,7 +20,7 @@ public class CurrencyExchangeDAO implements DAOInterface<CurrencyExchange, Strin
     @Getter
     private static final CurrencyExchangeDAO DAO = new CurrencyExchangeDAO();
     private static final DataBaseConnect DB = DataBaseConnect.getCONNCECTION();
-    private static final DataBaseRequestContainer QUERY = DataBaseRequestContainer.getREQUEST_CONTAINER();
+    private static final DataBaseRequestContainer QUERY = DataBaseRequestContainer.getInstance();
 
     private CurrencyExchangeDAO() {
     }
@@ -58,18 +58,18 @@ public class CurrencyExchangeDAO implements DAOInterface<CurrencyExchange, Strin
     }
 
     @Override
-    public List<CurrencyExchange> getModelAll() {
+    public List<CurrencyExchange> findAll() {
         return List.of();
     }
 
     @Override
-    public CurrencyExchange getModel(String code)
+    public CurrencyExchange find(String code)
             throws ObjectNotFound, DataBaseNotAvailable {
         return null;
     }
 
     @Override
-    public CurrencyExchange getModel(String baseCode, String targetCode)
+    public CurrencyExchange find(String baseCode, String targetCode)
             throws ObjectNotFound, DataBaseNotAvailable {
 
         ResultSet rs = DB.connect(QUERY.exchangeRequest,
@@ -94,7 +94,7 @@ public class CurrencyExchangeDAO implements DAOInterface<CurrencyExchange, Strin
     }
 
     @Override
-    public void addModel(String name, String code, String sign)
+    public void save(String name, String code, String sign)
             throws DataBaseNotAvailable, ObjectAlreadyExist, IncorrectParams {
     }
 }

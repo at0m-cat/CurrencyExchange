@@ -9,9 +9,9 @@ import lombok.Data;
 public class Currency {
 
     @JsonProperty("name")
-    private final String FULL_NAME;
-    private final String CODE;
-    private final Integer ID;
-    private final String SIGN;
+    private final String fullName;
+    private final String code;
+    private final Integer id;
+    private final String sign;
 
 }

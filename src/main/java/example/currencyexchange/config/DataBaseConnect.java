@@ -1,8 +1,8 @@
 package example.currencyexchange.config;
 
-import example.currencyexchange.model.exceptions.status_400.IncorrectParams;
-import example.currencyexchange.model.exceptions.status_409.ObjectAlreadyExist;
-import example.currencyexchange.model.exceptions.status_500.DataBaseNotAvailable;
+import example.currencyexchange.exceptions.status_400.IncorrectParams;
+import example.currencyexchange.exceptions.status_409.ObjectAlreadyExist;
+import example.currencyexchange.exceptions.status_500.DataBaseNotAvailable;
 import lombok.Getter;
 
 import java.sql.*;
@@ -11,7 +11,7 @@ public final class DataBaseConnect {
 
     @Getter
     private static final DataBaseConnect CONNCECTION = new DataBaseConnect();
-    private DataBaseConfig config = DataBaseConfig.getCONFIG();
+    private DataBaseConfig config = DataBaseConfig.getInstance();
 
     private DataBaseConnect() {
     }
@@ -19,9 +19,9 @@ public final class DataBaseConnect {
     public ResultSet connect(String query, Object... params)
             throws DataBaseNotAvailable, IncorrectParams, ObjectAlreadyExist {
         try {
-            Class.forName(config.JDBC_DRIVER);
+            Class.forName(config.jdbcDriver);
             Connection connection = DriverManager
-                    .getConnection(config.DATABASE_URL, config.DATABASE_USER, config.DATABASE_PASSWORD);
+                    .getConnection(config.databaseUrl, config.databaseUser, config.DATABASE_PASSWORD);
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             for (int i = 0; i < params.length; i++) {

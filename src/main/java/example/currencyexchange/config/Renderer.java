@@ -10,7 +10,7 @@ import java.io.PrintWriter;
 public class Renderer {
 
     @Getter
-    private static final Renderer RENDERER = new Renderer();
+    private static final Renderer instance = new Renderer();
 
     private Renderer() {
     }

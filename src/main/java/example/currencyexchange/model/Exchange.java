@@ -8,10 +8,10 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Getter
 public class Exchange {
-    private final int ID;
-    private final Currency BASE_CURRENCY;
-    private final Currency TARGET_CURRENCY;
-    private final BigDecimal RATE;
+    private final int id;
+    private final Currency baseCurrency;
+    private final Currency targetCurrency;
+    private final BigDecimal rate;
 
 }
 

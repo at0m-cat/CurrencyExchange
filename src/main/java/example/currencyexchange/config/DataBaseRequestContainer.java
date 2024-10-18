@@ -5,7 +5,7 @@ import lombok.Getter;
 public class DataBaseRequestContainer {
 
     @Getter
-    private static final DataBaseRequestContainer REQUEST_CONTAINER = new DataBaseRequestContainer();
+    private static final DataBaseRequestContainer instance = new DataBaseRequestContainer();
 
     private DataBaseRequestContainer() {
     }

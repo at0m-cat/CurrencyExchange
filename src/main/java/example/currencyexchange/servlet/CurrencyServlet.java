@@ -2,9 +2,9 @@ package example.currencyexchange.servlet;
 
 import example.currencyexchange.config.Renderer;
 import example.currencyexchange.dto.CurrencyDTO;
-import example.currencyexchange.model.exceptions.status_400.IncorrectParams;
-import example.currencyexchange.model.exceptions.status_404.ObjectNotFound;
-import example.currencyexchange.model.exceptions.status_500.DataBaseNotAvailable;
+import example.currencyexchange.exceptions.status_400.IncorrectParams;
+import example.currencyexchange.exceptions.status_404.ObjectNotFound;
+import example.currencyexchange.exceptions.status_500.DataBaseNotAvailable;
 import example.currencyexchange.service.CurrencyService;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,8 +13,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet(value = "/currency/*")
 public class CurrencyServlet extends HttpServlet {
-    private static final Renderer RENDERER = Renderer.getRENDERER();
-    private static final CurrencyService SERVICE = CurrencyService.getCURRENCY_SERVICE();
+    private static final Renderer RENDERER = Renderer.getInstance();
+    private static final CurrencyService SERVICE = CurrencyService.getInstance();
 
 
     @Override
@@ -30,7 +30,7 @@ public class CurrencyServlet extends HttpServlet {
                 throw new IncorrectParams("Incorrect length code of currency");
             }
 
-            CurrencyDTO currencyDTO = SERVICE.getByCode(code);
+            CurrencyDTO currencyDTO = SERVICE.findByCode(code);
 
             if (currencyDTO == null) {
                 throw new ObjectNotFound("Currency not found");

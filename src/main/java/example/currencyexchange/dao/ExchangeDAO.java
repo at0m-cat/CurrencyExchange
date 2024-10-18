@@ -5,10 +5,10 @@ import example.currencyexchange.config.DataBaseRequestContainer;
 import example.currencyexchange.dto.ExchangeDTO;
 import example.currencyexchange.model.Currency;
 import example.currencyexchange.model.Exchange;
-import example.currencyexchange.model.exceptions.status_400.IncorrectParams;
-import example.currencyexchange.model.exceptions.status_404.ObjectNotFound;
-import example.currencyexchange.model.exceptions.status_409.ObjectAlreadyExist;
-import example.currencyexchange.model.exceptions.status_500.DataBaseNotAvailable;
+import example.currencyexchange.exceptions.status_400.IncorrectParams;
+import example.currencyexchange.exceptions.status_404.ObjectNotFound;
+import example.currencyexchange.exceptions.status_409.ObjectAlreadyExist;
+import example.currencyexchange.exceptions.status_500.DataBaseNotAvailable;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -20,15 +20,15 @@ import java.util.List;
 public final class ExchangeDAO implements DAOInterface<Exchange, String> {
 
     @Getter
-    private static final ExchangeDAO DAO = new ExchangeDAO();
-    private static final DataBaseConnect DB = DataBaseConnect.getCONNCECTION();
-    private static final DataBaseRequestContainer QUERY = DataBaseRequestContainer.getREQUEST_CONTAINER();
+    private static final ExchangeDAO instance = new ExchangeDAO();
+    private static final DataBaseConnect db = DataBaseConnect.getCONNCECTION();
+    private static final DataBaseRequestContainer query = DataBaseRequestContainer.getInstance();
 
     private ExchangeDAO() {
     }
 
     @Override
-    public Exchange getModel(String code)
+    public Exchange find(String code)
             throws ObjectNotFound, DataBaseNotAvailable {
         return null;
     }
@@ -61,10 +61,10 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
     }
 
     @Override
-    public Exchange getModel(String baseCode, String targetCode)
+    public Exchange find(String baseCode, String targetCode)
             throws ObjectNotFound, DataBaseNotAvailable {
 
-        ResultSet rs = DB.connect(QUERY.getExchangeByCodePair, baseCode, targetCode);
+        ResultSet rs = db.connect(query.getExchangeByCodePair, baseCode, targetCode);
         try {
             if (rs.next()) {
                 return building(rs);
@@ -77,9 +77,9 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
     }
 
     @Override
-    public List<Exchange> getModelAll() throws DataBaseNotAvailable, ObjectNotFound {
+    public List<Exchange> findAll() throws DataBaseNotAvailable, ObjectNotFound {
 
-        ResultSet rs = DB.connect(QUERY.getExchangeAll);
+        ResultSet rs = db.connect(query.getExchangeAll);
         try {
             List<Exchange> result = new ArrayList<>();
             while (rs.next()) {
@@ -98,7 +98,7 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
     }
 
     @Override
-    public void addModel(String name, String code, String sign)
+    public void save(String name, String code, String sign)
             throws DataBaseNotAvailable, ObjectAlreadyExist, IncorrectParams {
     }
 
@@ -107,15 +107,15 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
 
         int baseId = pairsDto.getBaseCurrency().getId();
         int targetId = pairsDto.getTargetCurrency().getId();
-        DB.connect(QUERY.addExchange, baseId, targetId, rate);
+        db.connect(query.addExchange, baseId, targetId, rate);
     }
 
     public void updateRate(String baseCode, String targetCode, Double rate)
             throws DataBaseNotAvailable, IncorrectParams, ObjectNotFound {
 
-        Exchange model = getModel(baseCode, targetCode);
-        Integer baseId = model.getBASE_CURRENCY().getID();
-        Integer targetId = model.getTARGET_CURRENCY().getID();
-        DB.connect(QUERY.updateRate, rate, baseId, targetId);
+        Exchange model = find(baseCode, targetCode);
+        Integer baseId = model.getBaseCurrency().getId();
+        Integer targetId = model.getTargetCurrency().getId();
+        db.connect(query.updateRate, rate, baseId, targetId);
     }
 }
