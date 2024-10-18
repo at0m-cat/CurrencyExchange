@@ -52,7 +52,7 @@ Success - 200
 Error (e.g. database unavailable) - 500
 ```
 
-### 🔸 GET `/currency/EUR/`
+### 🔸 GET `/currency/EUR`
 - Receiving a specific currency. Example answer:
 
 ```json
