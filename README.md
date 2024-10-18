@@ -187,7 +187,7 @@ Error (for example, the database is unavailable) - 500
 ```
 
 ### 🔸 POST `/exchangeRates`
-- Adding a new exchange rate to the database. The data is transmitted in the request body as form fields (`x-www-form-urlencoded`). The fields of the form are `baseCurrencyCode`, `targetCurrencyCode`, `rate`. Example of form fields:
+> Adding a new exchange rate to the database. The data is transmitted in the request body as form fields (`x-www-form-urlencoded`). The fields of the form are `baseCurrencyCode`, `targetCurrencyCode`, `rate`. Example of form fields:
 - `baseCurrencyCode` = PPP
 - `targetCurrencyCode` = XXX
 - `rate` = 221.002
