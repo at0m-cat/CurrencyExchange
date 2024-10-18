@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Stream;
 
-@WebServlet(value = "/exchangerates")
+@WebServlet(value = "/exchangeRates")
 public class ExchangeRatesServlet extends HttpServlet {
     private static final Renderer renderer = Renderer.getInstance();
     private static final ExchangeService exchangeService = ExchangeService.getInstance();
@@ -123,7 +123,7 @@ public class ExchangeRatesServlet extends HttpServlet {
                         .createDto(baseCurrencyDTO, targetCurrencyDTO, BigDecimal.valueOf(rate));
                 exchangeService.save(pairs);
                 resp.setStatus(201);
-                renderer.print(resp, pairs);
+                renderer.print(resp, exchangeService.findByCode(baseCode + targetCode));
             }
 
         } catch (ObjectAlreadyExistException e) {

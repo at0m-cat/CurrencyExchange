@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-@WebServlet(value = "/exchangerate/*")
+@WebServlet(value = "/exchangeRate/*")
 public class ExchangeRateServlet extends HttpServlet {
     private static final Renderer renderer = Renderer.getInstance();
     private static final ExchangeService exchangeService = ExchangeService.getInstance();

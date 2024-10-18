@@ -84,14 +84,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8082/exchangerates",
+					"raw": "http://localhost:8081/exchangeRates",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8082",
+					"port": "8081",
 					"path": [
-						"exchangerates"
+						"exchangeRates"
 					]
 				}
 			},
@@ -103,14 +103,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8082/exchangerate/RUBUSD",
+					"raw": "http://localhost:8081/exchangeRate/RUBUSD",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8082",
+					"port": "8081",
 					"path": [
-						"exchangerate",
+						"exchangeRate",
 						"RUBUSD"
 					]
 				}
@@ -123,27 +123,27 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8082/exchangerates?baseCurrencyCode=SSS&targetCurrencyCode=RUB&rate=1.023",
+					"raw": "http://localhost:8081/exchangeRates?baseCurrencyCode=PPP&targetCurrencyCode=XXX&rate=221.002",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8082",
+					"port": "8081",
 					"path": [
-						"exchangerates"
+						"exchangeRates"
 					],
 					"query": [
 						{
 							"key": "baseCurrencyCode",
-							"value": "SSS"
+							"value": "PPP"
 						},
 						{
 							"key": "targetCurrencyCode",
-							"value": "RUB"
+							"value": "XXX"
 						},
 						{
 							"key": "rate",
-							"value": "1.023"
+							"value": "221.002"
 						}
 					]
 				}
@@ -156,20 +156,20 @@
 				"method": "PATCH",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8082/exchangerate/SSSRUB?rate=1.005",
+					"raw": "http://localhost:8081/exchangeRate/PPPXXX?rate=2.33",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8082",
+					"port": "8081",
 					"path": [
-						"exchangerate",
-						"SSSRUB"
+						"exchangeRate",
+						"PPPXXX"
 					],
 					"query": [
 						{
 							"key": "rate",
-							"value": "1.005"
+							"value": "2.33"
 						}
 					]
 				}
@@ -182,27 +182,27 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8082/exchange?from=SSS&to=DKK&amount=123",
+					"raw": "http://localhost:8081/exchange?from=PPP&to=AUD&amount=10",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8082",
+					"port": "8081",
 					"path": [
 						"exchange"
 					],
 					"query": [
 						{
 							"key": "from",
-							"value": "SSS"
+							"value": "PPP"
 						},
 						{
 							"key": "to",
-							"value": "DKK"
+							"value": "AUD"
 						},
 						{
 							"key": "amount",
-							"value": "123"
+							"value": "10"
 						}
 					]
 				}
