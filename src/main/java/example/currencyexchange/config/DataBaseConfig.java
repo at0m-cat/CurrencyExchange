@@ -11,8 +11,8 @@ public class DataBaseConfig {
     }
 
     public final String jdbcDriver = "org.postgresql.Driver";
-    public final String databaseUrl = "jdbc:postgresql://localhost:5432/currencyexchange";
-//    public final String databaseUrl = "jdbc:postgresql://db:5432/currencyexchange";
+//    public final String databaseUrl = "jdbc:postgresql://localhost:5432/currencyexchange";
+    public final String databaseUrl = "jdbc:postgresql://db:5432/currencyexchange";
     public final String databaseUser = "postgres";
     public final String DATABASE_PASSWORD = "yourpassword";
 }
