@@ -4,10 +4,10 @@ import example.currencyexchange.config.DataBaseConnect;
 import example.currencyexchange.config.DataBaseRequestContainer;
 import example.currencyexchange.model.Currency;
 import example.currencyexchange.model.CurrencyExchange;
-import example.currencyexchange.exceptions.status_400.IncorrectParams;
-import example.currencyexchange.exceptions.status_404.ObjectNotFound;
-import example.currencyexchange.exceptions.status_409.ObjectAlreadyExist;
-import example.currencyexchange.exceptions.status_500.DataBaseNotAvailable;
+import example.currencyexchange.exceptions.IncorrectParamsException;
+import example.currencyexchange.exceptions.ObjectNotFoundException;
+import example.currencyexchange.exceptions.ObjectAlreadyExistException;
+import example.currencyexchange.exceptions.DataBaseNotAvailableException;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -18,16 +18,17 @@ import java.util.List;
 public class CurrencyExchangeDAO implements DAOInterface<CurrencyExchange, String> {
 
     @Getter
-    private static final CurrencyExchangeDAO DAO = new CurrencyExchangeDAO();
-    private static final DataBaseConnect DB = DataBaseConnect.getCONNCECTION();
-    private static final DataBaseRequestContainer QUERY = DataBaseRequestContainer.getInstance();
+    private static final CurrencyExchangeDAO instance = new CurrencyExchangeDAO();
+    private final DataBaseConnect db;
+    private final DataBaseRequestContainer query;
 
     private CurrencyExchangeDAO() {
+        this.db = DataBaseConnect.getInstance();
+        this.query = DataBaseRequestContainer.getInstance();
     }
 
-    @Override
     public CurrencyExchange building(ResultSet rs)
-            throws DataBaseNotAvailable {
+            throws DataBaseNotAvailableException {
         try {
 
             CurrencyExchange currencyExchange = new CurrencyExchange();
@@ -53,7 +54,7 @@ public class CurrencyExchangeDAO implements DAOInterface<CurrencyExchange, Strin
             return currencyExchange;
 
         } catch (SQLException e) {
-            throw new DataBaseNotAvailable();
+            throw new DataBaseNotAvailableException();
         }
     }
 
@@ -63,16 +64,13 @@ public class CurrencyExchangeDAO implements DAOInterface<CurrencyExchange, Strin
     }
 
     @Override
-    public CurrencyExchange find(String code)
-            throws ObjectNotFound, DataBaseNotAvailable {
+    public CurrencyExchange find(String code){
         return null;
     }
 
     @Override
-    public CurrencyExchange find(String baseCode, String targetCode)
-            throws ObjectNotFound, DataBaseNotAvailable {
-
-        ResultSet rs = DB.connect(QUERY.exchangeRequest,
+    public CurrencyExchange find(String baseCode, String targetCode){
+        ResultSet rs = db.connect(query.exchangeRequest,
                 baseCode, targetCode,
                 targetCode, baseCode,
                 baseCode, targetCode,
@@ -87,14 +85,13 @@ public class CurrencyExchangeDAO implements DAOInterface<CurrencyExchange, Strin
             }
 
         } catch (SQLException e) {
-            throw new DataBaseNotAvailable();
+            throw new DataBaseNotAvailableException();
         }
 
-        throw new ObjectNotFound("Currency pair not found :(");
+        throw new ObjectNotFoundException("Currency pair not found :(");
     }
 
     @Override
-    public void save(String name, String code, String sign)
-            throws DataBaseNotAvailable, ObjectAlreadyExist, IncorrectParams {
+    public void save(String name, String code, String sign){
     }
 }

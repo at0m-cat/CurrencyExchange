@@ -1,15 +1,15 @@
-package example.currencyexchange.exceptions.status_404;
+package example.currencyexchange.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties({"cause", "stackTrace", "localizedMessage", "suppressed"})
-public class ObjectNotFound extends RuntimeException {
+public class ObjectNotFoundException extends RuntimeException {
 
-    public ObjectNotFound() {
+    public ObjectNotFoundException() {
         super("Object not found");
     }
 
-    public ObjectNotFound(String message) {
+    public ObjectNotFoundException(String message) {
         super(message);
     }
 }

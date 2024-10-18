@@ -5,10 +5,10 @@ import example.currencyexchange.config.DataBaseRequestContainer;
 import example.currencyexchange.dto.ExchangeDTO;
 import example.currencyexchange.model.Currency;
 import example.currencyexchange.model.Exchange;
-import example.currencyexchange.exceptions.status_400.IncorrectParams;
-import example.currencyexchange.exceptions.status_404.ObjectNotFound;
-import example.currencyexchange.exceptions.status_409.ObjectAlreadyExist;
-import example.currencyexchange.exceptions.status_500.DataBaseNotAvailable;
+import example.currencyexchange.exceptions.IncorrectParamsException;
+import example.currencyexchange.exceptions.ObjectNotFoundException;
+import example.currencyexchange.exceptions.ObjectAlreadyExistException;
+import example.currencyexchange.exceptions.DataBaseNotAvailableException;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -21,21 +21,20 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
 
     @Getter
     private static final ExchangeDAO instance = new ExchangeDAO();
-    private static final DataBaseConnect db = DataBaseConnect.getCONNCECTION();
-    private static final DataBaseRequestContainer query = DataBaseRequestContainer.getInstance();
+    private final DataBaseConnect db;
+    private final DataBaseRequestContainer query;
 
     private ExchangeDAO() {
+        this.db = DataBaseConnect.getInstance();
+        this.query = DataBaseRequestContainer.getInstance();
     }
 
     @Override
-    public Exchange find(String code)
-            throws ObjectNotFound, DataBaseNotAvailable {
+    public Exchange find(String code) {
         return null;
     }
 
-    @Override
-    public Exchange building(ResultSet rs)
-            throws DataBaseNotAvailable {
+    public Exchange building(ResultSet rs) {
         try {
             int id = rs.getInt("id");
             BigDecimal rate = rs.getBigDecimal("rate");
@@ -56,14 +55,12 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
             return new Exchange(id, baseCurrency, targetCurrency, rate);
 
         } catch (SQLException e) {
-            throw new DataBaseNotAvailable();
+            throw new DataBaseNotAvailableException();
         }
     }
 
     @Override
-    public Exchange find(String baseCode, String targetCode)
-            throws ObjectNotFound, DataBaseNotAvailable {
-
+    public Exchange find(String baseCode, String targetCode) {
         ResultSet rs = db.connect(query.getExchangeByCodePair, baseCode, targetCode);
         try {
             if (rs.next()) {
@@ -71,14 +68,13 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
             }
 
         } catch (SQLException e) {
-            throw new DataBaseNotAvailable();
+            throw new DataBaseNotAvailableException();
         }
-        throw new ObjectNotFound("Currency pair not found");
+        throw new ObjectNotFoundException("Currency pair not found");
     }
 
     @Override
-    public List<Exchange> findAll() throws DataBaseNotAvailable, ObjectNotFound {
-
+    public List<Exchange> findAll() {
         ResultSet rs = db.connect(query.getExchangeAll);
         try {
             List<Exchange> result = new ArrayList<>();
@@ -91,28 +87,23 @@ public final class ExchangeDAO implements DAOInterface<Exchange, String> {
             }
 
         } catch (SQLException e) {
-            throw new DataBaseNotAvailable();
+            throw new DataBaseNotAvailableException();
         }
 
-        throw new ObjectNotFound("Currency pair not found");
+        throw new ObjectNotFoundException("Currency pair not found");
     }
 
     @Override
-    public void save(String name, String code, String sign)
-            throws DataBaseNotAvailable, ObjectAlreadyExist, IncorrectParams {
+    public void save(String name, String code, String sign) {
     }
 
-    public void addToBase(ExchangeDTO pairsDto, BigDecimal rate)
-            throws DataBaseNotAvailable, ObjectAlreadyExist, IncorrectParams {
-
+    public void addToBase(ExchangeDTO pairsDto, BigDecimal rate) {
         int baseId = pairsDto.getBaseCurrency().getId();
         int targetId = pairsDto.getTargetCurrency().getId();
         db.connect(query.addExchange, baseId, targetId, rate);
     }
 
-    public void updateRate(String baseCode, String targetCode, Double rate)
-            throws DataBaseNotAvailable, IncorrectParams, ObjectNotFound {
-
+    public void updateRate(String baseCode, String targetCode, Double rate) {
         Exchange model = find(baseCode, targetCode);
         Integer baseId = model.getBaseCurrency().getId();
         Integer targetId = model.getTargetCurrency().getId();

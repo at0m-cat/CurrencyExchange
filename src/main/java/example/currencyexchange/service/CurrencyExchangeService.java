@@ -4,10 +4,10 @@ import example.currencyexchange.dao.CurrencyExchangeDAO;
 import example.currencyexchange.dto.CurrencyDTO;
 import example.currencyexchange.dto.CurrencyExchangeDTO;
 import example.currencyexchange.model.CurrencyExchange;
-import example.currencyexchange.exceptions.status_400.IncorrectParams;
-import example.currencyexchange.exceptions.status_404.ObjectNotFound;
-import example.currencyexchange.exceptions.status_409.ObjectAlreadyExist;
-import example.currencyexchange.exceptions.status_500.DataBaseNotAvailable;
+import example.currencyexchange.exceptions.IncorrectParamsException;
+import example.currencyexchange.exceptions.ObjectNotFoundException;
+import example.currencyexchange.exceptions.ObjectAlreadyExistException;
+import example.currencyexchange.exceptions.DataBaseNotAvailableException;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -16,11 +16,12 @@ import java.util.List;
 public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchangeDTO, String> {
     @Getter
     private static final CurrencyExchangeService instance = new CurrencyExchangeService();
-    private static final CurrencyService currencyService = CurrencyService.getInstance();
-    private static final CurrencyExchangeDAO dao = CurrencyExchangeDAO.getDAO();
+    private final CurrencyService currencyService;
+    private final CurrencyExchangeDAO dao;
 
     private CurrencyExchangeService() {
-
+        this.currencyService = CurrencyService.getInstance();
+        this.dao = CurrencyExchangeDAO.getInstance();
     }
 
     public CurrencyExchangeDTO createDto(CurrencyDTO baseCurrency, CurrencyDTO targetCurrency,
@@ -79,14 +80,12 @@ public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchang
     }
 
     @Override
-    public List<CurrencyExchangeDTO> findAll()
-            throws ObjectNotFound, DataBaseNotAvailable {
+    public List<CurrencyExchangeDTO> findAll() {
         return List.of();
     }
 
     @Override
-    public CurrencyExchangeDTO findByCode(String code)
-            throws ObjectNotFound, DataBaseNotAvailable {
+    public CurrencyExchangeDTO findByCode(String code) {
         String baseCode = code.substring(0, 3);
         String targetCode = code.substring(3);
 
@@ -95,8 +94,6 @@ public class CurrencyExchangeService implements ServiceIntefrace<CurrencyExchang
     }
 
     @Override
-    public void save(CurrencyExchangeDTO entity)
-            throws ObjectAlreadyExist, DataBaseNotAvailable, IncorrectParams {
-
+    public void save(CurrencyExchangeDTO entity) {
     }
 }

@@ -2,11 +2,10 @@ package example.currencyexchange.servlet;
 
 import example.currencyexchange.config.Renderer;
 import example.currencyexchange.dto.CurrencyDTO;
-import example.currencyexchange.exceptions.status_201.SuccesComplete;
-import example.currencyexchange.exceptions.status_400.IncorrectParams;
-import example.currencyexchange.exceptions.status_404.ObjectNotFound;
-import example.currencyexchange.exceptions.status_409.ObjectAlreadyExist;
-import example.currencyexchange.exceptions.status_500.DataBaseNotAvailable;
+import example.currencyexchange.exceptions.IncorrectParamsException;
+import example.currencyexchange.exceptions.ObjectNotFoundException;
+import example.currencyexchange.exceptions.ObjectAlreadyExistException;
+import example.currencyexchange.exceptions.DataBaseNotAvailableException;
 import example.currencyexchange.service.CurrencyService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -30,7 +29,7 @@ public class CurrenciesServlet extends HttpServlet {
             case "GET", "POST" -> super.service(req, resp);
             default -> {
                 resp.setStatus(500);
-                renderer.print(resp, new DataBaseNotAvailable("%s: not available method"
+                renderer.print(resp, new DataBaseNotAvailableException("%s: not available method"
                         .formatted(method)));
             }
         }
@@ -43,11 +42,11 @@ public class CurrenciesServlet extends HttpServlet {
             List<CurrencyDTO> currencyDTOS = service.findAll();
             renderer.print(response, currencyDTOS);
 
-        } catch (DataBaseNotAvailable e) {
+        } catch (DataBaseNotAvailableException e) {
             response.setStatus(500);
             renderer.print(response, e);
 
-        } catch (ObjectNotFound e){
+        } catch (ObjectNotFoundException e){
             response.setStatus(404);
             renderer.print(response, e);
         }
@@ -64,33 +63,31 @@ public class CurrenciesServlet extends HttpServlet {
                     .forEach(elem ->
                     {
                         if (elem == null || elem.isEmpty()) {
-                            throw new IncorrectParams("params equals null or empty");
+                            throw new IncorrectParamsException("params equals null or empty");
                         }
                     });
 
             if (code != code.toUpperCase()){
-                throw new IncorrectParams("%s - incorrect case code, correct: UpperCase".formatted(code));
+                throw new IncorrectParamsException("%s - incorrect case code, correct: UpperCase".formatted(code));
             }
 
             CurrencyDTO currencyDTO = service.createDto(name, code, sign);
             service.save(currencyDTO);
-            throw new SuccesComplete();
+            resp.setStatus(201);
+            renderer.print(resp, service.findByCode(currencyDTO.getCode()));
 
-        } catch (IncorrectParams e) {
+        } catch (IncorrectParamsException e) {
             resp.setStatus(400);
             renderer.print(resp, e);
 
-        } catch (DataBaseNotAvailable e) {
+        } catch (DataBaseNotAvailableException e) {
             resp.setStatus(500);
             renderer.print(resp, e);
 
-        } catch (ObjectAlreadyExist e) {
+        } catch (ObjectAlreadyExistException e) {
             resp.setStatus(409);
             renderer.print(resp, e);
 
-        } catch (SuccesComplete e){
-            resp.setStatus(201);
-            renderer.print(resp, e);
         }
     }
 }

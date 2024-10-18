@@ -1,15 +1,15 @@
-package example.currencyexchange.exceptions.status_400;
+package example.currencyexchange.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties({"cause", "stackTrace", "localizedMessage", "suppressed"})
-public class IncorrectParams extends RuntimeException {
+public class IncorrectParamsException extends RuntimeException {
 
-    public IncorrectParams() {
+    public IncorrectParamsException() {
         super("Incorrect parameters");
     }
 
-    public IncorrectParams(String message) {
+    public IncorrectParamsException(String message) {
         super(message);
     }
 

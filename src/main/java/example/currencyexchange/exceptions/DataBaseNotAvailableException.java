@@ -1,15 +1,15 @@
-package example.currencyexchange.exceptions.status_500;
+package example.currencyexchange.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties({"cause", "stackTrace", "localizedMessage", "suppressed"})
-public class DataBaseNotAvailable extends RuntimeException {
+public class DataBaseNotAvailableException extends RuntimeException {
 
-    public DataBaseNotAvailable() {
+    public DataBaseNotAvailableException() {
         super("Database not available");
     }
 
-    public DataBaseNotAvailable(String message) {
+    public DataBaseNotAvailableException(String message) {
         super(message);
     }
 

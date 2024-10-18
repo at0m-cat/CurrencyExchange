@@ -3,11 +3,10 @@ package example.currencyexchange.servlet;
 import example.currencyexchange.config.Renderer;
 import example.currencyexchange.dto.CurrencyDTO;
 import example.currencyexchange.dto.ExchangeDTO;
-import example.currencyexchange.exceptions.status_201.SuccesComplete;
-import example.currencyexchange.exceptions.status_400.IncorrectParams;
-import example.currencyexchange.exceptions.status_404.ObjectNotFound;
-import example.currencyexchange.exceptions.status_409.ObjectAlreadyExist;
-import example.currencyexchange.exceptions.status_500.DataBaseNotAvailable;
+import example.currencyexchange.exceptions.IncorrectParamsException;
+import example.currencyexchange.exceptions.ObjectNotFoundException;
+import example.currencyexchange.exceptions.ObjectAlreadyExistException;
+import example.currencyexchange.exceptions.DataBaseNotAvailableException;
 import example.currencyexchange.service.CurrencyService;
 import example.currencyexchange.service.ExchangeService;
 import jakarta.servlet.ServletException;
@@ -23,9 +22,9 @@ import java.util.stream.Stream;
 
 @WebServlet(value = "/exchangerates")
 public class ExchangeRatesServlet extends HttpServlet {
-    private static final Renderer RENDERER = Renderer.getInstance();
-    private static final ExchangeService EXCHANGE_SERVICE = ExchangeService.getInstance();
-    private static final CurrencyService CURRENCY_SERVICE = CurrencyService.getInstance();
+    private static final Renderer renderer = Renderer.getInstance();
+    private static final ExchangeService exchangeService = ExchangeService.getInstance();
+    private static final CurrencyService currencyService = CurrencyService.getInstance();
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -35,7 +34,7 @@ public class ExchangeRatesServlet extends HttpServlet {
             default ->
             {
                 resp.setStatus(500);
-                RENDERER.print(resp, new DataBaseNotAvailable("%s: not available method"
+                renderer.print(resp, new DataBaseNotAvailableException("%s: not available method"
                         .formatted(method)));
             }
         }
@@ -45,16 +44,16 @@ public class ExchangeRatesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         try
         {
-            List<ExchangeDTO> exchangeDTOS = EXCHANGE_SERVICE.findAll();
-            RENDERER.print(resp, exchangeDTOS);
+            List<ExchangeDTO> exchangeDTOS = exchangeService.findAll();
+            renderer.print(resp, exchangeDTOS);
 
-        } catch (DataBaseNotAvailable e) {
+        } catch (DataBaseNotAvailableException e) {
             resp.setStatus(500);
-            RENDERER.print(resp, e);
+            renderer.print(resp, e);
 
-        } catch (ObjectNotFound e) {
+        } catch (ObjectNotFoundException e) {
             resp.setStatus(404);
-            RENDERER.print(resp, e);
+            renderer.print(resp, e);
         }
     }
 
@@ -72,14 +71,14 @@ public class ExchangeRatesServlet extends HttpServlet {
             try {
                 rate = Double.valueOf(rateString);
             } catch (NumberFormatException e) {
-                throw new IncorrectParams("rate is not double or null");
+                throw new IncorrectParamsException("rate is not double or null");
             }
 
             Stream.of(baseCode, targetCode, rateString)
                     .forEach(param ->
                     {
                         if (param == null || param.isEmpty()) {
-                            throw new IncorrectParams("params equals empty");
+                            throw new IncorrectParamsException("params equals empty");
                         }
                     });
 
@@ -87,60 +86,57 @@ public class ExchangeRatesServlet extends HttpServlet {
                     .forEach(elem ->
                     {
                         if (!elem.equals(elem.toUpperCase())) {
-                            throw new IncorrectParams("%s - param case error, correct: UpperCase".formatted(elem));
+                            throw new IncorrectParamsException("%s - param case error, correct: UpperCase".formatted(elem));
                         }
                     });
 
-        } catch (IncorrectParams e) {
+        } catch (IncorrectParamsException e) {
             resp.setStatus(400);
-            RENDERER.print(resp, e);
+            renderer.print(resp, e);
             return;
         }
 
         try {
             try {
-                CURRENCY_SERVICE.findByCode(baseCode);
-                CURRENCY_SERVICE.findByCode(targetCode);
+                currencyService.findByCode(baseCode);
+                currencyService.findByCode(targetCode);
 
-            } catch (ObjectNotFound e) {
+            } catch (ObjectNotFoundException e) {
                 resp.setStatus(404);
-                RENDERER.print(resp, e);
+                renderer.print(resp, e);
                 return;
             }
 
             try {
-                EXCHANGE_SERVICE.findByCode(baseCode + targetCode);
+                exchangeService.findByCode(baseCode + targetCode);
                 resp.setStatus(409);
-                throw new ObjectAlreadyExist();
+                throw new ObjectAlreadyExistException();
 
-            } catch (ObjectAlreadyExist e) {
+            } catch (ObjectAlreadyExistException e) {
                 resp.setStatus(409);
-                RENDERER.print(resp, e);
+                renderer.print(resp, e);
 
-            } catch (ObjectNotFound e) {
-                CurrencyDTO baseCurrencyDTO = CURRENCY_SERVICE.findByCode(baseCode);
-                CurrencyDTO targetCurrencyDTO = CURRENCY_SERVICE.findByCode(targetCode);
-                ExchangeDTO pairs = EXCHANGE_SERVICE
+            } catch (ObjectNotFoundException e) {
+                CurrencyDTO baseCurrencyDTO = currencyService.findByCode(baseCode);
+                CurrencyDTO targetCurrencyDTO = currencyService.findByCode(targetCode);
+                ExchangeDTO pairs = exchangeService
                         .createDto(baseCurrencyDTO, targetCurrencyDTO, BigDecimal.valueOf(rate));
-                EXCHANGE_SERVICE.save(pairs);
-                throw new SuccesComplete();
+                exchangeService.save(pairs);
+                resp.setStatus(201);
+                renderer.print(resp, pairs);
             }
 
-        } catch (ObjectAlreadyExist e) {
+        } catch (ObjectAlreadyExistException e) {
             resp.setStatus(409);
-            RENDERER.print(resp, e);
+            renderer.print(resp, e);
 
-        } catch (SuccesComplete e) {
-            resp.setStatus(201);
-            RENDERER.print(resp, e);
-
-        } catch (DataBaseNotAvailable e) {
+        } catch (DataBaseNotAvailableException e) {
             resp.setStatus(500);
-            RENDERER.print(resp, e);
+            renderer.print(resp, e);
 
-        } catch (IncorrectParams e) {
+        } catch (IncorrectParamsException e) {
             resp.setStatus(400);
-            RENDERER.print(resp, e);
+            renderer.print(resp, e);
         }
     }
 

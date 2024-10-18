@@ -3,9 +3,9 @@ package example.currencyexchange.servlet;
 import example.currencyexchange.config.Renderer;
 import example.currencyexchange.dto.CurrencyDTO;
 import example.currencyexchange.dto.CurrencyExchangeDTO;
-import example.currencyexchange.exceptions.status_400.IncorrectParams;
-import example.currencyexchange.exceptions.status_404.ObjectNotFound;
-import example.currencyexchange.exceptions.status_500.DataBaseNotAvailable;
+import example.currencyexchange.exceptions.IncorrectParamsException;
+import example.currencyexchange.exceptions.ObjectNotFoundException;
+import example.currencyexchange.exceptions.DataBaseNotAvailableException;
 import example.currencyexchange.service.CurrencyExchangeService;
 import example.currencyexchange.service.CurrencyService;
 import jakarta.servlet.ServletException;
@@ -20,9 +20,9 @@ import java.util.stream.Stream;
 
 @WebServlet(value = "/exchange")
 public class ExchangeServlet extends HttpServlet {
-    private static final Renderer RENDERER = Renderer.getInstance();
-    private static final CurrencyService CURRENCY_SERVICE = CurrencyService.getInstance();
-    private static final CurrencyExchangeService CURRENCY_EXCHANGE_SERVICE = CurrencyExchangeService.getInstance();
+    private static final Renderer renderer = Renderer.getInstance();
+    private static final CurrencyService currencyService = CurrencyService.getInstance();
+    private static final CurrencyExchangeService currencyExchangeService = CurrencyExchangeService.getInstance();
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -31,7 +31,7 @@ public class ExchangeServlet extends HttpServlet {
             case "GET" -> super.service(req, resp);
             default -> {
                 resp.setStatus(500);
-                RENDERER.print(resp, new DataBaseNotAvailable("%s: not available method"
+                renderer.print(resp, new DataBaseNotAvailableException("%s: not available method"
                         .formatted(method)));
             }
         }
@@ -48,7 +48,7 @@ public class ExchangeServlet extends HttpServlet {
                 Double.valueOf(req.getParameter("amount"));
 
             } catch (NumberFormatException e) {
-                throw new IncorrectParams("amount is not double type or null");
+                throw new IncorrectParamsException("amount is not double type or null");
             }
 
             from = req.getParameter("from");
@@ -57,38 +57,38 @@ public class ExchangeServlet extends HttpServlet {
 
             Stream.of(from, to).forEach(param -> {
                 if (param == null || param.isEmpty()) {
-                    throw new IncorrectParams();
+                    throw new IncorrectParamsException();
                 }
                 if (!param.equals(param.toUpperCase())) {
-                    throw new IncorrectParams("%s - param case error, correct: UpperCase".formatted(param));
+                    throw new IncorrectParamsException("%s - param case error, correct: UpperCase".formatted(param));
                 }
             });
 
-        } catch (IncorrectParams e) {
+        } catch (IncorrectParamsException e) {
             resp.setStatus(400);
-            RENDERER.print(resp, e);
+            renderer.print(resp, e);
             return;
         }
         try {
             if (from.equals(to)) {
-                CurrencyDTO currencyDTO = CURRENCY_SERVICE.findByCode(from);
-                CurrencyExchangeDTO pair = CURRENCY_EXCHANGE_SERVICE
+                CurrencyDTO currencyDTO = currencyService.findByCode(from);
+                CurrencyExchangeDTO pair = currencyExchangeService
                         .createDto(currencyDTO, currencyDTO, BigDecimal.valueOf(1.0), BigDecimal.valueOf(amount));
-                RENDERER.print(resp, pair);
+                renderer.print(resp, pair);
                 return;
             }
-            CurrencyExchangeDTO currencyExchangeDTO = CURRENCY_EXCHANGE_SERVICE.findByCode(from + to);
-            currencyExchangeDTO = CURRENCY_EXCHANGE_SERVICE
+            CurrencyExchangeDTO currencyExchangeDTO = currencyExchangeService.findByCode(from + to);
+            currencyExchangeDTO = currencyExchangeService
                     .setExchangeParameters(currencyExchangeDTO, BigDecimal.valueOf(amount));
-            RENDERER.print(resp, currencyExchangeDTO);
+            renderer.print(resp, currencyExchangeDTO);
 
-        } catch (ObjectNotFound e) {
+        } catch (ObjectNotFoundException e) {
             resp.setStatus(404);
-            RENDERER.print(resp, e);
+            renderer.print(resp, e);
 
-        } catch (DataBaseNotAvailable e) {
+        } catch (DataBaseNotAvailableException e) {
             resp.setStatus(500);
-            RENDERER.print(resp, e);
+            renderer.print(resp, e);
         }
     }
 }

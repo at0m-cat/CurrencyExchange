@@ -4,10 +4,10 @@ import example.currencyexchange.dao.ExchangeDAO;
 import example.currencyexchange.dto.CurrencyDTO;
 import example.currencyexchange.dto.ExchangeDTO;
 import example.currencyexchange.model.Exchange;
-import example.currencyexchange.exceptions.status_400.IncorrectParams;
-import example.currencyexchange.exceptions.status_404.ObjectNotFound;
-import example.currencyexchange.exceptions.status_409.ObjectAlreadyExist;
-import example.currencyexchange.exceptions.status_500.DataBaseNotAvailable;
+import example.currencyexchange.exceptions.IncorrectParamsException;
+import example.currencyexchange.exceptions.ObjectNotFoundException;
+import example.currencyexchange.exceptions.ObjectAlreadyExistException;
+import example.currencyexchange.exceptions.DataBaseNotAvailableException;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -17,9 +17,10 @@ public class ExchangeService implements ServiceIntefrace<ExchangeDTO, String> {
 
     @Getter
     private static final ExchangeService instance = new ExchangeService();
-    private static final ExchangeDAO dao = ExchangeDAO.getInstance();
+    private final ExchangeDAO dao;
 
     private ExchangeService() {
+        this.dao = ExchangeDAO.getInstance();
     }
 
     public ExchangeDTO createDto(CurrencyDTO baseCurrency, CurrencyDTO targetCurrency, BigDecimal rate) {
@@ -54,16 +55,14 @@ public class ExchangeService implements ServiceIntefrace<ExchangeDTO, String> {
     }
 
     @Override
-    public List<ExchangeDTO> findAll()
-            throws ObjectNotFound, DataBaseNotAvailable {
+    public List<ExchangeDTO> findAll() {
         List<Exchange> models = dao.findAll();
         return models.stream().map(this::transform).toList();
     }
 
 
     @Override
-    public ExchangeDTO findByCode(String code)
-            throws ObjectNotFound, DataBaseNotAvailable {
+    public ExchangeDTO findByCode(String code) {
         String baseCode = code.substring(0, 3);
         String targetCode = code.substring(3);
 
@@ -72,14 +71,12 @@ public class ExchangeService implements ServiceIntefrace<ExchangeDTO, String> {
     }
 
     @Override
-    public void save(ExchangeDTO entity)
-            throws ObjectAlreadyExist, DataBaseNotAvailable, IncorrectParams {
+    public void save(ExchangeDTO entity) {
         BigDecimal rate = entity.getRATE();
         dao.addToBase(entity, rate);
     }
 
-    public void updateRate(String baseCode, String targetCode, Double rate)
-            throws DataBaseNotAvailable, IncorrectParams, ObjectNotFound {
+    public void updateRate(String baseCode, String targetCode, Double rate) {
         dao.updateRate(baseCode, targetCode, rate);
     }
 

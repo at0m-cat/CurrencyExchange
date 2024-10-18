@@ -1,12 +1,13 @@
 package example.currencyexchange.dao;
 
+import example.currencyexchange.config.DataBaseConfig;
 import example.currencyexchange.config.DataBaseConnect;
 import example.currencyexchange.config.DataBaseRequestContainer;
 import example.currencyexchange.model.Currency;
-import example.currencyexchange.exceptions.status_400.IncorrectParams;
-import example.currencyexchange.exceptions.status_404.ObjectNotFound;
-import example.currencyexchange.exceptions.status_409.ObjectAlreadyExist;
-import example.currencyexchange.exceptions.status_500.DataBaseNotAvailable;
+import example.currencyexchange.exceptions.IncorrectParamsException;
+import example.currencyexchange.exceptions.ObjectNotFoundException;
+import example.currencyexchange.exceptions.ObjectAlreadyExistException;
+import example.currencyexchange.exceptions.DataBaseNotAvailableException;
 import lombok.Getter;
 
 import java.sql.ResultSet;
@@ -18,19 +19,20 @@ public final class CurrencyDAO implements DAOInterface<Currency, String> {
 
     @Getter
     private static final CurrencyDAO instance = new CurrencyDAO();
-    private static final DataBaseConnect db = DataBaseConnect.getCONNCECTION();
-    private static final DataBaseRequestContainer query = DataBaseRequestContainer.getInstance();
+    private final DataBaseConnect db;
+    private final DataBaseRequestContainer query;
 
     private CurrencyDAO() {
+        this.db = DataBaseConnect.getInstance();
+        this.query = DataBaseRequestContainer.getInstance();
     }
 
     @Override
-    public Currency find(String baseCode, String targetCode) throws ObjectNotFound, DataBaseNotAvailable {
+    public Currency find(String baseCode, String targetCode) {
         return null;
     }
 
-    @Override
-    public Currency building(ResultSet rs) throws DataBaseNotAvailable {
+    public Currency building(ResultSet rs) {
         try {
             Integer id = rs.getInt(1);
             String codeCurrency = rs.getString(2);
@@ -39,29 +41,27 @@ public final class CurrencyDAO implements DAOInterface<Currency, String> {
             return new Currency(name, codeCurrency, id, sign);
 
         } catch (SQLException e) {
-            throw new DataBaseNotAvailable();
+            throw new DataBaseNotAvailableException();
         }
     }
 
 
     @Override
-    public Currency find(String code)
-            throws ObjectNotFound, DataBaseNotAvailable {
+    public Currency find(String code) {
         ResultSet rs = db.connect(query.getCurrencyByCode, code.toUpperCase());
         try {
             if (rs.next()) {
                 return building(rs);
             }
-            throw new ObjectNotFound("Currency not found");
+            throw new ObjectNotFoundException("Currency not found");
 
-        } catch (SQLException | DataBaseNotAvailable e) {
-            throw new DataBaseNotAvailable();
+        } catch (SQLException | DataBaseNotAvailableException e) {
+            throw new DataBaseNotAvailableException();
         }
     }
 
     @Override
-    public List<Currency> findAll()
-            throws DataBaseNotAvailable, ObjectNotFound {
+    public List<Currency> findAll() {
         ResultSet rs = db.connect(query.getAllCurrency);
         try {
             List<Currency> currencies = new ArrayList<>();
@@ -69,18 +69,17 @@ public final class CurrencyDAO implements DAOInterface<Currency, String> {
                 currencies.add(building(rs));
             }
             if (currencies.isEmpty()) {
-                throw new ObjectNotFound("Currencies not found");
+                throw new ObjectNotFoundException("Currencies not found");
             }
             return currencies;
 
-        } catch (SQLException | DataBaseNotAvailable e) {
-            throw new DataBaseNotAvailable();
+        } catch (SQLException | DataBaseNotAvailableException e) {
+            throw new DataBaseNotAvailableException();
         }
     }
 
     @Override
-    public void save(String name, String code, String sign)
-            throws DataBaseNotAvailable, ObjectAlreadyExist, IncorrectParams {
+    public void save(String name, String code, String sign) {
         db.connect(query.addCurrency, name, code, sign);
     }
 }

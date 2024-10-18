@@ -1,8 +1,8 @@
 package example.currencyexchange.config;
 
-import example.currencyexchange.exceptions.status_400.IncorrectParams;
-import example.currencyexchange.exceptions.status_409.ObjectAlreadyExist;
-import example.currencyexchange.exceptions.status_500.DataBaseNotAvailable;
+import example.currencyexchange.exceptions.IncorrectParamsException;
+import example.currencyexchange.exceptions.ObjectAlreadyExistException;
+import example.currencyexchange.exceptions.DataBaseNotAvailableException;
 import lombok.Getter;
 
 import java.sql.*;
@@ -10,14 +10,14 @@ import java.sql.*;
 public final class DataBaseConnect {
 
     @Getter
-    private static final DataBaseConnect CONNCECTION = new DataBaseConnect();
-    private DataBaseConfig config = DataBaseConfig.getInstance();
+    private static final DataBaseConnect instance = new DataBaseConnect();
+    private final DataBaseConfig config;
 
     private DataBaseConnect() {
+        this.config = DataBaseConfig.getInstance();
     }
 
-    public ResultSet connect(String query, Object... params)
-            throws DataBaseNotAvailable, IncorrectParams, ObjectAlreadyExist {
+    public ResultSet connect(String query, Object... params) {
         try {
             Class.forName(config.jdbcDriver);
             Connection connection = DriverManager
@@ -42,19 +42,20 @@ public final class DataBaseConnect {
             return resultSet;
 
         } catch (ClassNotFoundException e) {
-            throw new DataBaseNotAvailable();
+            throw new DataBaseNotAvailableException();
 
         } catch (SQLException e) {
             if (e.getSQLState().equals("23505")) {
-                throw new ObjectAlreadyExist("a record with this object already exists");
+                throw new ObjectAlreadyExistException("a record with this object already exists");
 
             } else if (e.getSQLState().equals("42804")) {
-                throw new IncorrectParams();
+                throw new IncorrectParamsException();
             }
             else if (e.getSQLState().equals("08001")) {
-                throw new DataBaseNotAvailable("database connection lost");
+                throw new DataBaseNotAvailableException("database connection lost");
             }
-            throw new DataBaseNotAvailable(e.getSQLState());
+            throw new DataBaseNotAvailableException(e.getSQLState());
         }
+
     }
 }

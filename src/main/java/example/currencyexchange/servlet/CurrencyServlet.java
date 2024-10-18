@@ -2,9 +2,9 @@ package example.currencyexchange.servlet;
 
 import example.currencyexchange.config.Renderer;
 import example.currencyexchange.dto.CurrencyDTO;
-import example.currencyexchange.exceptions.status_400.IncorrectParams;
-import example.currencyexchange.exceptions.status_404.ObjectNotFound;
-import example.currencyexchange.exceptions.status_500.DataBaseNotAvailable;
+import example.currencyexchange.exceptions.IncorrectParamsException;
+import example.currencyexchange.exceptions.ObjectNotFoundException;
+import example.currencyexchange.exceptions.DataBaseNotAvailableException;
 import example.currencyexchange.service.CurrencyService;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,8 +13,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet(value = "/currency/*")
 public class CurrencyServlet extends HttpServlet {
-    private static final Renderer RENDERER = Renderer.getInstance();
-    private static final CurrencyService SERVICE = CurrencyService.getInstance();
+    private static final Renderer renderer = Renderer.getInstance();
+    private static final CurrencyService service = CurrencyService.getInstance();
 
 
     @Override
@@ -22,33 +22,33 @@ public class CurrencyServlet extends HttpServlet {
         try {
             String[] args = req.getPathInfo().split("/");
             if (args.length != 2) {
-                throw new IncorrectParams("Incorrect code of currency");
+                throw new IncorrectParamsException("Incorrect code of currency");
             }
 
             String code = args[1];
             if (code.length() != 3) {
-                throw new IncorrectParams("Incorrect length code of currency");
+                throw new IncorrectParamsException("Incorrect length code of currency");
             }
 
-            CurrencyDTO currencyDTO = SERVICE.findByCode(code);
+            CurrencyDTO currencyDTO = service.findByCode(code);
 
             if (currencyDTO == null) {
-                throw new ObjectNotFound("Currency not found");
+                throw new ObjectNotFoundException("Currency not found");
             }
 
-            RENDERER.print(resp, currencyDTO);
+            renderer.print(resp, currencyDTO);
 
-        } catch (IncorrectParams e) {
+        } catch (IncorrectParamsException e) {
             resp.setStatus(400);
-            RENDERER.print(resp, e);
+            renderer.print(resp, e);
 
-        } catch (ObjectNotFound e) {
+        } catch (ObjectNotFoundException e) {
             resp.setStatus(404);
-            RENDERER.print(resp, e);
+            renderer.print(resp, e);
 
-        } catch (DataBaseNotAvailable e) {
+        } catch (DataBaseNotAvailableException e) {
             resp.setStatus(500);
-            RENDERER.print(resp, e);
+            renderer.print(resp, e);
         }
     }
 }
