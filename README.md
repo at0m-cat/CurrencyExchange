@@ -21,7 +21,8 @@ Allows you to view and edit lists of currencies and exchange rates, and perform 
 ## ➡️ Currencies
 
 ### 🔸 GET `/currencies`
-- example of output of all currencies:
+> Output of all currencies.
+- Example answer:
 
 ```json
 [
@@ -53,7 +54,8 @@ Error (e.g. database unavailable) - 500
 ```
 
 ### 🔸 GET `/currency/EUR`
-- Receiving a specific currency. Example answer:
+> Receiving a specific currency.
+- Example answer:
 
 ```json
 {
@@ -73,7 +75,8 @@ Error (e.g. database unavailable) - 500
 ```
 
 ### 🔸 POST `/currencies`
-- Adding a new currency to the database. The data is transmitted in the request body as form fields (`x-www-form-urlencoded`). The fields of the form are `name`, `code`, `sign`. An example of a response is a JSON representation of a record inserted into the database, including its ID:
+> Adding a new currency to the database. The data is transmitted in the request body as form fields (`x-www-form-urlencoded`). The fields of the form are `name`, `code`, `sign`.
+- An example of a response is a JSON representation of a record inserted into the database, including its ID:
 
 ```json
 {
@@ -95,7 +98,8 @@ Error (for example, the database is unavailable) - 500
 ## ➡️ ExchangeRates
 
 ### 🔸 GET `/exchangeRates`
-- Getting a list of all exchange rates. Sample response:
+> Getting a list of all exchange rates.
+- Sample response:
 
 ```json
 [
@@ -157,7 +161,8 @@ Error (for example, the database is unavailable) - 500
 ```
 
 ### 🔸 GET `/exchangeRate/RUBUSD`
-- Getting a specific exchange rate. The currency pair is set by consecutive currency codes in the request address. Sample response:
+> Getting a specific exchange rate. The currency pair is set by consecutive currency codes in the request address.
+- Sample response:
 
 ```json
 {
@@ -188,9 +193,9 @@ Error (for example, the database is unavailable) - 500
 
 ### 🔸 POST `/exchangeRates`
 > Adding a new exchange rate to the database. The data is transmitted in the request body as form fields (`x-www-form-urlencoded`). The fields of the form are `baseCurrencyCode`, `targetCurrencyCode`, `rate`. Example of form fields:
-- `baseCurrencyCode` = PPP
-- `targetCurrencyCode` = XXX
-- `rate` = 221.002
+- > `baseCurrencyCode` = PPP
+- > `targetCurrencyCode` = XXX
+- > `rate` = 221.002
 - An example of a response is a JSON representation of a record inserted into the database, including its ID:
 
 ```json
@@ -223,7 +228,7 @@ Error (for example, the database is unavailable) - 500
 
 ### 🔸 PATCH `/exchangeRate/USDRUB`
 
-- Updating the existing exchange rate in the database. The currency pair is set by consecutive currency codes in the request address. The data is transmitted in the request body as form fields (`x-www-form-urlencoded`). The only field in the form is `rate`.
+> Updating the existing exchange rate in the database. The currency pair is set by consecutive currency codes in the request address. The data is transmitted in the request body as form fields (`x-www-form-urlencoded`). The only field in the form is `rate`.
 - An example of a response is a JSON representation of a record inserted into the database, including its ID:
 
 ```json
@@ -257,9 +262,9 @@ Error (for example, the database is unavailable) - 500
 
 ### 🔸 GET `/exchange?from=BASE_CURRENCY_CODE&to=TARGET_CURRENCY_CODE&amount=$AMOUNT`
 
-> Calculation of the transfer of a certain amount of funds from one currency to another. An example of a request is GET `/exchange?from=ETB&to=RUB&amount=10`.
-  
-- Obtaining an exchange rate can take place according to one of three scenarios: `direct exchange`, `reverse exchange`, `exchange through an intermediary`.
+> Calculation of the transfer of a certain amount of funds from one currency to another.
+> Obtaining an exchange rate can take place according to one of three scenarios: `direct exchange`, `reverse exchange`, `exchange through an intermediary`.
+- > An example of a request is GET `/exchange?from=ETB&to=RUB&amount=10`.
 
 ```json
 {
@@ -282,6 +287,7 @@ Error (for example, the database is unavailable) - 500
 ```
 
 ## ➡️ Exceptions
+> Errors that are possible: `DataBaseNotAvailableException`, `IncorrectParamsException`, `ObjectAlreadyExistException`, `ObjectNotFoundException`.
 - For all requests, in case of an error, the response may look like this: 
 
 ```json
@@ -291,4 +297,3 @@ Error (for example, the database is unavailable) - 500
 ```
 
 - The value of the `message` depends on what kind of error occurred.
-- Errors that are possible: `DataBaseNotAvailableException`, `IncorrectParamsException`, `ObjectAlreadyExistException`, `ObjectNotFoundException`.
