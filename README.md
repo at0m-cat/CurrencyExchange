@@ -264,7 +264,7 @@ Error (for example, the database is unavailable) - 500
 
 > Calculation of the transfer of a certain amount of funds from one currency to another.
 > Obtaining an exchange rate can take place according to one of three scenarios: `direct exchange`, `reverse exchange`, `exchange through an intermediary`.
-- > An example of a request is GET `/exchange?from=ETB&to=RUB&amount=10`.
+- An example of a request is GET `/exchange?from=ETB&to=RUB&amount=10`.
 
 ```json
 {
