@@ -180,3 +180,64 @@ public class DataBaseRequestContainer {
             
             SELECT * FROM exchange_pairs LIMIT 1""";
 }
+
+// new sql request (optimized)
+
+// WITH exchange_rates AS (
+//     -- Прямой и обратный курс
+//     SELECT 
+//         e.id,
+//         e.basecurrencyid AS base_id,
+//         c1.fullname AS base_name,
+//         c1.code AS base_code,
+//         c1.sign AS base_sign,
+//         e.targetcurrencyid AS target_id,
+//         c2.fullname AS target_name,
+//         c2.code AS target_code,
+//         c2.sign AS target_sign,
+//         e.rate
+//     FROM exchangerates e
+//     JOIN currencies c1 ON e.basecurrencyid = c1.id
+//     JOIN currencies c2 ON e.targetcurrencyid = c2.id
+//     WHERE c1.code = ? AND c2.code = ?
+
+//     UNION ALL
+
+//     -- Обратный курс (targetCurrency -> baseCurrency)
+//     SELECT 
+//         e.id,
+//         e.targetcurrencyid AS base_id,
+//         c2.fullname AS base_name,
+//         c2.code AS base_code,
+//         c2.sign AS base_sign,
+//         e.basecurrencyid AS target_id,
+//         c1.fullname AS target_name,
+//         c1.code AS target_code,
+//         c1.sign AS target_sign,
+//         ROUND(1 / e.rate, 4) AS rate
+//     FROM exchangerates e
+//     JOIN currencies c1 ON e.basecurrencyid = c1.id
+//     JOIN currencies c2 ON e.targetcurrencyid = c2.id
+//     WHERE c1.code = ? AND c2.code = ?
+
+//     UNION ALL
+
+//     -- Курс через посредника
+//     SELECT 
+//         e1.id,
+//         e1.basecurrencyid AS base_id,
+//         c1.fullname AS base_name,
+//         c1.code AS base_code,
+//         c1.sign AS base_sign,
+//         e2.targetcurrencyid AS target_id,
+//         c3.fullname AS target_name,
+//         c3.code AS target_code,
+//         c3.sign AS target_sign,
+//         ROUND(e1.rate * e2.rate, 4) AS rate
+//     FROM exchangerates e1
+//     JOIN exchangerates e2 ON e1.targetcurrencyid = e2.basecurrencyid
+//     JOIN currencies c1 ON e1.basecurrencyid = c1.id
+//     JOIN currencies c3 ON e2.targetcurrencyid = c3.id
+//     WHERE c1.code = ? AND c3.code = ?
+// )
+// SELECT * FROM exchange_rates LIMIT 1;
